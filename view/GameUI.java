@@ -1,17 +1,15 @@
 package game.view;
 
-import game.model.PortType;
-import game.model.SquarePort;
-import game.model.TrianglePort;
+import game.model.*;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import static game.controller.Constants.*;
-import game.model.SystemModel;
-import static game.controller.Constants.SYSTEMS_BOX_COLOR;
-import static game.controller.Constants.SYSTEMS_BOX_HEIGHT;
-import static game.controller.Constants.SYSTEMS_BOX_WIDTH;
 
 public final class GameUI {
     public static Stage stage;
@@ -29,17 +27,28 @@ public final class GameUI {
     }
 
     public static void run() {
-        Scene scene = new Scene(Root.getINSTANCE(), STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
+        Scene scene = new Scene(Root.getINSTANCE(), STAGE_WIDTH, STAGE_HEIGHT);
+        Root.getINSTANCE().setBackground(new Background(new BackgroundFill(
+                BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
+        )));
 
-        SystemModel systemModel = new SystemModel(50, 50);
-        new SquarePort(systemModel, PortType.INPUT);
-        new TrianglePort(systemModel, PortType.OUTPUT);
-        new SystemView(systemModel);
-        SystemModel systemModel2 = new SystemModel(50, 250);
-        new SquarePort(systemModel2, PortType.INPUT);
-        new TrianglePort(systemModel2, PortType.INPUT);
-        new SquarePort(systemModel2, PortType.OUTPUT);
-        new SystemView(systemModel2);
+        SystemModel generalSystem = new SystemModel(50, 50);
+        new SquarePort(generalSystem, PortType.INPUT);
+        new TrianglePort(generalSystem, PortType.OUTPUT);
+        new SystemView(generalSystem);
+        SystemModel generalSystem2 = new SystemModel(50, 250);
+        new SquarePort(generalSystem2, PortType.INPUT);
+        new TrianglePort(generalSystem2, PortType.INPUT);
+        new SquarePort(generalSystem2, PortType.OUTPUT);
+        new SystemView(generalSystem2);
+        StartSystem generalSystem3 = new StartSystem(50, 450);
+        new TrianglePort(generalSystem3, PortType.OUTPUT);
+        new SquarePort(generalSystem3, PortType.OUTPUT);
+        new StartSystemView(generalSystem3);
+        EndSystem generalSystem4 = new EndSystem(50, 650);
+        new TrianglePort(generalSystem4, PortType.INPUT);
+        new SquarePort(generalSystem4, PortType.INPUT);
+        new EndSystemView(generalSystem4);
 
 
         stage.setWidth(STAGE_WIDTH);

@@ -1,13 +1,13 @@
 package game.view;
 
-import game.model.SystemModel;
+import game.model.GeneralSystem;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 
 import static game.controller.Constants.*;
 
 public abstract class ViewUtil {
-    public static void paintSystem(double x, double y, SystemModel system) {
+    public static void paintSystem(double x, double y, GeneralSystem system) {
         Group shape = new Group();
         Rectangle mainRectangle = new Rectangle(x, y, SYSTEM_SIZE, SYSTEM_SIZE);
         mainRectangle.setFill(SYSTEM_COLOR);

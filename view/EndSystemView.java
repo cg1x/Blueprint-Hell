@@ -9,26 +9,31 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static game.controller.Constants.*;
+import static game.controller.Constants.INDICATOR_HEIGHT;
+import static game.controller.Constants.INDICATOR_MARGIN;
+import static game.controller.Constants.INDICATOR_WIDTH;
+import static game.controller.Constants.SYSTEM_COLOR;
+import static game.controller.Constants.SYSTEM_SIZE;
+import static game.controller.Constants.SYSTEM_TOP_COLOR;
+import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
 
-public class SystemView {
+public class EndSystemView {
     double x;
     double y;
-    SystemModel system;
+    EndSystem system;
     ArrayList<Port> inputPorts;
-    ArrayList<Port> outputPorts;
     int blockCnt;
     Rectangle mainRectangle;
     Rectangle topRectangle;
     Group shape;
     Rectangle indicator;
 
-    public SystemView(SystemModel system) {
+    public EndSystemView(EndSystem system) {
         this.x = system.getInitialX();
         this.y = system.getInitialY();
         this.system = system;
         inputPorts = system.inputPorts;
-        outputPorts = system.outputPorts;
-        blockCnt = Math.max(inputPorts.size(), outputPorts.size());
+        blockCnt = inputPorts.size();
         paint();
         enableDragging();
     }
@@ -75,18 +80,6 @@ public class SystemView {
 
             if (port instanceof TrianglePort) {
                 TrianglePortView portView = new TrianglePortView(x, y + 10 + ((inputPorts.indexOf(port) + 1)* SYSTEM_TOP_HEIGHT));
-                shape.getChildren().addAll(portView);
-            }
-        }
-        // paint output ports
-        for (Port port : outputPorts) {
-            if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x + SYSTEM_SIZE - 5, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
-                shape.getChildren().addAll(portView);
-            }
-
-            if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x + SYSTEM_SIZE, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
                 shape.getChildren().addAll(portView);
             }
         }

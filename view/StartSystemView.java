@@ -2,19 +2,27 @@ package game.view;
 
 import game.model.*;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static game.controller.Constants.*;
+import static game.controller.Constants.INDICATOR_HEIGHT;
+import static game.controller.Constants.INDICATOR_MARGIN;
+import static game.controller.Constants.INDICATOR_WIDTH;
+import static game.controller.Constants.SYSTEM_COLOR;
+import static game.controller.Constants.SYSTEM_SIZE;
+import static game.controller.Constants.SYSTEM_TOP_COLOR;
+import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
 
-public class SystemView {
+public class StartSystemView {
     double x;
     double y;
-    SystemModel system;
-    ArrayList<Port> inputPorts;
+    StartSystem system;
     ArrayList<Port> outputPorts;
     int blockCnt;
     Rectangle mainRectangle;
@@ -22,13 +30,12 @@ public class SystemView {
     Group shape;
     Rectangle indicator;
 
-    public SystemView(SystemModel system) {
+    public StartSystemView(StartSystem system) {
         this.x = system.getInitialX();
         this.y = system.getInitialY();
         this.system = system;
-        inputPorts = system.inputPorts;
         outputPorts = system.outputPorts;
-        blockCnt = Math.max(inputPorts.size(), outputPorts.size());
+        blockCnt = outputPorts.size();
         paint();
         enableDragging();
     }
@@ -66,30 +73,27 @@ public class SystemView {
         indicator.setFill(SYSTEM_TOP_COLOR);
         indicator.setStroke(SYSTEM_COLOR);
         shape.getChildren().addAll(mainRectangle, topRectangle, indicator);
-        // paint input ports
-        for (Port port : inputPorts) {
-            if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x - 5, y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
-                shape.getChildren().addAll(portView);
-            }
-
-            if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x, y + 10 + ((inputPorts.indexOf(port) + 1)* SYSTEM_TOP_HEIGHT));
-                shape.getChildren().addAll(portView);
-            }
-        }
         // paint output ports
         for (Port port : outputPorts) {
             if (port instanceof SquarePort) {
                 SquarePortView portView = new SquarePortView(x + SYSTEM_SIZE - 5, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
-                shape.getChildren().addAll(portView);
+                shape.getChildren().add(portView);
             }
 
             if (port instanceof TrianglePort) {
                 TrianglePortView portView = new TrianglePortView(x + SYSTEM_SIZE, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
-                shape.getChildren().addAll(portView);
+                shape.getChildren().add(portView);
             }
         }
+        //paint run button
+        Button runButton = new Button("Run");
+        runButton.setPrefWidth(60);
+        runButton.setPrefHeight(20);
+        runButton.setLayoutX(x + 30);
+        runButton.setLayoutY(y + (blockCnt + 1) * SYSTEM_TOP_HEIGHT/2 + 5);
+        runButton.setFont(new Font("Verdana", 12));
+        shape.getChildren().add(runButton);
+
         Root.getINSTANCE().getChildren().addAll(shape);
     }
 }

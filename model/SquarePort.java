@@ -1,15 +1,15 @@
 package game.model;
 
 public class SquarePort extends Port {
-    public SystemModel system;
+    public GeneralSystem system;
     public PortType portType;
 
-    public SquarePort(SystemModel system, PortType portType) {
+    public SquarePort(GeneralSystem system, PortType portType) {
         super(system, portType);
     }
 
     @Override
-    public SystemModel getSystem() {
+    public GeneralSystem getSystem() {
         return system;
     }
     @Override
