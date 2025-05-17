@@ -36,19 +36,21 @@ public final class GameUI {
         new SquarePort(generalSystem, PortType.INPUT);
         new TrianglePort(generalSystem, PortType.OUTPUT);
         new SystemView(generalSystem);
-        SystemModel generalSystem2 = new SystemModel(50, 250);
+        SystemModel generalSystem2 = new SystemModel(250, 50);
         new SquarePort(generalSystem2, PortType.INPUT);
         new TrianglePort(generalSystem2, PortType.INPUT);
         new SquarePort(generalSystem2, PortType.OUTPUT);
         new SystemView(generalSystem2);
-        StartSystem generalSystem3 = new StartSystem(50, 450);
+        StartSystem generalSystem3 = new StartSystem(200, 390);
         new TrianglePort(generalSystem3, PortType.OUTPUT);
         new SquarePort(generalSystem3, PortType.OUTPUT);
         new StartSystemView(generalSystem3);
-        EndSystem generalSystem4 = new EndSystem(50, 650);
+        EndSystem generalSystem4 = new EndSystem(1300, 390);
         new TrianglePort(generalSystem4, PortType.INPUT);
         new SquarePort(generalSystem4, PortType.INPUT);
         new EndSystemView(generalSystem4);
+
+
 
 
         stage.setWidth(STAGE_WIDTH);

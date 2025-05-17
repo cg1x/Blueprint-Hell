@@ -6,11 +6,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static game.controller.Constants.*;
 
-public class SystemView {
+public class SystemView extends GeneralSystemView {
     double x;
     double y;
     SystemModel system;
@@ -20,6 +21,7 @@ public class SystemView {
     Rectangle mainRectangle;
     Rectangle topRectangle;
     Group shape;
+    Group shapeWithoutPorts;
     Rectangle indicator;
 
     public SystemView(SystemModel system) {
@@ -30,25 +32,31 @@ public class SystemView {
         outputPorts = system.outputPorts;
         blockCnt = Math.max(inputPorts.size(), outputPorts.size());
         paint();
-        enableDragging();
+        enableDragging(true);
     }
 
     public GeneralSystem getModel() {
         return system;
     }
 
-    public void enableDragging() {
-        AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
-        AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);
-        shape.setOnMousePressed((MouseEvent e) -> {
-            offsetX.set(e.getX());
-            offsetY.set(e.getY());
-        });
-
-        shape.setOnMouseDragged((MouseEvent e) -> {
-            shape.setLayoutX(e.getSceneX() - offsetX.get());
-            shape.setLayoutY(e.getSceneY() - offsetY.get());
-        });
+    public void enableDragging(boolean bool) {
+        if (bool) {
+            AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
+            AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);
+            AtomicBoolean allowed = new AtomicBoolean(false);
+            shape.setOnMousePressed((MouseEvent e) -> {
+                offsetX.set(e.getX());
+                offsetY.set(e.getY());
+                Object target = e.getPickResult().getIntersectedNode();
+                allowed.set(!(target instanceof SquarePortView));
+            });
+            shape.setOnMouseDragged((MouseEvent e) -> {
+                if (allowed.get()) {
+                    shape.setLayoutX(e.getSceneX() - offsetX.get());
+                    shape.setLayoutY(e.getSceneY() - offsetY.get());
+                }
+            });
+        }
     }
 
     public void paint() {
@@ -69,19 +77,21 @@ public class SystemView {
         // paint input ports
         for (Port port : inputPorts) {
             if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x - 5, y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
+                SquarePortView portView = new SquarePortView(x - 5,
+                        y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (SquarePort) port);
                 shape.getChildren().addAll(portView);
             }
 
             if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x, y + 10 + ((inputPorts.indexOf(port) + 1)* SYSTEM_TOP_HEIGHT));
+                TrianglePortView portView = new TrianglePortView(x, y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
                 shape.getChildren().addAll(portView);
             }
         }
         // paint output ports
         for (Port port : outputPorts) {
             if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x + SYSTEM_SIZE - 5, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
+                SquarePortView portView = new SquarePortView(x + SYSTEM_SIZE - 5,
+                        y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (SquarePort) port);
                 shape.getChildren().addAll(portView);
             }
 

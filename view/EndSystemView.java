@@ -17,7 +17,7 @@ import static game.controller.Constants.SYSTEM_SIZE;
 import static game.controller.Constants.SYSTEM_TOP_COLOR;
 import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
 
-public class EndSystemView {
+public class EndSystemView extends GeneralSystemView {
     double x;
     double y;
     EndSystem system;
@@ -35,25 +35,28 @@ public class EndSystemView {
         inputPorts = system.inputPorts;
         blockCnt = inputPorts.size();
         paint();
-        enableDragging();
+        enableDragging(false);
     }
 
     public GeneralSystem getModel() {
         return system;
     }
 
-    public void enableDragging() {
-        AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
-        AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);
-        shape.setOnMousePressed((MouseEvent e) -> {
-            offsetX.set(e.getX());
-            offsetY.set(e.getY());
-        });
+    public void enableDragging(boolean bool) {
+        if (bool) {
+            AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
+            AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);
+            shape.setOnMousePressed((MouseEvent e) -> {
 
-        shape.setOnMouseDragged((MouseEvent e) -> {
-            shape.setLayoutX(e.getSceneX() - offsetX.get());
-            shape.setLayoutY(e.getSceneY() - offsetY.get());
-        });
+                offsetX.set(e.getX());
+                offsetY.set(e.getY());
+            });
+
+            shape.setOnMouseDragged((MouseEvent e) -> {
+                shape.setLayoutX(e.getSceneX() - offsetX.get());
+                shape.setLayoutY(e.getSceneY() - offsetY.get());
+            });
+        }
     }
 
     public void paint() {
@@ -74,7 +77,8 @@ public class EndSystemView {
         // paint input ports
         for (Port port : inputPorts) {
             if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x - 5, y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
+                SquarePortView portView = new SquarePortView(x - 5,
+                        y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (SquarePort) port);
                 shape.getChildren().addAll(portView);
             }
 
