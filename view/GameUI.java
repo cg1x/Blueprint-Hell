@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import static game.controller.Constants.*;
@@ -32,23 +31,23 @@ public final class GameUI {
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
-        SystemModel generalSystem = new SystemModel(50, 50);
+        SystemModel generalSystem = new SystemModel(600, 600);
         new SquarePort(generalSystem, PortType.INPUT);
         new TrianglePort(generalSystem, PortType.OUTPUT);
         new SystemView(generalSystem);
-        SystemModel generalSystem2 = new SystemModel(250, 50);
+        SystemModel generalSystem2 = new SystemModel(1000, 600);
         new SquarePort(generalSystem2, PortType.INPUT);
         new TrianglePort(generalSystem2, PortType.INPUT);
         new SquarePort(generalSystem2, PortType.OUTPUT);
         new SystemView(generalSystem2);
         StartSystem generalSystem3 = new StartSystem(200, 390);
-        new TrianglePort(generalSystem3, PortType.OUTPUT);
+        new TrianglePort(generalSystem3, PortType.INPUT);
         new SquarePort(generalSystem3, PortType.OUTPUT);
         new StartSystemView(generalSystem3);
-        EndSystem generalSystem4 = new EndSystem(1300, 390);
+        SystemModel generalSystem4 = new SystemModel(1300, 390);
         new TrianglePort(generalSystem4, PortType.INPUT);
         new SquarePort(generalSystem4, PortType.INPUT);
-        new EndSystemView(generalSystem4);
+        new SystemView(generalSystem4);
 
 
 

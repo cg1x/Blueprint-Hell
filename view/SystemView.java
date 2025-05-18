@@ -3,6 +3,7 @@ package game.view;
 import game.model.*;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -28,14 +29,15 @@ public class SystemView extends GeneralSystemView {
         this.x = system.getInitialX();
         this.y = system.getInitialY();
         this.system = system;
-        inputPorts = system.inputPorts;
-        outputPorts = system.outputPorts;
+        system.setView(this);
+        inputPorts = system.getInputPorts();
+        outputPorts = system.getOutputPorts();
         blockCnt = Math.max(inputPorts.size(), outputPorts.size());
         paint();
-        enableDragging(true);
+        enableDragging(false);
     }
 
-    public GeneralSystem getModel() {
+    public SystemModel getModel() {
         return system;
     }
 
@@ -57,6 +59,15 @@ public class SystemView extends GeneralSystemView {
                 }
             });
         }
+    }
+
+    @Override
+    public void turnOnIndicator() {
+        indicator.setFill(Color.CYAN);
+    }
+    @Override
+    public void turnOffIndicator() {
+        indicator.setFill(SYSTEM_TOP_COLOR);
     }
 
     public void paint() {
@@ -83,7 +94,8 @@ public class SystemView extends GeneralSystemView {
             }
 
             if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x, y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
+                TrianglePortView portView = new TrianglePortView(x,
+                        y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (TrianglePort) port);
                 shape.getChildren().addAll(portView);
             }
         }
@@ -96,7 +108,8 @@ public class SystemView extends GeneralSystemView {
             }
 
             if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x + SYSTEM_SIZE, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
+                TrianglePortView portView = new TrianglePortView(x + SYSTEM_SIZE,
+                        y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (TrianglePort) port);
                 shape.getChildren().addAll(portView);
             }
         }

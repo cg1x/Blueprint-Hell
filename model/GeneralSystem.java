@@ -1,5 +1,6 @@
 package game.model;
 
+import game.view.GeneralSystemView;
 import game.view.SystemView;
 
 import java.util.ArrayList;
@@ -7,13 +8,35 @@ import java.util.ArrayList;
 public abstract class GeneralSystem {
     public double initialX;
     public double initialY;
-    public SystemView systemView;
+    public GeneralSystemView systemView;
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
 
     public GeneralSystem(double x, double y) {
         initialX = x;
         initialY = y;
+    }
+
+    public void updateIndicator() {
+        int availablePorts = inputPorts.size() + outputPorts.size();
+
+        for (Port port : inputPorts) {
+            if (!(port.isAvailable())) {
+                availablePorts--;
+            }
+        }
+
+        for (Port port : outputPorts) {
+            if (!(port.isAvailable())) {
+                availablePorts--;
+            }
+        }
+
+        if (availablePorts == 0) {
+            systemView.turnOnIndicator();
+        } else {
+            systemView.turnOffIndicator();
+        }
     }
 
     public double getInitialY() {
@@ -24,12 +47,20 @@ public abstract class GeneralSystem {
         return initialX;
     }
 
-    public SystemView getView() {
+    public GeneralSystemView getView() {
         return systemView;
     }
 
-    public void setView(SystemView systemView) {
+    public void setView(GeneralSystemView systemView) {
         this.systemView = systemView;
+    }
+
+    public ArrayList<Port> getInputPorts() {
+        return inputPorts;
+    }
+
+    public ArrayList<Port> getOutputPorts() {
+        return outputPorts;
     }
 
     public void addPort(Port port, PortType portType) {
@@ -39,4 +70,5 @@ public abstract class GeneralSystem {
             outputPorts.add(port);
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package game.view;
 
 import game.controller.Constants;
+import game.controller.Controller;
+import game.model.PortType;
 import game.model.SquarePort;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
@@ -13,9 +15,9 @@ import static game.controller.Constants.PORT_SIZE;
 
 public class SquarePortView extends Rectangle {
 
-    SquarePort port;
-    Color color = Color.GREEN;
-    WireView wire;
+    public SquarePort port;
+    public Color color = Color.GREEN;
+    public WireView wire;
 
     public SquarePortView(double x, double y, SquarePort port) {
         super(x, y, PORT_SIZE, PORT_SIZE);
@@ -26,11 +28,11 @@ public class SquarePortView extends Rectangle {
         Root.getINSTANCE().getChildren().add(this);
         setOnMouseEntered(e -> setOpacity(0.5));
         setOnMouseExited(e -> setOpacity(1.0));
-        enableDrawLine(true);
+        enableDrawLine();
     }
 
-    public void enableDrawLine(boolean bool) {
-        if (bool) {
+    public void enableDrawLine() {
+        if (port.available) {
             this.setOnMousePressed(this::startLine);
         }
     }
@@ -48,8 +50,8 @@ public class SquarePortView extends Rectangle {
     }
 
     public void dragLine(MouseEvent e) {
-        if (wire != null) {
-            wire.setEndX(e.getSceneX() + 1);
+        if (wire != null && port.available && (port.getPortType() == PortType.OUTPUT)) {
+            wire.setEndX(e.getSceneX());
             wire.setEndY(e.getSceneY() + 1);
         }
     }
@@ -57,16 +59,15 @@ public class SquarePortView extends Rectangle {
     public void endLine(MouseEvent e) {
         if (wire != null) {
             Object target = e.getPickResult().getIntersectedNode();
-            if (target instanceof SquarePortView) {
+            if (target instanceof SquarePortView && Controller.connectable(this, (SquarePortView) target)) {
                 wire.setEndX(((SquarePortView) target).getCenterX());
                 wire.setEndY(((SquarePortView) target).getCenterY());
                 wire.setStrokeWidth(4);
-
-
+                port.available = false;
+                ((SquarePortView) target).port.available = false;
+                wire.setWireModel(this, (SquarePortView) target);
             } else {
                 Root.getINSTANCE().getChildren().remove(wire);
-                enableDrawLine(false);
-
             }
         }
 
