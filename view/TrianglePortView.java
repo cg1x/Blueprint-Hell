@@ -11,7 +11,7 @@ import javafx.scene.shape.Polygon;
 
 import static game.controller.Constants.PORT_SIZE;
 
-public class TrianglePortView extends Polygon {
+public class TrianglePortView extends PortView {
     double x;
     double y;
     public TrianglePort port;
@@ -24,6 +24,7 @@ public class TrianglePortView extends Polygon {
         this.x = x;
         this.y = y;
         this.port = port;
+        port.setPortView(this);
         setFill(Color.YELLOW);
         setStroke(Color.BLACK);
         setStrokeWidth(2);
@@ -83,5 +84,15 @@ public class TrianglePortView extends Polygon {
 
     public double getCenterY() {
         return y + PORT_SIZE/2;
+    }
+
+    @Override
+    public double getX() {
+        return x;
+    }
+
+    @Override
+    public double getY() {
+        return y;
     }
 }

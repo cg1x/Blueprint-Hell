@@ -1,12 +1,17 @@
 package game.model;
 
+import game.controller.Update;
 import game.view.GeneralSystemView;
 import game.view.StartSystemView;
 import game.view.SystemView;
 
 import java.util.ArrayList;
 
-public class StartSystem extends GeneralSystem {
+
+
+public final class StartSystem extends GeneralSystem {
+
+    private static StartSystem INSTANCE;
     public double initialX;
     public double initialY;
     public StartSystemView systemView;
@@ -16,6 +21,7 @@ public class StartSystem extends GeneralSystem {
 
     public StartSystem(double x, double y) {
         super(x, y);
+        INSTANCE = this;
         initialX = x;
         initialY = y;
     }
@@ -38,6 +44,9 @@ public class StartSystem extends GeneralSystem {
 
         if (availablePorts == 0) {
             systemView.turnOnIndicator();
+            new TrianglePacket(outputPorts.getFirst());
+            new TrianglePacket(outputPorts.get(1));
+            new Update();
         } else {
             systemView.turnOffIndicator();
         }
@@ -74,5 +83,9 @@ public class StartSystem extends GeneralSystem {
         } else if (portType == PortType.OUTPUT) {
             outputPorts.add(port);
         }
+    }
+
+    public StartSystem getINSTANCE() {
+        return INSTANCE;
     }
 }

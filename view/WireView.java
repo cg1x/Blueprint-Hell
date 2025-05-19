@@ -23,13 +23,13 @@ public class WireView extends Line {
     }
 
     public void setWireModel(SquarePortView startPort, SquarePortView endPort) {
-        wire = new Wire(startPort.port, endPort.port, WireType.SQUARE);
+        wire = new Wire(startPort.port, endPort.port, WireType.SQUARE, this);
         this.startPort = startPort.port;
         this.endPort = endPort.port;
     }
 
     public void setWireModel(TrianglePortView startPort, TrianglePortView endPort) {
-        wire = new Wire(startPort.port, endPort.port, WireType.TRIANGLE);
+        wire = new Wire(startPort.port, endPort.port, WireType.TRIANGLE, this);
         this.startPort = startPort.port;
         this.endPort = endPort.port;
     }

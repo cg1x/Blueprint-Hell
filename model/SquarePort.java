@@ -1,9 +1,14 @@
 package game.model;
 
+import game.view.PortView;
+import game.view.SquarePortView;
+
 public class SquarePort extends Port {
     public GeneralSystem system;
     public PortType portType;
     public boolean available;
+    public SquarePortView portView;
+    public Wire wire;
 
     public SquarePort(GeneralSystem system, PortType portType) {
         super(system, portType);
@@ -11,6 +16,27 @@ public class SquarePort extends Port {
         this.portType = portType;
         available = true;
     }
+
+    @Override
+    public void setWire(Wire wire) {
+        super.setWire(wire);
+    }
+
+    @Override
+    public Wire getWire() {
+        return super.getWire();
+    }
+
+    @Override
+    public SquarePortView getPortView() {
+        return portView;
+    }
+
+    @Override
+    public void setPortView(PortView portView) {
+        this.portView = (SquarePortView) portView;
+    }
+
     @Override
     public boolean isAvailable() {
         return available;

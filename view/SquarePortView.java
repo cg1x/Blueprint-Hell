@@ -6,22 +6,24 @@ import game.model.PortType;
 import game.model.SquarePort;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import static game.controller.Constants.PORT_SIZE;
 
-public class SquarePortView extends Rectangle {
+public class SquarePortView extends PortView {
 
+    public double x;
+    public double y;
     public SquarePort port;
     public Color color = Color.GREEN;
     public WireView wire;
 
     public SquarePortView(double x, double y, SquarePort port) {
         super(x, y, PORT_SIZE, PORT_SIZE);
+        this.x = x;
+        this.y = y;
         this.port = port;
+        port.setPortView(this);
         setFill(color);
         setStroke(Color.BLACK);
         setStrokeWidth(2);
@@ -74,17 +76,25 @@ public class SquarePortView extends Rectangle {
         wire = null;
     }
 
-
     public double getCenterX() {
-        Bounds bounds = this.localToScene(this.getBoundsInLocal());
-        double x = bounds.getMinX();
+//        Bounds bounds = this.localToScene(this.getBoundsInLocal());
+//        double x = bounds.getMinX();
         return x + PORT_SIZE/2;
     }
 
     public double getCenterY() {
-        Bounds bounds = this.localToScene(this.getBoundsInLocal());
-        double y = bounds.getMinY();
+//        Bounds bounds = this.localToScene(this.getBoundsInLocal());
+//        double y = bounds.getMinY();
         return y + PORT_SIZE/2;
     }
 
+    @Override
+    public double getX() {
+        return x;
+    }
+
+    @Override
+    public double getY() {
+        return y;
+    }
 }
