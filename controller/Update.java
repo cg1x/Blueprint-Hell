@@ -31,12 +31,20 @@ public class Update {
             if (packet.reachedEndPort()) {
                 packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(trianglePackets.indexOf(packet)));
             }
-
+        }
+        for (SquarePacket packet : squarePackets) {
+            packet.move();
+            if (packet.reachedEndPort()) {
+                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(squarePackets.indexOf(packet)));
+            }
         }
     }
 
     public void updateView() {
         for (TrianglePacket packet : trianglePackets) {
+            packet.getPacketView().update();
+        }
+        for (SquarePacket packet : squarePackets) {
             packet.getPacketView().update();
         }
     }

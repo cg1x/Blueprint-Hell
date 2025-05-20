@@ -16,12 +16,13 @@ public class SquarePacket extends Packet implements Movable {
     public Direction direction;
     public SquarePacketView packetView;
     public static ArrayList<SquarePacket> squarePackets = new ArrayList<>();
-    public final double SPEED = 2;
+    public double speed;
 
     public SquarePacket(Port port) {
-        x = port.getPortView().getX();
-        y = port.getPortView().getY();
+        x = port.getPortView().getCenterX() - PORT_SIZE/2;
+        y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
+        setSpeed();
         direction = new Direction(wire);
         packetView = new SquarePacketView(this);
         squarePackets.add(this);
@@ -32,10 +33,20 @@ public class SquarePacket extends Packet implements Movable {
         return shape.getBoundsInLocal().getWidth() != -1;
     }
 
+    public void setSpeed() {
+        if (wire.getWireType() == WireType.SQUARE) {
+            this.speed = 2;
+        }
+        if (wire.getWireType() == WireType.TRIANGLE) {
+            this.speed = 4;
+        }
+    }
+
     public void setPort(Port port) {
         x = port.getPortView().getCenterX() - PORT_SIZE/2;
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
+        setSpeed();
         direction = new Direction(wire);
     }
 
@@ -76,7 +87,7 @@ public class SquarePacket extends Packet implements Movable {
 
     @Override
     public void move() {
-        move(direction,SPEED);
+        move(direction, speed);
     }
 
 }

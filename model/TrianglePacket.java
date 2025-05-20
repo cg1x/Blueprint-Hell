@@ -2,7 +2,6 @@ package game.model;
 
 import game.model.movement.Direction;
 import game.model.movement.Movable;
-import game.view.SquarePacketView;
 import game.view.TrianglePacketView;
 import javafx.scene.shape.Shape;
 
@@ -17,12 +16,14 @@ public class TrianglePacket extends Packet implements Movable {
     public Direction direction;
     public TrianglePacketView packetView;
     public static ArrayList<TrianglePacket> trianglePackets = new ArrayList<>();
-    public final double SPEED = 2;
+    public double acceleration = 0.05;
+    public double speed;
 
     public TrianglePacket(Port port) {
         x = port.getPortView().getCenterX();
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
+        speed = 2;
         direction = new Direction(wire);
         packetView = new TrianglePacketView(this);
         trianglePackets.add(this);
@@ -37,6 +38,7 @@ public class TrianglePacket extends Packet implements Movable {
         x = port.getPortView().getCenterX();
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
+        speed = 2;
         direction = new Direction(wire);
     }
 
@@ -73,10 +75,13 @@ public class TrianglePacket extends Packet implements Movable {
     public void move(Direction direction, double speed) {
         this.x += direction.getX() * speed;
         this.y += direction.getY() * speed;
+        if (wire.getWireType() == WireType.SQUARE) {
+            this.speed += acceleration;
+        }
     }
 
     @Override
     public void move() {
-        move(direction,SPEED);
+        move(direction, speed);
     }
 }
