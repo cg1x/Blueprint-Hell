@@ -44,8 +44,8 @@ public final class StartSystem extends GeneralSystem {
 
         if (availablePorts == 0) {
             systemView.turnOnIndicator();
-            new TrianglePacket(outputPorts.getFirst());
-            new TrianglePacket(outputPorts.get(1));
+            new TrianglePacket(outputPorts.get(0));
+            new TrianglePacket(outputPorts.get(0));
             new Update();
         } else {
             systemView.turnOffIndicator();

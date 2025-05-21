@@ -2,6 +2,7 @@ package game.model;
 
 import game.model.movement.Direction;
 import game.model.movement.Movable;
+import game.view.Root;
 import game.view.SquarePacketView;
 import javafx.scene.shape.Shape;
 
@@ -15,6 +16,7 @@ public class SquarePacket extends Packet implements Movable {
     public Wire wire;
     public Direction direction;
     public SquarePacketView packetView;
+    public boolean onWire;
     public static ArrayList<SquarePacket> squarePackets = new ArrayList<>();
     public double speed;
 
@@ -22,10 +24,19 @@ public class SquarePacket extends Packet implements Movable {
         x = port.getPortView().getCenterX() - PORT_SIZE/2;
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
+        wire.addPacket(this);
         setSpeed();
         direction = new Direction(wire);
         packetView = new SquarePacketView(this);
         squarePackets.add(this);
+    }
+
+    public boolean isOnWire() {
+        return onWire;
+    }
+
+    public void setOnWire(boolean onWire) {
+        this.onWire = onWire;
     }
 
     public boolean reachedEndPort() {
@@ -43,9 +54,11 @@ public class SquarePacket extends Packet implements Movable {
     }
 
     public void setPort(Port port) {
+        wire.removePacket(this);
         x = port.getPortView().getCenterX() - PORT_SIZE/2;
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
+        wire.addPacket(this);
         setSpeed();
         direction = new Direction(wire);
     }

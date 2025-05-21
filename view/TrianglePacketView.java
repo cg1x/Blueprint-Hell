@@ -35,5 +35,6 @@ public class TrianglePacketView extends PacketView {
     public void update() {
         shape.setLayoutX(packet.getX() - x);
         shape.setLayoutY(packet.getY() - y);
+        shape.setVisible(packet.getWire().getOnWirePacket() == packet);
     }
 }

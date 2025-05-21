@@ -27,15 +27,19 @@ public class Update {
 
     public void updateModel() {
         for (TrianglePacket packet : trianglePackets) {
-            packet.move();
+            if (packet.getWire().getOnWirePacket() == packet) {
+                packet.move();
+            }
             if (packet.reachedEndPort()) {
-                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(trianglePackets.indexOf(packet)));
+                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(0));
             }
         }
         for (SquarePacket packet : squarePackets) {
-            packet.move();
+            if (packet.getWire().getOnWirePacket() == packet) {
+                packet.move();
+            }
             if (packet.reachedEndPort()) {
-                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(squarePackets.indexOf(packet)));
+                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(1));
             }
         }
     }
