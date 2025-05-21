@@ -27,7 +27,7 @@ public class Update {
 
     public void updateModel() {
         for (TrianglePacket packet : trianglePackets) {
-            if (packet.getWire().getStartPort().getSystem().getPendingPackets().contains(packet)) {
+            if (packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet)) {
                 continue;
             }
             packet.move();
@@ -37,7 +37,7 @@ public class Update {
             }
         }
         for (SquarePacket packet : squarePackets) {
-            if (packet.getWire().getStartPort().getSystem().getPendingPackets().contains(packet)) {
+            if (packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet)) {
                 continue;
             }
             packet.move();

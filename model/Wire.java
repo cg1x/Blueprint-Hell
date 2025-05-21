@@ -35,6 +35,7 @@ public class Wire {
             packet = null;
         } else {
             packet = startPort.getSystem().getPendingPackets().getFirst();
+            startPort.getSystem().getPendingPackets().remove(packet);
             packet.setPort(startPort);
         }
     }

@@ -20,13 +20,12 @@ public class SquarePacket extends Packet implements Movable {
     public static ArrayList<SquarePacket> squarePackets = new ArrayList<>();
     public double speed;
 
-    public SquarePacket(Port port) {
+    public SquarePacket() {
+        Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
         x = port.getPortView().getCenterX() - PORT_SIZE/2;
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
-        wire.setPacket(this);
-        setSpeed();
-        direction = new Direction(wire);
+        StartSystem.getINSTANCE().decideForPacket(this);
         packetView = new SquarePacketView(this);
         squarePackets.add(this);
     }

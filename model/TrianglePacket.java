@@ -2,6 +2,7 @@ package game.model;
 
 import game.model.movement.Direction;
 import game.model.movement.Movable;
+import game.view.SquarePacketView;
 import game.view.TrianglePacketView;
 import javafx.scene.shape.Shape;
 
@@ -19,13 +20,12 @@ public class TrianglePacket extends Packet implements Movable {
     public double acceleration = 0.05;
     public double speed;
 
-    public TrianglePacket(Port port) {
+    public TrianglePacket() {
+        Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
         x = port.getPortView().getCenterX();
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
-        wire.setPacket(this);
-        speed = 2;
-        direction = new Direction(wire);
+        StartSystem.getINSTANCE().decideForPacket(this);
         packetView = new TrianglePacketView(this);
         trianglePackets.add(this);
     }
