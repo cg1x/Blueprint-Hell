@@ -11,11 +11,51 @@ public class SystemModel extends GeneralSystem {
     public SystemView systemView;
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
+    public ArrayList<Packet> pendingPackets = new ArrayList<>();
 
     public SystemModel(double x, double y) {
         super(x, y);
         initialX = x;
         initialY = y;
+    }
+
+    public ArrayList<Packet> getPendingPackets() {
+        return pendingPackets;
+    }
+
+    @Override
+    public void decideForPacket(TrianglePacket packet) {
+        for (Port port : outputPorts) {
+            if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
+                packet.setPort(port);
+                return;
+            }
+        }
+        for (Port port : outputPorts) {
+            if (port instanceof SquarePort && port.getWire().getPacket() == null) {
+                packet.setPort(port);
+                return;
+            }
+        }
+        pendingPackets.add(packet);
+
+    }
+
+    @Override
+    public void decideForPacket(SquarePacket packet) {
+        for (Port port : outputPorts) {
+            if (port instanceof SquarePort && port.getWire().getPacket() == null) {
+                packet.setPort(port);
+                return;
+            }
+        }
+        for (Port port : outputPorts) {
+            if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
+                packet.setPort(port);
+                return;
+            }
+        }
+        pendingPackets.add(packet);
     }
 
     @Override

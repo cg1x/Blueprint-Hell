@@ -23,7 +23,7 @@ public class TrianglePacket extends Packet implements Movable {
         x = port.getPortView().getCenterX();
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
-        wire.addPacket(this);
+        wire.setPacket(this);
         speed = 2;
         direction = new Direction(wire);
         packetView = new TrianglePacketView(this);
@@ -36,11 +36,10 @@ public class TrianglePacket extends Packet implements Movable {
     }
 
     public void setPort(Port port) {
-        wire.removePacket(this);
         x = port.getPortView().getCenterX();
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
         wire = port.getWire();
-        wire.addPacket(this);
+        wire.setPacket(this);
         speed = 2;
         direction = new Direction(wire);
     }

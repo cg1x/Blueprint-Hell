@@ -9,7 +9,7 @@ public class Wire {
     public Port endPort;
     public WireType wireType;
     public WireView wireView;
-    public ArrayList<Packet> packets = new ArrayList<>();
+    public Packet packet;
     public boolean available = true;
 
     public Wire(Port startPort, Port endPort, WireType wireType, WireView wireView) {
@@ -22,24 +22,21 @@ public class Wire {
         update();
     }
 
-    public void addPacket(Packet packet) {
-        packets.add(packet);
+    public Packet getPacket() {
+        return packet;
     }
 
-    public Packet getOnWirePacket() {
-        return packets.getFirst();
+    public void setPacket(Packet packet) {
+        this.packet = packet;
     }
 
-    public void removePacket(Packet packet) {
-        packets.remove(packet);
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void getNewPacket() {
+        if (startPort.getSystem().getPendingPackets().isEmpty()) {
+            packet = null;
+        } else {
+            packet = startPort.getSystem().getPendingPackets().getFirst();
+            packet.setPort(startPort);
+        }
     }
 
     public Port getStartPort() {

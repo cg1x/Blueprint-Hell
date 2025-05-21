@@ -11,10 +11,18 @@ public abstract class GeneralSystem {
     public GeneralSystemView systemView;
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
+    public ArrayList<Packet> pendingPackets = new ArrayList<>();
 
     public GeneralSystem(double x, double y) {
         initialX = x;
         initialY = y;
+    }
+
+    public abstract void decideForPacket(TrianglePacket packet);
+    public abstract void decideForPacket(SquarePacket packet);
+
+    public ArrayList<Packet> getPendingPackets() {
+        return pendingPackets;
     }
 
     public void updateIndicator() {

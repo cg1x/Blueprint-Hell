@@ -27,19 +27,23 @@ public class Update {
 
     public void updateModel() {
         for (TrianglePacket packet : trianglePackets) {
-            if (packet.getWire().getOnWirePacket() == packet) {
-                packet.move();
+            if (packet.getWire().getStartPort().getSystem().getPendingPackets().contains(packet)) {
+                continue;
             }
+            packet.move();
             if (packet.reachedEndPort()) {
-                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(0));
+                packet.getWire().getNewPacket();
+                packet.getWire().getEndPort().getSystem().decideForPacket(packet);
             }
         }
         for (SquarePacket packet : squarePackets) {
-            if (packet.getWire().getOnWirePacket() == packet) {
-                packet.move();
+            if (packet.getWire().getStartPort().getSystem().getPendingPackets().contains(packet)) {
+                continue;
             }
+            packet.move();
             if (packet.reachedEndPort()) {
-                packet.setPort(packet.getWire().getEndPort().getSystem().getOutputPorts().get(1));
+                packet.getWire().getNewPacket();
+                packet.getWire().getEndPort().getSystem().decideForPacket(packet);
             }
         }
     }
