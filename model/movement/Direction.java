@@ -1,6 +1,9 @@
 package game.model.movement;
 
+import game.model.Packet;
 import game.model.Wire;
+import game.model.collision.Collidable;
+import game.model.collision.Collision;
 import javafx.geometry.Point2D;
 
 public class Direction {
@@ -14,6 +17,27 @@ public class Direction {
     public Direction(Wire wire) {
         double x = wire.getWireView().getEndX() - wire.getWireView().getStartX();
         double y = wire.getWireView().getEndY() - wire.getWireView().getStartY();
+
+        if (x == 0 && y > 0) {
+            isUpward = true;
+        } else if (x == 0 && y < 0) {
+            isDownward = true;
+        } else if (x == 0) {
+            state = DirectionState.NEUTRAL;
+        } else {
+            slope = y / x;
+            if (x > 0) {
+                state = DirectionState.POSITIVE;
+            } else {
+                state = DirectionState.NEGATIVE;
+            }
+        }
+        getDirectionVector();
+    }
+
+    public Direction(Packet packet, Collision collision) {
+        double x = packet.getCenterX() - collision.getX();
+        double y = packet.getCenterY() - collision.getY();
 
         if (x == 0 && y > 0) {
             isUpward = true;

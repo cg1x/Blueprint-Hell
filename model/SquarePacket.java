@@ -14,6 +14,8 @@ import static game.controller.Constants.*;
 public class SquarePacket extends Packet implements Movable, Collidable {
     public double x;
     public double y;
+    public double deflectionX;
+    public double deflectionY;
     public Wire wire;
     public Direction direction;
     public SquarePacketView packetView;
@@ -23,6 +25,8 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public double speed;
 
     public SquarePacket() {
+        deflectionX = 0;
+        deflectionY = 0;
         Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
         x = port.getPortView().getCenterX() - PORT_SIZE/2;
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
@@ -55,8 +59,8 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     }
 
     public void setPort(Port port) {
-        x = port.getPortView().getCenterX() - PORT_SIZE/2;
-        y = port.getPortView().getCenterY() - PORT_SIZE/2;
+        x = port.getPortView().getCenterX() - PORT_SIZE/2 + deflectionX;
+        y = port.getPortView().getCenterY() - PORT_SIZE/2 + deflectionY;
         wire = port.getWire();
         wire.setPacket(this);
         setSpeed();
@@ -66,6 +70,16 @@ public class SquarePacket extends Packet implements Movable, Collidable {
 
     public Wire getWire() {
         return wire;
+    }
+
+    public void setDeflectionX(double deflectionX) {
+        this.deflectionX = deflectionX;
+        x += deflectionX;
+    }
+
+    public void setDeflectionY(double deflectionY) {
+        this.deflectionY = deflectionY;
+        y += deflectionY;
     }
 
     @Override
@@ -92,6 +106,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         return x;
     }
 
+    @Override
     public void setX(double x) {
         this.x = x;
     }
@@ -100,6 +115,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         return y;
     }
 
+    @Override
     public void setY(double y) {
         this.y = y;
     }
@@ -128,5 +144,10 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     @Override
     public double getCenterY() {
         return y + PORT_SIZE/2;
+    }
+
+    @Override
+    public SquarePacket getPacket() {
+        return this;
     }
 }

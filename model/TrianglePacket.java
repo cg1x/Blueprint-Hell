@@ -14,6 +14,8 @@ import static game.controller.Constants.PORT_SIZE;
 public class TrianglePacket extends Packet implements Movable, Collidable {
     public double x;
     public double y;
+    public double deflectionX;
+    public double deflectionY;
     public Wire wire;
     public Direction direction;
     public TrianglePacketView packetView;
@@ -23,6 +25,8 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     public double speed;
 
     public TrianglePacket() {
+        deflectionX = 0;
+        deflectionY = 0;
         Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
         x = port.getPortView().getCenterX();
         y = port.getPortView().getCenterY() - PORT_SIZE/2;
@@ -38,8 +42,8 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     }
 
     public void setPort(Port port) {
-        x = port.getPortView().getCenterX();
-        y = port.getPortView().getCenterY() - PORT_SIZE/2;
+        x = port.getPortView().getCenterX() + deflectionX;
+        y = port.getPortView().getCenterY() - PORT_SIZE/2 + deflectionY;
         wire = port.getWire();
         wire.setPacket(this);
         speed = 2;
@@ -49,6 +53,18 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
 
     public Wire getWire() {
         return wire;
+    }
+
+    @Override
+    public void setDeflectionX(double deflectionX) {
+        this.deflectionX = deflectionX;
+        x += deflectionX;
+    }
+
+    @Override
+    public void setDeflectionY(double deflectionY) {
+        this.deflectionY = deflectionY;
+        y += deflectionY;
     }
 
     @Override
@@ -75,6 +91,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         return x;
     }
 
+    @Override
     public void setX(double x) {
         this.x = x;
     }
@@ -83,6 +100,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         return y;
     }
 
+    @Override
     public void setY(double y) {
         this.y = y;
     }
@@ -114,5 +132,10 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     @Override
     public double getCenterY() {
         return y + PORT_SIZE/2;
+    }
+
+    @Override
+    public TrianglePacket getPacket() {
+        return this;
     }
 }

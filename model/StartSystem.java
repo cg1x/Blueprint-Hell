@@ -87,7 +87,8 @@ public final class StartSystem extends GeneralSystem {
         if (availablePorts == 0) {
             systemView.turnOnIndicator();
             new TrianglePacket();
-            new SquarePacket();
+            new TrianglePacket();
+            new TrianglePacket();
             new SquarePacket();
             new Update();
         } else {

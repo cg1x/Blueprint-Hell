@@ -11,7 +11,22 @@ public abstract class Packet implements Movable, Collidable {
     public Wire wire;
     public PacketView packetView;
 
+    public abstract void setDeflectionX(double deflectionX);
+
+    public abstract void setDeflectionY(double deflectionY);
+
     public abstract void setPort(Port port);
+
+    public abstract double getX();
+
+    public abstract void setX(double x);
+
+    public abstract double getY();
+
+    public abstract void setY(double y);
+
+    @Override
+    public abstract Packet getPacket();
 
     @Override
     public abstract void removeCollidable(Collidable collidable);

@@ -52,7 +52,7 @@ public class Update {
             for (int j = i + 1; j < collidables.size(); j++) {
                 Collision collision = collidables.get(i).collides(collidables.get(j));
                 if (collision != null) {
-                    System.out.println("just hit");
+                    collision.applyImpact();
                 }
             }
         }

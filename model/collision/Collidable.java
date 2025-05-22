@@ -1,5 +1,6 @@
 package game.model.collision;
 
+import game.model.Packet;
 import game.view.PacketView;
 import javafx.scene.shape.Shape;
 
@@ -13,6 +14,7 @@ public interface Collidable {
     void removeCollidable(Collidable collidable);
     double getCenterX();
     double getCenterY();
+    Packet getPacket();
     PacketView getPacketView();
 
     default Collision collides(Collidable collidable) {
