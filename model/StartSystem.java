@@ -7,6 +7,7 @@ import game.view.SystemView;
 
 import java.util.ArrayList;
 
+import static game.model.collision.Collidable.collidables;
 
 
 public final class StartSystem extends GeneralSystem {
@@ -33,6 +34,7 @@ public final class StartSystem extends GeneralSystem {
 
     @Override
     public void decideForPacket(TrianglePacket packet) {
+        collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
                 packet.setPort(port);
@@ -50,6 +52,7 @@ public final class StartSystem extends GeneralSystem {
 
     @Override
     public void decideForPacket(SquarePacket packet) {
+        collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {
                 packet.setPort(port);
@@ -84,8 +87,8 @@ public final class StartSystem extends GeneralSystem {
         if (availablePorts == 0) {
             systemView.turnOnIndicator();
             new TrianglePacket();
-            new TrianglePacket();
-            new TrianglePacket();
+            new SquarePacket();
+            new SquarePacket();
             new Update();
         } else {
             systemView.turnOffIndicator();

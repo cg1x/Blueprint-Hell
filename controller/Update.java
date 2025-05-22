@@ -3,10 +3,12 @@ package game.controller;
 
 import game.model.SquarePacket;
 import game.model.TrianglePacket;
+import game.model.collision.Collision;
 import javafx.application.Platform;
 
 import static game.model.SquarePacket.squarePackets;
 import static game.model.TrianglePacket.trianglePackets;
+import static game.model.collision.Collidable.collidables;
 
 public class Update {
     public Update() {
@@ -44,6 +46,14 @@ public class Update {
             if (packet.reachedEndPort()) {
                 packet.getWire().getNewPacket();
                 packet.getWire().getEndPort().getSystem().decideForPacket(packet);
+            }
+        }
+        for (int i = 0; i < collidables.size(); i++) {
+            for (int j = i + 1; j < collidables.size(); j++) {
+                Collision collision = collidables.get(i).collides(collidables.get(j));
+                if (collision != null) {
+                    System.out.println("just hit");
+                }
             }
         }
     }

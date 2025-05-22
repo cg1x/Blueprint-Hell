@@ -21,7 +21,8 @@ public class SquarePacketView extends PacketView {
         Root.getINSTANCE().getChildren().add(rect);
     }
 
-    public Rectangle getRect() {
+    @Override
+    public Rectangle getShape() {
         return rect;
     }
 

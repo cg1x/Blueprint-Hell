@@ -1,8 +1,9 @@
 package game.model;
 
+import game.model.collision.Collidable;
+import game.model.collision.Collision;
 import game.model.movement.Direction;
 import game.model.movement.Movable;
-import game.view.SquarePacketView;
 import game.view.TrianglePacketView;
 import javafx.scene.shape.Shape;
 
@@ -10,13 +11,14 @@ import java.util.ArrayList;
 
 import static game.controller.Constants.PORT_SIZE;
 
-public class TrianglePacket extends Packet implements Movable {
+public class TrianglePacket extends Packet implements Movable, Collidable {
     public double x;
     public double y;
     public Wire wire;
     public Direction direction;
     public TrianglePacketView packetView;
     public static ArrayList<TrianglePacket> trianglePackets = new ArrayList<>();
+    public ArrayList<Collidable> collidingWith = new ArrayList<>();
     public double acceleration = 0.05;
     public double speed;
 
@@ -42,12 +44,29 @@ public class TrianglePacket extends Packet implements Movable {
         wire.setPacket(this);
         speed = 2;
         direction = new Direction(wire);
+        collidables.add(this);
     }
 
     public Wire getWire() {
         return wire;
     }
 
+    @Override
+    public boolean isCollidingWith(Collidable collidable) {
+        return collidingWith.contains(collidable);
+    }
+
+    @Override
+    public void addCollidable(Collidable collidable) {
+        collidingWith.add(collidable);
+    }
+
+    @Override
+    public void removeCollidable(Collidable collidable) {
+        collidingWith.remove(collidable);
+    }
+
+    @Override
     public TrianglePacketView getPacketView() {
         return packetView;
     }
@@ -85,5 +104,15 @@ public class TrianglePacket extends Packet implements Movable {
     @Override
     public void move() {
         move(direction, speed);
+    }
+
+    @Override
+    public double getCenterX() {
+        return x;
+    }
+
+    @Override
+    public double getCenterY() {
+        return y + PORT_SIZE/2;
     }
 }

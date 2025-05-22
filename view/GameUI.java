@@ -31,9 +31,16 @@ public final class GameUI {
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
+        StartSystem generalSystem3 = new StartSystem(200, 390);
+        new SquarePort(generalSystem3, PortType.INPUT);
+        new TrianglePort(generalSystem3, PortType.INPUT);
+        new SquarePort(generalSystem3, PortType.OUTPUT);
+        new TrianglePort(generalSystem3, PortType.OUTPUT);
+        new StartSystemView(generalSystem3);
+
         SystemModel generalSystem = new SystemModel(600, 600);
-        new SquarePort(generalSystem, PortType.INPUT);
         new TrianglePort(generalSystem, PortType.INPUT);
+        new SquarePort(generalSystem, PortType.INPUT);
         new SquarePort(generalSystem, PortType.OUTPUT);
         new TrianglePort(generalSystem, PortType.OUTPUT);
         new SystemView(generalSystem);
@@ -43,15 +50,9 @@ public final class GameUI {
         new SquarePort(generalSystem2, PortType.OUTPUT);
         new TrianglePort(generalSystem2, PortType.OUTPUT);
         new SystemView(generalSystem2);
-        StartSystem generalSystem3 = new StartSystem(200, 390);
-        new SquarePort(generalSystem3, PortType.INPUT);
-        new TrianglePort(generalSystem3, PortType.INPUT);
-        new SquarePort(generalSystem3, PortType.OUTPUT);
-        new TrianglePort(generalSystem3, PortType.OUTPUT);
-        new StartSystemView(generalSystem3);
         SystemModel generalSystem4 = new SystemModel(1300, 200);
-        new SquarePort(generalSystem4, PortType.INPUT);
         new TrianglePort(generalSystem4, PortType.INPUT);
+        new SquarePort(generalSystem4, PortType.INPUT);
         new SquarePort(generalSystem4, PortType.OUTPUT);
         new TrianglePort(generalSystem4, PortType.OUTPUT);
         new SystemView(generalSystem4);
