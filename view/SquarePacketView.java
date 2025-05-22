@@ -1,6 +1,7 @@
 package game.view;
 
 import game.model.SquarePacket;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -30,5 +31,11 @@ public class SquarePacketView extends PacketView {
         rect.setX(packet.getX());
         rect.setY(packet.getY());
         rect.setVisible(!packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet));
+    }
+
+    public void remove() {
+        Platform.runLater(() -> {
+            Root.getINSTANCE().getChildren().remove(rect);
+        });
     }
 }

@@ -5,11 +5,13 @@ import game.model.collision.Collision;
 import game.model.movement.Direction;
 import game.model.movement.Movable;
 import game.view.TrianglePacketView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 
 import static game.controller.Constants.PORT_SIZE;
+import static game.controller.Constants.WIRE_WIDTH;
 
 public class TrianglePacket extends Packet implements Movable, Collidable {
     public double x;
@@ -21,6 +23,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     public TrianglePacketView packetView;
     public static ArrayList<TrianglePacket> trianglePackets = new ArrayList<>();
     public ArrayList<Collidable> collidingWith = new ArrayList<>();
+    public int health = 3;
     public double acceleration = 0.05;
     public double speed;
 
@@ -56,15 +59,37 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     }
 
     @Override
+    public boolean deflected() {
+        Shape shape = Shape.intersect(packetView.getShape(), wire.getWireView());
+        return shape.getBoundsInLocal().getWidth() == -1;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    @Override
+    public void reduceHealth() {
+        health--;
+    }
+
+    @Override
     public void setDeflectionX(double deflectionX) {
-        this.deflectionX = deflectionX;
+        this.deflectionX += deflectionX;
         x += deflectionX;
+        if (deflectionX > (PORT_SIZE + WIRE_WIDTH) / 2) {
+            kill();
+        }
     }
 
     @Override
     public void setDeflectionY(double deflectionY) {
-        this.deflectionY = deflectionY;
+        this.deflectionY += deflectionY;
         y += deflectionY;
+        if (deflectionY > (PORT_SIZE + WIRE_WIDTH) / 2) {
+            kill();
+        }
     }
 
     @Override
@@ -137,5 +162,13 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     @Override
     public TrianglePacket getPacket() {
         return this;
+    }
+
+    @Override
+    public void kill() {
+        wire.getNewPacket();
+        collidables.remove(this);
+        trianglePackets.remove(this);
+        packetView.remove();
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 import static game.controller.Constants.PORT_SIZE;
+import static game.controller.Constants.WIRE_WIDTH;
 
 public class TrianglePortView extends PortView {
     double x;
@@ -65,7 +66,7 @@ public class TrianglePortView extends PortView {
             if (target instanceof TrianglePortView && Controller.connectable(this, (TrianglePortView) target)) {
                 wire.setEndX(((TrianglePortView) target).getCenterX());
                 wire.setEndY(((TrianglePortView) target).getCenterY());
-                wire.setStrokeWidth(4);
+                wire.setStrokeWidth(WIRE_WIDTH);
                 port.available = false;
                 ((TrianglePortView) target).port.available = false;
                 wire.setWireModel(this, (TrianglePortView) target);

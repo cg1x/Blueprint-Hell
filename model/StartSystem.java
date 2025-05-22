@@ -88,7 +88,7 @@ public final class StartSystem extends GeneralSystem {
             systemView.turnOnIndicator();
             new TrianglePacket();
             new TrianglePacket();
-            new TrianglePacket();
+            new SquarePacket();
             new SquarePacket();
             new Update();
         } else {

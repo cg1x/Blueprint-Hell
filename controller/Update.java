@@ -11,6 +11,7 @@ import static game.model.TrianglePacket.trianglePackets;
 import static game.model.collision.Collidable.collidables;
 
 public class Update {
+
     public Update() {
         Thread animator = new Thread(() -> {
             try {
@@ -28,7 +29,8 @@ public class Update {
     }
 
     public void updateModel() {
-        for (TrianglePacket packet : trianglePackets) {
+        for (int i = 0; i < trianglePackets.size(); i++) {
+            TrianglePacket packet = trianglePackets.get(i);
             if (packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet)) {
                 continue;
             }
@@ -38,7 +40,8 @@ public class Update {
                 packet.getWire().getEndPort().getSystem().decideForPacket(packet);
             }
         }
-        for (SquarePacket packet : squarePackets) {
+        for (int i = 0; i < squarePackets.size(); i++) {
+            SquarePacket packet = squarePackets.get(i);
             if (packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet)) {
                 continue;
             }
@@ -59,11 +62,11 @@ public class Update {
     }
 
     public void updateView() {
-        for (TrianglePacket packet : trianglePackets) {
-            packet.getPacketView().update();
+        for (int i = 0; i < trianglePackets.size(); i++) {
+            trianglePackets.get(i).getPacketView().update();
         }
-        for (SquarePacket packet : squarePackets) {
-            packet.getPacketView().update();
+        for (int i = 0; i < squarePackets.size(); i++) {
+            squarePackets.get(i).getPacketView().update();
         }
     }
 }

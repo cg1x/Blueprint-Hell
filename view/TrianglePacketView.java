@@ -2,6 +2,7 @@ package game.view;
 
 import game.model.SquarePacket;
 import game.model.TrianglePacket;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -36,5 +37,11 @@ public class TrianglePacketView extends PacketView {
         shape.setLayoutX(packet.getX() - x);
         shape.setLayoutY(packet.getY() - y);
         shape.setVisible(!packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet));
+    }
+
+    public void remove() {
+        Platform.runLater(() -> {
+            Root.getINSTANCE().getChildren().remove(shape);
+        });
     }
 }

@@ -4,7 +4,9 @@ import game.model.collision.Collidable;
 import game.model.collision.Collision;
 import game.model.movement.Direction;
 import game.model.movement.Movable;
+import game.view.Root;
 import game.view.SquarePacketView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public boolean onWire;
     public static ArrayList<SquarePacket> squarePackets = new ArrayList<>();
     public ArrayList<Collidable> collidingWith = new ArrayList<>();
+    public int health = 2;
     public double speed;
 
     public SquarePacket() {
@@ -58,6 +61,22 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         }
     }
 
+    @Override
+    public boolean deflected() {
+        Shape shape = Shape.intersect(packetView.getShape(), wire.getWireView());
+        return shape.getBoundsInLocal().getWidth() == -1;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    @Override
+    public void reduceHealth() {
+        health--;
+    }
+
     public void setPort(Port port) {
         x = port.getPortView().getCenterX() - PORT_SIZE/2 + deflectionX;
         y = port.getPortView().getCenterY() - PORT_SIZE/2 + deflectionY;
@@ -73,13 +92,19 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     }
 
     public void setDeflectionX(double deflectionX) {
-        this.deflectionX = deflectionX;
+        this.deflectionX += deflectionX;
         x += deflectionX;
+        if (deflectionX > (PORT_SIZE + WIRE_WIDTH) / 2) {
+            kill();
+        }
     }
 
     public void setDeflectionY(double deflectionY) {
-        this.deflectionY = deflectionY;
+        this.deflectionY += deflectionY;
         y += deflectionY;
+        if (deflectionY > (PORT_SIZE + WIRE_WIDTH) / 2) {
+            kill();
+        }
     }
 
     @Override
@@ -149,5 +174,13 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     @Override
     public SquarePacket getPacket() {
         return this;
+    }
+
+    @Override
+    public void kill() {
+        wire.getNewPacket();
+        collidables.remove(this);
+        squarePackets.remove(this);
+        packetView.remove();
     }
 }

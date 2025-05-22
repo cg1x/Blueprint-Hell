@@ -18,8 +18,16 @@ public class Collision {
     public Collision(Collidable collidable1, Collidable collidable2) {
         this.collidable1 = collidable1;
         collidable1.addCollidable(collidable2);
+        collidable1.getPacket().reduceHealth();
+        if (collidable1.getPacket().getHealth() == 0) {
+            collidable1.getPacket().kill();
+        }
         this.collidable2 = collidable2;
         collidable2.addCollidable(collidable1);
+        collidable2.getPacket().reduceHealth();
+        if (collidable2.getPacket().getHealth() == 0) {
+            collidable2.getPacket().kill();
+        }
         this.x = (collidable1.getCenterX() + collidable2.getCenterX()) / 2;
         this.y = (collidable1.getCenterY() + collidable2.getCenterY()) / 2;
         System.out.println("just hit");

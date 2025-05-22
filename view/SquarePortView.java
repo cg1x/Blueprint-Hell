@@ -64,7 +64,7 @@ public class SquarePortView extends PortView {
             if (target instanceof SquarePortView && Controller.connectable(this, (SquarePortView) target)) {
                 wire.setEndX(((SquarePortView) target).getCenterX());
                 wire.setEndY(((SquarePortView) target).getCenterY());
-                wire.setStrokeWidth(4);
+                wire.setStrokeWidth(Constants.WIRE_WIDTH);
                 port.available = false;
                 ((SquarePortView) target).port.available = false;
                 wire.setWireModel(this, (SquarePortView) target);
