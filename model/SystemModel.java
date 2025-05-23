@@ -11,14 +11,21 @@ public class SystemModel extends GeneralSystem {
     public double initialX;
     public double initialY;
     public SystemView systemView;
+    public boolean ready = false;
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
     public ArrayList<Packet> pendingPackets = new ArrayList<>();
+    public static ArrayList<SystemModel> systems = new ArrayList<>();
 
     public SystemModel(double x, double y) {
         super(x, y);
         initialX = x;
         initialY = y;
+        systems.add(this);
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 
     public ArrayList<Packet> getPendingPackets() {
@@ -27,6 +34,7 @@ public class SystemModel extends GeneralSystem {
 
     @Override
     public void decideForPacket(TrianglePacket packet) {
+        Operator.getINSTANCE().packetReached(packet);
         collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
@@ -40,11 +48,16 @@ public class SystemModel extends GeneralSystem {
                 return;
             }
         }
-        pendingPackets.add(packet);
+        if (pendingPackets.size() == 5) {
+            packet.kill();
+        } else {
+            pendingPackets.add(packet);
+        }
     }
 
     @Override
     public void decideForPacket(SquarePacket packet) {
+        Operator.getINSTANCE().packetReached(packet);
         collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {
@@ -58,7 +71,11 @@ public class SystemModel extends GeneralSystem {
                 return;
             }
         }
-        pendingPackets.add(packet);
+        if (pendingPackets.size() == 5) {
+            packet.kill();
+        } else {
+            pendingPackets.add(packet);
+        }
     }
 
     @Override
@@ -79,8 +96,12 @@ public class SystemModel extends GeneralSystem {
 
         if (availablePorts == 0) {
             systemView.turnOnIndicator();
+            ready = true;
+            StartSystem.getINSTANCE().getView().updateButton();
         } else {
             systemView.turnOffIndicator();
+            StartSystem.getINSTANCE().getView().updateButton();
+            ready = false;
         }
     }
 

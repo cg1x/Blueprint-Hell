@@ -26,6 +26,7 @@ public class TrianglePacketView extends PacketView {
         shape.setFill(color);
         shape.setStroke(color);
         shape.setStrokeWidth(2);
+        shape.setVisible(false);
         Root.getINSTANCE().getChildren().add(shape);
     }
 

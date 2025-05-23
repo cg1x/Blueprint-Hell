@@ -21,6 +21,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public Wire wire;
     public Direction direction;
     public SquarePacketView packetView;
+    public boolean first = true;
     public boolean onWire;
     public static ArrayList<SquarePacket> squarePackets = new ArrayList<>();
     public ArrayList<Collidable> collidingWith = new ArrayList<>();
@@ -39,6 +40,10 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         squarePackets.add(this);
     }
 
+    public boolean isFirst() {
+        return first;
+    }
+
     public boolean isOnWire() {
         return onWire;
     }
@@ -46,6 +51,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public void setOnWire(boolean onWire) {
         this.onWire = onWire;
     }
+
 
     public boolean reachedEndPort() {
         Shape shape = Shape.intersect(this.packetView.getShape(), wire.getEndPort().getPortView());
@@ -85,6 +91,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         setSpeed();
         direction = new Direction(wire);
         collidables.add(this);
+        first = false;
     }
 
     public Wire getWire() {
@@ -177,10 +184,19 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     }
 
     @Override
+    public void remove() {
+        collidables.remove(this);
+        squarePackets.remove(this);
+        packetView.remove();
+        Operator.getINSTANCE().setSuccessfulPacket(this);
+    }
+
+    @Override
     public void kill() {
         wire.getNewPacket();
         collidables.remove(this);
         squarePackets.remove(this);
         packetView.remove();
+        Operator.getINSTANCE().setLostPacket(this);
     }
 }

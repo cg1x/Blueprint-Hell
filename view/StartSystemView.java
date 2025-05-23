@@ -1,5 +1,6 @@
 package game.view;
 
+import game.controller.Update;
 import game.model.*;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import static game.controller.Constants.SYSTEM_COLOR;
 import static game.controller.Constants.SYSTEM_SIZE;
 import static game.controller.Constants.SYSTEM_TOP_COLOR;
 import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
+import static game.model.SystemModel.systems;
 
 public class StartSystemView extends GeneralSystemView {
     double x;
@@ -31,6 +33,7 @@ public class StartSystemView extends GeneralSystemView {
     Rectangle topRectangle;
     Group shape;
     Rectangle indicator;
+    Button runButton;
 
     public StartSystemView(StartSystem system) {
         this.system = system;
@@ -115,14 +118,30 @@ public class StartSystemView extends GeneralSystemView {
             }
         }
         //paint run button
-        Button runButton = new Button("Run");
+        runButton = new Button("Run");
         runButton.setPrefWidth(60);
         runButton.setPrefHeight(20);
         runButton.setLayoutX(x + 30);
         runButton.setLayoutY(y + (blockCnt + 1) * SYSTEM_TOP_HEIGHT/2 + 5);
         runButton.setFont(new Font("Verdana", 12));
+        runButton.setDisable(true);
+        runButton.setOnAction(e -> {
+            system.generatePackets();
+            new Update();
+            runButton.setDisable(true);
+        });
         shape.getChildren().add(runButton);
 
         Root.getINSTANCE().getChildren().addAll(shape);
+    }
+
+    public void updateButton() {
+        for (SystemModel system : systems) {
+            if (!system.isReady()) {
+                runButton.setDisable(true);
+                return;
+            }
+        }
+        runButton.setDisable(!this.system.isReady());
     }
 }

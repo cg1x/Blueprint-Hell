@@ -19,6 +19,7 @@ public class SquarePacketView extends PacketView {
         rect.setFill(color);
         rect.setStroke(color);
         rect.setStrokeWidth(2);
+        rect.setVisible(false);
         Root.getINSTANCE().getChildren().add(rect);
     }
 

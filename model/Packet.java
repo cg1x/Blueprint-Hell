@@ -11,6 +11,8 @@ public abstract class Packet implements Movable, Collidable {
     public Wire wire;
     public PacketView packetView;
 
+    public abstract void remove();
+
     public abstract boolean deflected();
 
     public abstract void kill();

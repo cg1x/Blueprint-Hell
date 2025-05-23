@@ -23,6 +23,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     public TrianglePacketView packetView;
     public static ArrayList<TrianglePacket> trianglePackets = new ArrayList<>();
     public ArrayList<Collidable> collidingWith = new ArrayList<>();
+    public boolean first = true;
     public int health = 3;
     public double acceleration = 0.05;
     public double speed;
@@ -39,9 +40,22 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         trianglePackets.add(this);
     }
 
+    public boolean isFirst() {
+        return first;
+    }
+
     public boolean reachedEndPort() {
         Shape shape = Shape.intersect(this.packetView.getShape(), wire.getEndPort().getPortView());
         return shape.getBoundsInLocal().getWidth() != -1;
+    }
+
+    public void setSpeed() {
+        if (wire.getWireType() == WireType.SQUARE) {
+            this.speed = 1;
+        }
+        if (wire.getWireType() == WireType.TRIANGLE) {
+            this.speed = 2;
+        }
     }
 
     public void setPort(Port port) {
@@ -49,10 +63,13 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         y = port.getPortView().getCenterY() - PORT_SIZE/2 + deflectionY;
         wire = port.getWire();
         wire.setPacket(this);
-        speed = 2;
+        setSpeed();
         direction = new Direction(wire);
         collidables.add(this);
+        first = false;
     }
+
+
 
     public Wire getWire() {
         return wire;
@@ -165,10 +182,19 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     }
 
     @Override
+    public void remove() {
+        collidables.remove(this);
+        trianglePackets.remove(this);
+        packetView.remove();
+        Operator.getINSTANCE().setSuccessfulPacket(this);
+    }
+
+    @Override
     public void kill() {
         wire.getNewPacket();
         collidables.remove(this);
         trianglePackets.remove(this);
         packetView.remove();
+        Operator.getINSTANCE().setLostPacket(this);
     }
 }

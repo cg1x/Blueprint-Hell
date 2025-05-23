@@ -7,6 +7,7 @@ import game.view.SystemView;
 
 import java.util.ArrayList;
 
+import static game.model.SystemModel.systems;
 import static game.model.collision.Collidable.collidables;
 
 
@@ -16,6 +17,7 @@ public final class StartSystem extends GeneralSystem {
     public double initialX;
     public double initialY;
     public StartSystemView systemView;
+    public boolean ready = false;
 
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
@@ -28,12 +30,29 @@ public final class StartSystem extends GeneralSystem {
         initialY = y;
     }
 
+    public void generatePackets() {
+        new TrianglePacket();
+        new SquarePacket();
+        new TrianglePacket();
+        new SquarePacket();
+        new TrianglePacket();
+        new SquarePacket();
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
     public ArrayList<Packet> getPendingPackets() {
         return pendingPackets;
     }
 
     @Override
     public void decideForPacket(TrianglePacket packet) {
+        if (!packet.isFirst()) {
+            packet.remove();
+            return;
+        }
         collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
@@ -52,6 +71,10 @@ public final class StartSystem extends GeneralSystem {
 
     @Override
     public void decideForPacket(SquarePacket packet) {
+        if (!packet.isFirst()) {
+            packet.remove();
+            return;
+        }
         collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {
@@ -86,13 +109,12 @@ public final class StartSystem extends GeneralSystem {
 
         if (availablePorts == 0) {
             systemView.turnOnIndicator();
-            new TrianglePacket();
-            new TrianglePacket();
-            new SquarePacket();
-            new SquarePacket();
-            new Update();
+            ready = true;
+            systemView.updateButton();
         } else {
             systemView.turnOffIndicator();
+            ready = false;
+            systemView.updateButton();
         }
     }
 
