@@ -75,4 +75,8 @@ public final class Operator {
     public double getPacketLoss() {
         return packetLoss;
     }
+
+    public void reset() {
+        INSTANCE = new Operator();
+    }
 }

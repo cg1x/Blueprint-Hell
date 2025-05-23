@@ -1,6 +1,7 @@
 package game.model;
 
 import game.controller.Update;
+import game.view.GameUI;
 import game.view.GeneralSystemView;
 import game.view.StartSystemView;
 import game.view.SystemView;
@@ -31,12 +32,26 @@ public final class StartSystem extends GeneralSystem {
     }
 
     public void generatePackets() {
-        new TrianglePacket();
-        new SquarePacket();
-        new TrianglePacket();
-        new SquarePacket();
-        new TrianglePacket();
-        new SquarePacket();
+        if (GameUI.level == 1) {
+            new TrianglePacket();
+            new SquarePacket();
+            new TrianglePacket();
+            new SquarePacket();
+            new TrianglePacket();
+            new SquarePacket();
+        }
+        if (GameUI.level == 2) {
+            new TrianglePacket();
+            new SquarePacket();
+            new TrianglePacket();
+            new SquarePacket();
+            new TrianglePacket();
+            new SquarePacket();
+            new TrianglePacket();
+            new SquarePacket();
+            new TrianglePacket();
+            new SquarePacket();
+        }
     }
 
     public boolean isReady() {

@@ -45,14 +45,13 @@ public class HUD {
         packetLoss.setX(10);
         packetLoss.setY(150);
 
-        Root.getINSTANCE().getChildren().addAll(coins, successfulPacket, inNetworkPacket, lostPacket, packetLoss);
+        Root.getINSTANCE().getChildren().addAll(coins, successfulPacket, inNetworkPacket, lostPacket);
     }
 
     public void update() {
-        coins.setText("coins " + operator.coins);
+        coins.setText("coins: " + operator.coins);
         successfulPacket.setText("successfulPackets: " + operator.successfulPacket);
         inNetworkPacket.setText("inNetworkPackets: " + operator.inNetworkPacket);
         lostPacket.setText("lostPackets: " + operator.lostPacket);
-        packetLoss.setText("packetLoss: " + (int)((double)(operator.lostPacket/operator.totalPacket)) * 100);
     }
 }

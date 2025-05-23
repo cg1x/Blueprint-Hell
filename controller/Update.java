@@ -6,6 +6,7 @@ import game.model.SquarePacket;
 import game.model.StartSystem;
 import game.model.TrianglePacket;
 import game.model.collision.Collision;
+import game.view.GameUI;
 import javafx.application.Platform;
 
 import static game.model.SquarePacket.squarePackets;
@@ -15,11 +16,12 @@ import static game.model.collision.Collidable.collidables;
 public class Update {
 
     public boolean first = true;
+    public boolean running = true;
 
     public Update() {
         Thread animator = new Thread(() -> {
             try {
-                while (true) {
+                while (running) {
                     Thread.sleep(16);
                     updateModel();
                     Platform.runLater(() -> updateView());
@@ -30,6 +32,10 @@ public class Update {
         });
         animator.setDaemon(true);
         animator.start();
+    }
+
+    public void stop() {
+        running = false;
     }
 
     public void updateModel() {
@@ -65,6 +71,24 @@ public class Update {
                 Collision collision = collidables.get(i).collides(collidables.get(j));
                 if (collision != null) {
                     collision.applyImpact();
+                }
+            }
+        }
+        if (Operator.getINSTANCE().inNetworkPacket == 0) {
+            stop();
+            Operator.getINSTANCE().update();
+            if (GameUI.level == 1) {
+                if (Operator.getINSTANCE().getPacketLoss() >= 50) {
+                    GameUI.showLvl1fail();
+                } else {
+                    GameUI.showLvl1win();
+                }
+            }
+            if (GameUI.level == 2) {
+                if (Operator.getINSTANCE().getPacketLoss() >= 50) {
+                    GameUI.showLvl2fail();
+                } else {
+                    GameUI.showLvl2win();
                 }
             }
         }
