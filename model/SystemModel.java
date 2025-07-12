@@ -34,7 +34,7 @@ public class SystemModel extends GeneralSystem {
 
     @Override
     public void decideForPacket(TrianglePacket packet) {
-        Operator.getINSTANCE().packetReached(packet);
+        GameStats.getINSTANCE().packetReached(packet);
         collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
@@ -57,7 +57,7 @@ public class SystemModel extends GeneralSystem {
 
     @Override
     public void decideForPacket(SquarePacket packet) {
-        Operator.getINSTANCE().packetReached(packet);
+        GameStats.getINSTANCE().packetReached(packet);
         collidables.remove(packet);
         for (Port port : outputPorts) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {

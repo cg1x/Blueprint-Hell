@@ -2,10 +2,7 @@ package game.model;
 
 import game.view.HUD;
 
-import static game.model.SquarePacket.squarePackets;
-import static game.model.TrianglePacket.trianglePackets;
-
-public final class Operator {
+public final class GameStats {
     public int coins;
     public double wireLength;
     public int successfulPacket;
@@ -14,9 +11,9 @@ public final class Operator {
     public int totalPacket;
     public double packetLoss;
     public HUD hud;
-    private static Operator INSTANCE;
+    private static GameStats INSTANCE;
 
-    public Operator() {
+    public GameStats() {
         coins = 0;
         successfulPacket = 0;
         lostPacket = 0;
@@ -61,9 +58,9 @@ public final class Operator {
         inNetworkPacket--;
     }
 
-    public static Operator getINSTANCE() {
+    public static GameStats getINSTANCE() {
         if (INSTANCE == null) {
-            INSTANCE = new Operator();
+            INSTANCE = new GameStats();
         }
         return INSTANCE;
     }
@@ -77,6 +74,6 @@ public final class Operator {
     }
 
     public void reset() {
-        INSTANCE = new Operator();
+        INSTANCE = new GameStats();
     }
 }

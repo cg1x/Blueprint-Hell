@@ -1,11 +1,9 @@
 package game.model;
 
 import game.model.collision.Collidable;
-import game.model.collision.Collision;
 import game.model.movement.Direction;
 import game.model.movement.Movable;
 import game.view.TrianglePacketView;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
@@ -186,7 +184,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         collidables.remove(this);
         trianglePackets.remove(this);
         packetView.remove();
-        Operator.getINSTANCE().setSuccessfulPacket(this);
+        GameStats.getINSTANCE().setSuccessfulPacket(this);
     }
 
     @Override
@@ -195,6 +193,6 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         collidables.remove(this);
         trianglePackets.remove(this);
         packetView.remove();
-        Operator.getINSTANCE().setLostPacket(this);
+        GameStats.getINSTANCE().setLostPacket(this);
     }
 }

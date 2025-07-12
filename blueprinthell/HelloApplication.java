@@ -1,6 +1,8 @@
 package game.blueprinthell;
 
-import game.view.GameUI;
+import game.controller.GameController;
+import game.service.GameService;
+import game.view.GameView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -11,8 +13,11 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.initStyle(StageStyle.UNDECORATED);
-        GameUI.getINSTANCE(stage);
-        GameUI.run();
+        GameService gameService = new GameService();
+        GameView gameView = new GameView(stage);
+        GameController gameController = new GameController(gameService, gameView);
+        gameView.showMenu();
+
     }
 
     public static void main(String[] args) {

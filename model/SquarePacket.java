@@ -1,12 +1,9 @@
 package game.model;
 
 import game.model.collision.Collidable;
-import game.model.collision.Collision;
 import game.model.movement.Direction;
 import game.model.movement.Movable;
-import game.view.Root;
 import game.view.SquarePacketView;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
@@ -188,7 +185,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         collidables.remove(this);
         squarePackets.remove(this);
         packetView.remove();
-        Operator.getINSTANCE().setSuccessfulPacket(this);
+        GameStats.getINSTANCE().setSuccessfulPacket(this);
     }
 
     @Override
@@ -197,6 +194,6 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         collidables.remove(this);
         squarePackets.remove(this);
         packetView.remove();
-        Operator.getINSTANCE().setLostPacket(this);
+        GameStats.getINSTANCE().setLostPacket(this);
     }
 }

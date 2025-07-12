@@ -1,25 +1,28 @@
 package game.controller;
 
 
-import game.model.Operator;
+import game.model.GameStats;
 import game.model.SquarePacket;
-import game.model.StartSystem;
 import game.model.TrianglePacket;
 import game.model.collision.Collision;
-import game.view.GameUI;
 import javafx.application.Platform;
 
 import static game.model.SquarePacket.squarePackets;
 import static game.model.TrianglePacket.trianglePackets;
 import static game.model.collision.Collidable.collidables;
 
-public class Update {
+public class UpdateController {
 
     public boolean first = true;
     public boolean running = true;
+    public Thread animator;
+    public GameStats gameStats;
+    public GameController gameController;
 
-    public Update() {
-        Thread animator = new Thread(() -> {
+    public UpdateController(GameStats gameStats, GameController gameController) {
+        this.gameStats = gameStats;
+        this.gameController = gameController;
+        animator = new Thread(() -> {
             try {
                 while (running) {
                     Thread.sleep(16);
@@ -31,6 +34,9 @@ public class Update {
             }
         });
         animator.setDaemon(true);
+    }
+
+    public void start() {
         animator.start();
     }
 
@@ -40,7 +46,7 @@ public class Update {
 
     public void updateModel() {
         if (first) {
-            Operator.getINSTANCE().setTotalPacket(trianglePackets.size() + squarePackets.size());
+            gameStats.setTotalPacket(trianglePackets.size() + squarePackets.size());
             first = false;
         }
         for (int i = 0; i < trianglePackets.size(); i++) {
@@ -74,22 +80,13 @@ public class Update {
                 }
             }
         }
-        if (Operator.getINSTANCE().inNetworkPacket == 0) {
+        if (gameStats.inNetworkPacket == 0) {
             stop();
-            Operator.getINSTANCE().update();
-            if (GameUI.level == 1) {
-                if (Operator.getINSTANCE().getPacketLoss() >= 50) {
-                    GameUI.showLvl1fail();
-                } else {
-                    GameUI.showLvl1win();
-                }
-            }
-            if (GameUI.level == 2) {
-                if (Operator.getINSTANCE().getPacketLoss() >= 50) {
-                    GameUI.showLvl2fail();
-                } else {
-                    GameUI.showLvl2win();
-                }
+            gameStats.update();
+            if (gameStats.getPacketLoss() >= 50) {
+                gameController.levelFailed();
+            } else {
+                gameController.levelComplete();
             }
         }
     }
@@ -101,6 +98,6 @@ public class Update {
         for (int i = 0; i < squarePackets.size(); i++) {
             squarePackets.get(i).getPacketView().update();
         }
-        Operator.getINSTANCE().hud.update();
+        gameStats.hud.update();
     }
 }

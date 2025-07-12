@@ -1,6 +1,6 @@
 package game.view;
 
-import game.controller.Update;
+import game.controller.GameController;
 import game.model.*;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -12,7 +12,6 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static game.controller.Constants.*;
 import static game.controller.Constants.INDICATOR_HEIGHT;
 import static game.controller.Constants.INDICATOR_MARGIN;
 import static game.controller.Constants.INDICATOR_WIDTH;
@@ -34,6 +33,7 @@ public class StartSystemView extends GeneralSystemView {
     Group shape;
     Rectangle indicator;
     Button runButton;
+    private GameController gameController;
 
     public StartSystemView(StartSystem system) {
         this.system = system;
@@ -127,7 +127,7 @@ public class StartSystemView extends GeneralSystemView {
         runButton.setDisable(true);
         runButton.setOnAction(e -> {
             system.generatePackets();
-            new Update();
+            gameController.startGame();
             runButton.setDisable(true);
         });
         shape.getChildren().add(runButton);
@@ -143,5 +143,9 @@ public class StartSystemView extends GeneralSystemView {
             }
         }
         runButton.setDisable(!this.system.isReady());
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 }

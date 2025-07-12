@@ -1,6 +1,5 @@
 package game.view;
 
-import game.model.Operator;
 import javafx.scene.layout.Pane;
 
 public final class Root extends Pane {

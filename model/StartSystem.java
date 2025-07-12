@@ -1,14 +1,10 @@
 package game.model;
 
-import game.controller.Update;
-import game.view.GameUI;
 import game.view.GeneralSystemView;
 import game.view.StartSystemView;
-import game.view.SystemView;
 
 import java.util.ArrayList;
 
-import static game.model.SystemModel.systems;
 import static game.model.collision.Collidable.collidables;
 
 
@@ -19,6 +15,7 @@ public final class StartSystem extends GeneralSystem {
     public double initialY;
     public StartSystemView systemView;
     public boolean ready = false;
+    private GameState gameState;
 
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
@@ -32,7 +29,7 @@ public final class StartSystem extends GeneralSystem {
     }
 
     public void generatePackets() {
-        if (GameUI.level == 1) {
+        if (gameState.getCurrentLevel() == 1) {
             new TrianglePacket();
             new SquarePacket();
             new TrianglePacket();
@@ -40,7 +37,7 @@ public final class StartSystem extends GeneralSystem {
             new TrianglePacket();
             new SquarePacket();
         }
-        if (GameUI.level == 2) {
+        if (gameState.getCurrentLevel()  == 2) {
             new TrianglePacket();
             new SquarePacket();
             new TrianglePacket();
@@ -164,6 +161,10 @@ public final class StartSystem extends GeneralSystem {
         } else if (portType == PortType.OUTPUT) {
             outputPorts.add(port);
         }
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
     public static StartSystem getINSTANCE() {
