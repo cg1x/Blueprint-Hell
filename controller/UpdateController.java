@@ -6,6 +6,8 @@ import game.model.SquarePacket;
 import game.model.TrianglePacket;
 import game.model.collision.Collision;
 import javafx.application.Platform;
+import game.service.MovementService;
+import game.model.GameState;
 
 import static game.model.SquarePacket.squarePackets;
 import static game.model.TrianglePacket.trianglePackets;
@@ -14,14 +16,19 @@ import static game.model.collision.Collidable.collidables;
 public class UpdateController {
 
     public boolean first = true;
-    public boolean running = true;
+    public boolean running = false;
     public Thread animator;
     public GameStats gameStats;
     public GameController gameController;
+    private MovementService movementService = new MovementService();
 
     public UpdateController(GameStats gameStats, GameController gameController) {
         this.gameStats = gameStats;
         this.gameController = gameController;
+        initializeGameLoop();
+    }
+
+    private void initializeGameLoop() {
         animator = new Thread(() -> {
             try {
                 while (running) {
@@ -38,6 +45,7 @@ public class UpdateController {
 
     public void start() {
         animator.start();
+        running = true;
     }
 
     public void stop() {
@@ -46,40 +54,11 @@ public class UpdateController {
 
     public void updateModel() {
         if (first) {
-            gameStats.setTotalPacket(trianglePackets.size() + squarePackets.size());
+            gameStats.setTotalPacket(gameController.getGameService().getGameState().getTrianglePackets().size() +
+                                    gameController.getGameService().getGameState().getSquarePackets().size());
             first = false;
         }
-        for (int i = 0; i < trianglePackets.size(); i++) {
-            TrianglePacket packet = trianglePackets.get(i);
-            if (packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet)) {
-                continue;
-            }
-            packet.move();
-            if (packet.reachedEndPort()) {
-                packet.getWire().getNewPacket();
-                packet.getWire().getEndPort().getSystem().decideForPacket(packet);
-            }
-        }
-        for (int i = 0; i < squarePackets.size(); i++) {
-            SquarePacket packet = squarePackets.get(i);
-            if (packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet)) {
-                continue;
-            }
-            packet.move();
-            if (packet.reachedEndPort()) {
-                packet.getWire().getNewPacket();
-                packet.getWire().getEndPort().getSystem().decideForPacket(packet);
-
-            }
-        }
-        for (int i = 0; i < collidables.size(); i++) {
-            for (int j = i + 1; j < collidables.size(); j++) {
-                Collision collision = collidables.get(i).collides(collidables.get(j));
-                if (collision != null) {
-                    collision.applyImpact();
-                }
-            }
-        }
+        movementService.updatePackets(gameController.getGameService().getGameState(), gameController);
         if (gameStats.inNetworkPacket == 0) {
             stop();
             gameStats.update();
@@ -98,6 +77,6 @@ public class UpdateController {
         for (int i = 0; i < squarePackets.size(); i++) {
             squarePackets.get(i).getPacketView().update();
         }
-        gameStats.hud.update();
+        gameController.updateHud();
     }
 }

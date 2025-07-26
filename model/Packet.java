@@ -3,13 +3,11 @@ package game.model;
 import game.model.collision.Collidable;
 import game.model.collision.Collision;
 import game.model.movement.Movable;
-import game.view.PacketView;
 
 public abstract class Packet implements Movable, Collidable {
     public double x;
     public double y;
     public Wire wire;
-    public PacketView packetView;
 
     public abstract void remove();
 
@@ -50,10 +48,7 @@ public abstract class Packet implements Movable, Collidable {
     @Override
     public abstract double getCenterY();
 
-    @Override
-    public PacketView getPacketView() {
-        return packetView;
-    }
+    // Removed getPacketView() method and any PacketView references
 
     @Override
     public abstract boolean isCollidingWith(Collidable collidable);

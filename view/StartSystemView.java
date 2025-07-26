@@ -39,11 +39,9 @@ public class StartSystemView extends GeneralSystemView {
         this.system = system;
         this.x = system.getInitialX();
         this.y = system.getInitialY();
-        system.setView(this);
         inputPorts = system.getInputPorts();
         outputPorts = system.getOutputPorts();
         blockCnt = Math.max(inputPorts.size(), outputPorts.size());
-        paint();
         enableDragging(false);
     }
 
@@ -126,7 +124,7 @@ public class StartSystemView extends GeneralSystemView {
         runButton.setFont(new Font("Verdana", 12));
         runButton.setDisable(true);
         runButton.setOnAction(e -> {
-            system.generatePackets();
+            gameController.generatePackets();
             gameController.startGame();
             runButton.setDisable(true);
         });

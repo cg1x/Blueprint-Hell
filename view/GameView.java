@@ -22,6 +22,7 @@ public class GameView {
     private GameController gameController;
     private final Stage stage;
     private final ViewUtil viewUtil;
+    private HUD hud;
 
     public GameView(Stage stage) {
         this.stage = stage;
@@ -95,15 +96,21 @@ public class GameView {
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
+        SystemViewManager systemViewManager = gameController.getSystemViewManager();
+
         for (GeneralSystem system : gameState.getSystems()) {
             if (system instanceof StartSystem) {
-                StartSystemView startSystemView = new StartSystemView((StartSystem) system);
+                StartSystemView startSystemView = (StartSystemView) systemViewManager.getView(system);
                 startSystemView.setGameController(gameController);
+                startSystemView.paint();
+
             }
             else {
-                new SystemView((SystemModel) system);
+                systemViewManager.getView(system).paint();
             }
         }
+
+        hud = new HUD(gameController.getGameService().getGameState().getGameStats());
 
         setupStage(scene);
     }
@@ -117,6 +124,8 @@ public class GameView {
             stage.show();
         });
     }
+
+    public HUD getHud() { return hud; }
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;

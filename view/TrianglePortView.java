@@ -2,50 +2,38 @@ package game.view;
 
 import game.controller.Controller;
 import game.model.PortType;
-import game.model.SquarePort;
 import game.model.TrianglePort;
-import javafx.geometry.Bounds;
+import game.service.WireService;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
 import static game.controller.Constants.PORT_SIZE;
 import static game.controller.Constants.WIRE_WIDTH;
 
 public class TrianglePortView extends PortView {
-    double x;
-    double y;
     public TrianglePort port;
     public Color color = Color.YELLOW;
-    public WireView wire;
+    public double x;
+    public double y;
 
-    public TrianglePortView(double x, double y, TrianglePort port) {
-        super(x, y,
-                x - PORT_SIZE/2, y + PORT_SIZE, x + PORT_SIZE/2, y + PORT_SIZE);
-        this.x = x;
-        this.y = y;
+    public TrianglePortView(TrianglePort port) {
         this.port = port;
-        port.setPortView(this);
-        setFill(Color.YELLOW);
-        setStroke(Color.BLACK);
-        setStrokeWidth(2);
-        Root.getINSTANCE().getChildren().add(this);
-        setOnMouseEntered(e -> setOpacity(0.5));
-        setOnMouseExited(e -> setOpacity(1.0));
-        enableDrawLine();
     }
 
-    public void enableDrawLine() {
+    public void enableDrawLine(WireService wireService) {
+        this.wireService = wireService;
         if (port.available) {
-            this.setOnMousePressed(this::startLine);
+            shape.setOnMousePressed(this::startLine);
         }
     }
 
     public void startLine(MouseEvent e) {
-        wire = new WireView();
+        wire = new Line();
         wire.setStroke(color);
-        wire.setStartX(this.getCenterX());
-        wire.setStartY(this.getCenterY());
+        wire.setStartX(getCenterX());
+        wire.setStartY(getCenterY());
         wire.setEndX(e.getSceneX());
         wire.setEndY(e.getSceneY());
         Root.getINSTANCE().getChildren().add(wire);
@@ -62,38 +50,48 @@ public class TrianglePortView extends PortView {
 
     public void endLine(MouseEvent e) {
         if (wire != null) {
-            Object target = e.getPickResult().getIntersectedNode();
-            if (target instanceof TrianglePortView && Controller.connectable(this, (TrianglePortView) target)) {
-                wire.setEndX(((TrianglePortView) target).getCenterX());
-                wire.setEndY(((TrianglePortView) target).getCenterY());
-                wire.setStrokeWidth(WIRE_WIDTH);
-                port.available = false;
-                ((TrianglePortView) target).port.available = false;
-                wire.setWireModel(this, (TrianglePortView) target);
-
-            } else {
-                Root.getINSTANCE().getChildren().remove(wire);
+            Object object = e.getPickResult().getIntersectedNode();
+            if (object instanceof Polygon) {
+                Object target = ((Polygon) object).getUserData();
+                if (target instanceof TrianglePortView && Controller.connectable(this, (TrianglePortView) target)) {
+                    wireService.createWire(this.port, ((TrianglePortView) target).getPort());
+                }
             }
+            Root.getINSTANCE().getChildren().remove(wire);
         }
-
         wire = null;
     }
 
-    public double getCenterX() {
-        return x ;
-    }
-
-    public double getCenterY() {
-        return y + PORT_SIZE/2;
+    @Override
+    public void paint() {
+        this.x = port.getX();
+        this.y = port.getY();
+        this.shape = new Polygon(
+            x, y,
+            x + PORT_SIZE/2, y + PORT_SIZE,
+            x - PORT_SIZE/2, y + PORT_SIZE
+        );
+        shape.setFill(color);
+        shape.setStroke(Color.BLACK);
+        shape.setStrokeWidth(2);
+        shape.setUserData(this);
+        Root.getINSTANCE().getChildren().add(shape);
+        shape.setOnMouseEntered(e -> shape.setOpacity(0.5));
+        shape.setOnMouseExited(e -> shape.setOpacity(1.0));
     }
 
     @Override
-    public double getX() {
+    public double getCenterX() {
         return x;
     }
 
     @Override
-    public double getY() {
-        return y;
+    public double getCenterY() {
+        return y + PORT_SIZE/2;
+    }
+
+    public TrianglePort getPort() {
+        return port;
     }
 }
+

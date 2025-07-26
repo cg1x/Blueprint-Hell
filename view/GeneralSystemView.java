@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static game.controller.Constants.SYSTEM_TOP_COLOR;
 
 public abstract class GeneralSystemView {
+    public abstract void paint();
 
     public abstract void turnOnIndicator();
 

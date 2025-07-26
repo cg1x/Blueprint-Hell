@@ -6,6 +6,8 @@ import java.util.List;
 public class GameState {
     private int currentLevel;
     private List<GeneralSystem> systems;
+    private List<SquarePacket> squarePackets;
+    private List<TrianglePacket> trianglePackets;
     private GameStats gameStats;
     private boolean gameRunning;
 
@@ -32,6 +34,14 @@ public class GameState {
         systems.add(system);
     }
 
+    public void addSquarePacket(SquarePacket packet) {
+        squarePackets.add(packet);
+    }
+
+    public void addTrianglePacket(TrianglePacket packet) {
+        trianglePackets.add(packet);
+    }
+
     public GameStats getGameStats() {
         return gameStats;
     }
@@ -52,5 +62,13 @@ public class GameState {
         systems.clear();
         gameStats = new GameStats();
         gameRunning = false;
+    }
+
+    public List<SquarePacket> getSquarePackets() {
+        return squarePackets;
+    }
+
+    public List<TrianglePacket> getTrianglePackets() {
+        return trianglePackets;
     }
 }

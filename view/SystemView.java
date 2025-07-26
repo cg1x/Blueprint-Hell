@@ -29,11 +29,9 @@ public class SystemView extends GeneralSystemView {
         this.x = system.getInitialX();
         this.y = system.getInitialY();
         this.system = system;
-        system.setView(this);
         inputPorts = system.getInputPorts();
         outputPorts = system.getOutputPorts();
         blockCnt = Math.max(inputPorts.size(), outputPorts.size());
-        paint();
         enableDragging(false);
     }
 

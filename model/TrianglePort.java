@@ -8,7 +8,6 @@ public class TrianglePort extends Port {
     public GeneralSystem system;
     public PortType portType;
     public boolean available;
-    public TrianglePortView portView;
     public Wire wire;
 
     public TrianglePort(GeneralSystem system, PortType portType) {
@@ -26,16 +25,6 @@ public class TrianglePort extends Port {
     @Override
     public Wire getWire() {
         return super.getWire();
-    }
-
-    @Override
-    public TrianglePortView getPortView() {
-        return portView;
-    }
-
-    @Override
-    public void setPortView(PortView portView) {
-        this.portView = (TrianglePortView) portView;
     }
 
     @Override

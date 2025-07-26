@@ -17,7 +17,6 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public double deflectionY;
     public Wire wire;
     public Direction direction;
-    public SquarePacketView packetView;
     public boolean first = true;
     public boolean onWire;
     public static ArrayList<SquarePacket> squarePackets = new ArrayList<>();
@@ -29,11 +28,10 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         deflectionX = 0;
         deflectionY = 0;
         Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
-        x = port.getPortView().getCenterX() - PORT_SIZE/2;
-        y = port.getPortView().getCenterY() - PORT_SIZE/2;
+        x = 0;
+        y = 0;
         wire = port.getWire();
         StartSystem.getINSTANCE().decideForPacket(this);
-        packetView = new SquarePacketView(this);
         squarePackets.add(this);
     }
 
@@ -51,8 +49,8 @@ public class SquarePacket extends Packet implements Movable, Collidable {
 
 
     public boolean reachedEndPort() {
-        Shape shape = Shape.intersect(this.packetView.getShape(), wire.getEndPort().getPortView());
-        return shape.getBoundsInLocal().getWidth() != -1;
+        // Removed view logic: should be handled in view
+        return false;
     }
 
     public void setSpeed() {
@@ -66,8 +64,8 @@ public class SquarePacket extends Packet implements Movable, Collidable {
 
     @Override
     public boolean deflected() {
-        Shape shape = Shape.intersect(packetView.getShape(), wire.getWireView());
-        return shape.getBoundsInLocal().getWidth() == -1;
+        // Removed view logic: should be handled in view
+        return false;
     }
 
     @Override
@@ -126,10 +124,7 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         collidingWith.remove(collidable);
     }
 
-    @Override
-    public SquarePacketView getPacketView() {
-        return packetView;
-    }
+    
 
     public double getX() {
         return x;
@@ -184,7 +179,6 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public void remove() {
         collidables.remove(this);
         squarePackets.remove(this);
-        packetView.remove();
         GameStats.getINSTANCE().setSuccessfulPacket(this);
     }
 
@@ -193,7 +187,6 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         wire.getNewPacket();
         collidables.remove(this);
         squarePackets.remove(this);
-        packetView.remove();
         GameStats.getINSTANCE().setLostPacket(this);
     }
 }

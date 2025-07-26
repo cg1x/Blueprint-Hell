@@ -20,7 +20,6 @@ public final class GameStats {
         totalPacket = 0;
         inNetworkPacket = totalPacket;
         packetLoss = 0.0;
-        hud = new HUD(this);
     }
 
     public void setTotalPacket(int n) {

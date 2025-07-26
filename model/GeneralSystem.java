@@ -8,10 +8,18 @@ import java.util.ArrayList;
 public abstract class GeneralSystem {
     public double initialX;
     public double initialY;
-    public GeneralSystemView systemView;
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
     public ArrayList<Packet> pendingPackets = new ArrayList<>();
+    public boolean ready;
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
 
     public GeneralSystem(double x, double y) {
         initialX = x;
@@ -25,42 +33,12 @@ public abstract class GeneralSystem {
         return pendingPackets;
     }
 
-    public void updateIndicator() {
-        int availablePorts = inputPorts.size() + outputPorts.size();
-
-        for (Port port : inputPorts) {
-            if (!(port.isAvailable())) {
-                availablePorts--;
-            }
-        }
-
-        for (Port port : outputPorts) {
-            if (!(port.isAvailable())) {
-                availablePorts--;
-            }
-        }
-
-        if (availablePorts == 0) {
-            systemView.turnOnIndicator();
-        } else {
-            systemView.turnOffIndicator();
-        }
-    }
-
     public double getInitialY() {
         return initialY;
     }
 
     public double getInitialX() {
         return initialX;
-    }
-
-    public GeneralSystemView getView() {
-        return systemView;
-    }
-
-    public void setView(GeneralSystemView systemView) {
-        this.systemView = systemView;
     }
 
     public ArrayList<Port> getInputPorts() {

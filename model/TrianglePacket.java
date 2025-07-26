@@ -18,7 +18,6 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     public double deflectionY;
     public Wire wire;
     public Direction direction;
-    public TrianglePacketView packetView;
     public static ArrayList<TrianglePacket> trianglePackets = new ArrayList<>();
     public ArrayList<Collidable> collidingWith = new ArrayList<>();
     public boolean first = true;
@@ -30,11 +29,10 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         deflectionX = 0;
         deflectionY = 0;
         Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
-        x = port.getPortView().getCenterX();
-        y = port.getPortView().getCenterY() - PORT_SIZE/2;
+        x = 0;
+        y = 0;
         wire = port.getWire();
         StartSystem.getINSTANCE().decideForPacket(this);
-        packetView = new TrianglePacketView(this);
         trianglePackets.add(this);
     }
 
@@ -43,7 +41,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     }
 
     public boolean reachedEndPort() {
-        Shape shape = Shape.intersect(this.packetView.getShape(), wire.getEndPort().getPortView());
+        Shape shape = Shape.intersect(this.getPacketView().getShape(), wire.getEndPort().getPortView());
         return shape.getBoundsInLocal().getWidth() != -1;
     }
 
@@ -67,15 +65,13 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         first = false;
     }
 
-
-
     public Wire getWire() {
         return wire;
     }
 
     @Override
     public boolean deflected() {
-        Shape shape = Shape.intersect(packetView.getShape(), wire.getWireView());
+        Shape shape = Shape.intersect(this.getPacketView().getShape(), wire.getWireView());
         return shape.getBoundsInLocal().getWidth() == -1;
     }
 
@@ -124,7 +120,7 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
 
     @Override
     public TrianglePacketView getPacketView() {
-        return packetView;
+        return null; // Removed packetView
     }
 
     public double getX() {
@@ -183,7 +179,6 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     public void remove() {
         collidables.remove(this);
         trianglePackets.remove(this);
-        packetView.remove();
         GameStats.getINSTANCE().setSuccessfulPacket(this);
     }
 
@@ -192,7 +187,6 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         wire.getNewPacket();
         collidables.remove(this);
         trianglePackets.remove(this);
-        packetView.remove();
         GameStats.getINSTANCE().setLostPacket(this);
     }
 }

@@ -4,46 +4,36 @@ import game.controller.Constants;
 import game.controller.Controller;
 import game.model.PortType;
 import game.model.SquarePort;
-import javafx.geometry.Bounds;
+import game.service.WireService;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 
 import static game.controller.Constants.PORT_SIZE;
 
 public class SquarePortView extends PortView {
-
-    public double x;
-    public double y;
     public SquarePort port;
     public Color color = Color.GREEN;
-    public WireView wire;
+    public double x;
+    public double y;
 
-    public SquarePortView(double x, double y, SquarePort port) {
-        super(x, y, PORT_SIZE, PORT_SIZE);
-        this.x = x;
-        this.y = y;
+    public SquarePortView(SquarePort port) {
         this.port = port;
-        port.setPortView(this);
-        setFill(color);
-        setStroke(Color.BLACK);
-        setStrokeWidth(2);
-        Root.getINSTANCE().getChildren().add(this);
-        setOnMouseEntered(e -> setOpacity(0.5));
-        setOnMouseExited(e -> setOpacity(1.0));
-        enableDrawLine();
     }
 
-    public void enableDrawLine() {
+    public void enableDrawLine(WireService wireService) {
+        this.wireService = wireService;
         if (port.available) {
-            this.setOnMousePressed(this::startLine);
+            shape.setOnMousePressed(this::startLine);
         }
     }
 
     public void startLine(MouseEvent e) {
-        wire = new WireView();
+        wire = new Line();
         wire.setStroke(color);
-        wire.setStartX(this.getCenterX());
-        wire.setStartY(this.getCenterY());
+        wire.setStartX(getCenterX());
+        wire.setStartY(getCenterY());
         wire.setEndX(e.getSceneX());
         wire.setEndY(e.getSceneY());
         Root.getINSTANCE().getChildren().add(wire);
@@ -72,29 +62,35 @@ public class SquarePortView extends PortView {
                 Root.getINSTANCE().getChildren().remove(wire);
             }
         }
-
         wire = null;
     }
 
+    @Override
+    public void paint() {
+        this.x = port.getX();
+        this.y = port.getY();
+        this.shape = new Polygon(
+            x, y,
+            x + PORT_SIZE, y,
+            x + PORT_SIZE, y + PORT_SIZE,
+            x, y + PORT_SIZE
+        );
+        shape.setFill(color);
+        shape.setStroke(Color.BLACK);
+        shape.setStrokeWidth(2);
+        Root.getINSTANCE().getChildren().add(shape);
+        shape.setOnMouseEntered(e -> shape.setOpacity(0.5));
+        shape.setOnMouseExited(e -> shape.setOpacity(1.0));
+    }
+
+    @Override
     public double getCenterX() {
-//        Bounds bounds = this.localToScene(this.getBoundsInLocal());
-//        double x = bounds.getMinX();
         return x + PORT_SIZE/2;
     }
 
+    @Override
     public double getCenterY() {
-//        Bounds bounds = this.localToScene(this.getBoundsInLocal());
-//        double y = bounds.getMinY();
         return y + PORT_SIZE/2;
     }
-
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public double getY() {
-        return y;
-    }
 }
+
