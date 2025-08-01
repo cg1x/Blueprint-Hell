@@ -111,6 +111,8 @@ public class GameView {
 
         hud = new HUD(gameController.getGameService().getGameState().getGameStats());
 
+        
+
         setupStage(scene);
     }
 

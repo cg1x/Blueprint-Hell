@@ -137,7 +137,7 @@ public class PacketService {
     public void reduceHealth(Packet packet) {
         packet.reduceHealth();
         if (packet.getHealth() == 0) {
-            removePacket(packet);
+            handlePacketLost(packet);
         }
     }
 

@@ -60,7 +60,7 @@ public class UpdateController {
 
     public void updateModel() {
         packetService.movePackets(gameController.getGameService().getGameState());
-        //collisionService.detectCollisions(gameController.getGameService().getGameState()); 
+        collisionService.detectCollisions(gameController.getGameService().getGameState()); 
         if (gameService.isGameOver()) {
             stop();
             gameService.getGameState().getGameStats().calculatePacketLoss();

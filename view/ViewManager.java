@@ -22,7 +22,15 @@ public class ViewManager {
     }
 
     public boolean AreIntersecting(Packet packet1, Packet packet2) {
-        Shape shape = Shape.intersect(packetViewManager.getView(packet1).getShape(), packetViewManager.getView(packet2).getShape());
+        PacketView view1 = packetViewManager.getView(packet1);
+        PacketView view2 = packetViewManager.getView(packet2);
+        if (view1 == null || view2 == null) {
+            return false;
+        }
+        if (!(view1.getShape().isVisible() && view2.getShape().isVisible())) {
+            return false;
+        }
+        Shape shape = Shape.intersect(view1.getShape(), view2.getShape());
         return shape.getBoundsInLocal().getWidth() != -1;
     }
 

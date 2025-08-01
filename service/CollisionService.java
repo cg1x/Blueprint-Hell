@@ -39,6 +39,7 @@ public class CollisionService {
                 }
                 else if (checkCollision(packets.get(i), packets.get(j))) {
                     Collision collision = handleCollision(packets.get(i), packets.get(j));
+                    System.out.println("x:" + collision.getX() + ", y: " + collision.getY());
                     applyImpact(collision, packets);
                 }
             }

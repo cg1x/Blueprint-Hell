@@ -5,6 +5,7 @@ import game.controller.Controller;
 import game.model.PortType;
 import game.model.SquarePort;
 import game.service.WireService;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -30,6 +31,9 @@ public class SquarePortView extends PortView {
     }
 
     public void startLine(MouseEvent e) {
+        if (e.getButton() != MouseButton.PRIMARY) {
+            return;
+        }
         wire = new Line();
         wire.setStroke(color);
         wire.setStartX(getCenterX());
@@ -42,6 +46,9 @@ public class SquarePortView extends PortView {
     }
 
     public void dragLine(MouseEvent e) {
+        if (e.getButton() != MouseButton.PRIMARY) {
+            return;
+        }
         if (wire != null && port.available && (port.getPortType() == PortType.OUTPUT)) {
             wire.setEndX(e.getSceneX());
             wire.setEndY(e.getSceneY() + 1);
