@@ -6,7 +6,10 @@ import game.model.SquarePacket;
 import game.model.TrianglePacket;
 import game.model.collision.Collision;
 import javafx.application.Platform;
+import game.service.CollisionService;
+import game.service.GameService;
 import game.service.MovementService;
+import game.service.PacketService;
 import game.model.GameState;
 
 import static game.model.SquarePacket.squarePackets;
@@ -18,14 +21,16 @@ public class UpdateController {
     public boolean first = true;
     public boolean running = false;
     public Thread animator;
-    public GameStats gameStats;
+    public GameService gameService;
     public GameController gameController;
-    private MovementService movementService = new MovementService();
+    private PacketService packetService;
+    private CollisionService collisionService;
 
-    public UpdateController(GameStats gameStats, GameController gameController) {
-        this.gameStats = gameStats;
+    public UpdateController(GameService gameService, GameController gameController) {
+        this.gameService = gameService;
+        this.packetService = gameService.getPacketService();
+        this.collisionService = gameService.getCollisionService();
         this.gameController = gameController;
-        initializeGameLoop();
     }
 
     private void initializeGameLoop() {
@@ -44,8 +49,9 @@ public class UpdateController {
     }
 
     public void start() {
-        animator.start();
+        initializeGameLoop();
         running = true;
+        animator.start();
     }
 
     public void stop() {
@@ -53,16 +59,12 @@ public class UpdateController {
     }
 
     public void updateModel() {
-        if (first) {
-            gameStats.setTotalPacket(gameController.getGameService().getGameState().getTrianglePackets().size() +
-                                    gameController.getGameService().getGameState().getSquarePackets().size());
-            first = false;
-        }
-        movementService.updatePackets(gameController.getGameService().getGameState(), gameController);
-        if (gameStats.inNetworkPacket == 0) {
+        packetService.movePackets(gameController.getGameService().getGameState());
+        //collisionService.detectCollisions(gameController.getGameService().getGameState()); 
+        if (gameService.isGameOver()) {
             stop();
-            gameStats.update();
-            if (gameStats.getPacketLoss() >= 50) {
+            gameService.getGameState().getGameStats().calculatePacketLoss();
+            if (gameService.isLevelComplete()) {
                 gameController.levelFailed();
             } else {
                 gameController.levelComplete();
@@ -71,12 +73,6 @@ public class UpdateController {
     }
 
     public void updateView() {
-        for (int i = 0; i < trianglePackets.size(); i++) {
-            trianglePackets.get(i).getPacketView().update();
-        }
-        for (int i = 0; i < squarePackets.size(); i++) {
-            squarePackets.get(i).getPacketView().update();
-        }
-        gameController.updateHud();
+        gameController.updateView();
     }
 }

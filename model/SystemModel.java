@@ -14,22 +14,30 @@ public class SystemModel extends GeneralSystem {
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
     public ArrayList<Packet> pendingPackets = new ArrayList<>();
-    public static ArrayList<SystemModel> systems = new ArrayList<>();
+    //public static ArrayList<SystemModel> systems = new ArrayList<>();
 
     public SystemModel(double x, double y) {
         super(x, y);
         initialX = x;
         initialY = y;
-        systems.add(this);
+        //systems.add(this);
     }
 
     public boolean isReady() {
         return ready;
     }
 
+    public boolean canSendPacket() {
+        return !pendingPackets.isEmpty();
+    }
+
+    public boolean canAcceptPacket() {
+        return pendingPackets.size() < 5;
+    }
+
     @Override
     public void setReady(boolean ready) {
-        super.setReady(ready);
+        this.ready = ready;
     }
 
     public ArrayList<Packet> getPendingPackets() {

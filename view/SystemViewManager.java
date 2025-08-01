@@ -19,6 +19,10 @@ public class SystemViewManager {
         systemMap.put(system, view);
     }
 
+    public Map<GeneralSystem, GeneralSystemView> getSystemMap() {
+        return systemMap;
+    }
+
     public GeneralSystemView getView(GeneralSystem system) {
         return systemMap.get(system);
     }

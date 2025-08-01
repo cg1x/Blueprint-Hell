@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -22,11 +23,21 @@ public class GameView {
     private GameController gameController;
     private final Stage stage;
     private final ViewUtil viewUtil;
+    private PacketViewManager packetViewManager;
+    private SystemViewManager systemViewManager;
+    private WireViewManager wireViewManager;
+    private PortViewManager portViewManager;
+    private ViewManager viewManager;
     private HUD hud;
 
     public GameView(Stage stage) {
         this.stage = stage;
         viewUtil = new ViewUtil();
+        packetViewManager = new PacketViewManager();
+        systemViewManager = new SystemViewManager();
+        wireViewManager = new WireViewManager();
+        portViewManager = new PortViewManager();
+        viewManager = new ViewManager(packetViewManager, wireViewManager, portViewManager);
     }
 
     public void showMenu() {
@@ -39,7 +50,7 @@ public class GameView {
         Button startButton = viewUtil.createButton("START GAME", 700, 250, root);
         startButton.setOnAction(e -> gameController.startLevel(1));
 
-        Button exitButton = viewUtil.createButton("EXIT", 700, 300, root);
+        Button exitButton = viewUtil.createButton("EXIT", 700, 350, root);
         exitButton.setOnAction(e -> Platform.exit());
 
         setupStage(scene);
@@ -55,7 +66,7 @@ public class GameView {
         Text winText = viewUtil.createText("NICE JOB!", 750, 250, root);
 
         String packetLossStr = String.format("PACKET LOSS: %.2f",
-                (double) gameStats.lostPacket/gameStats.totalPacket*100) + "%";
+                (double) gameStats.getLostPackets()/gameStats.getTotalPackets()*100) + "%";
         Text packetLossText = viewUtil.createText(packetLossStr, 650, 350, root);
 
         Button playNextLevelButton = viewUtil.createButton("PLAY LEVEL " + (level+1), 700, 450, root);
@@ -77,7 +88,7 @@ public class GameView {
         Text loseText = viewUtil.createText("YOU LOST", 750, 250, root);
 
         String packetLossStr = String.format("PACKET LOSS: %.2f",
-                (double) gameStats.lostPacket/gameStats.totalPacket*100) + "%";
+                (double) gameStats.getLostPackets()/gameStats.getTotalPackets()*100) + "%";
         Text packetLossText = viewUtil.createText(packetLossStr, 650, 350, root);
 
         Button playAgainButton = viewUtil.createButton("PLAY AGAIN", 700, 450, root);
@@ -96,23 +107,16 @@ public class GameView {
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
-        SystemViewManager systemViewManager = gameController.getSystemViewManager();
-
-        for (GeneralSystem system : gameState.getSystems()) {
-            if (system instanceof StartSystem) {
-                StartSystemView startSystemView = (StartSystemView) systemViewManager.getView(system);
-                startSystemView.setGameController(gameController);
-                startSystemView.paint();
-
-            }
-            else {
-                systemViewManager.getView(system).paint();
-            }
-        }
+        gameController.getGameService().getSystemService().paintAllSystems(gameController);
 
         hud = new HUD(gameController.getGameService().getGameState().getGameStats());
 
         setupStage(scene);
+    }
+
+    public void updateView() {
+        packetViewManager.updateAll();
+        hud.update();
     }
 
     private void setupStage(Scene scene) {
@@ -125,9 +129,21 @@ public class GameView {
         });
     }
 
-    public HUD getHud() { return hud; }
-
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
+
+    public void resetView() {
+        packetViewManager.clear();
+        wireViewManager.clear();
+        portViewManager.clear();
+        systemViewManager.clear();
+    }
+    
+    public HUD getHud() { return hud; }
+    public ViewManager getViewManager() { return viewManager; }
+    public PacketViewManager getPacketViewManager() { return packetViewManager; }
+    public SystemViewManager getSystemViewManager() { return systemViewManager; }
+    public WireViewManager getWireViewManager() { return wireViewManager; }
+    public PortViewManager getPortViewManager() { return portViewManager; }
 }

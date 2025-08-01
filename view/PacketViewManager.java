@@ -18,6 +18,10 @@ public class PacketViewManager {
         }
     }
 
+    public PacketView getView(Packet packet) {
+        return packetViews.get(packet);
+    }
+
     public void removePacket(Packet packet) {
         PacketView view = packetViews.remove(packet);
         if (view != null) {

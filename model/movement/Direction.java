@@ -15,8 +15,8 @@ public class Direction {
     DirectionState state;
 
     public Direction(Wire wire) {
-        double x = wire.getWireView().getEndX() - wire.getWireView().getStartX();
-        double y = wire.getWireView().getEndY() - wire.getWireView().getStartY();
+        double x = wire.getEndX() - wire.getStartX();
+        double y = wire.getEndY() - wire.getStartY();
 
         if (x == 0 && y > 0) {
             isUpward = true;

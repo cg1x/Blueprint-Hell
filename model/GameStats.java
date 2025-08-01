@@ -1,42 +1,52 @@
 package game.model;
 
-import game.view.HUD;
-
 public final class GameStats {
     public int coins;
     public double wireLength;
-    public int successfulPacket;
-    public int inNetworkPacket;
-    public int lostPacket;
-    public int totalPacket;
+    public int successfulPackets;
+    public int inNetworkPackets;
+    public int lostPackets;
+    public int totalPackets;
     public double packetLoss;
-    public HUD hud;
     private static GameStats INSTANCE;
 
     public GameStats() {
         coins = 0;
-        successfulPacket = 0;
-        lostPacket = 0;
-        totalPacket = 0;
-        inNetworkPacket = totalPacket;
+        successfulPackets = 0;
+        lostPackets = 0;
+        totalPackets = 0;
+        inNetworkPackets = 0;
         packetLoss = 0.0;
     }
 
-    public void setTotalPacket(int n) {
-        totalPacket = n;
-        inNetworkPacket = totalPacket;
+    public int getCoins() { return coins; }
+    public void setCoins(int coins) { this.coins = coins; }
+    public void addCoins(int coins) { this.coins += coins; }
+    
+    public int getSuccessfulPackets() { return successfulPackets; }
+    public void setSuccessfulPackets(int successfulPackets) { this.successfulPackets = successfulPackets; }
+    public void incrementSuccessfulPackets() { this.successfulPackets++; }
+    
+    public int getInNetworkPackets() { return inNetworkPackets; }
+    public void setInNetworkPackets(int inNetworkPackets) { this.inNetworkPackets = inNetworkPackets; }
+    public void decrementInNetworkPackets() { this.inNetworkPackets--; }
+    
+    public int getLostPackets() { return lostPackets; }
+    public void setLostPackets(int lostPackets) { this.lostPackets = lostPackets; }
+    public void incrementLostPackets() { this.lostPackets++; }
+    
+    public int getTotalPackets() { return totalPackets; }
+    public void setTotalPackets(int totalPackets) { 
+        this.totalPackets = totalPackets;
+        this.inNetworkPackets = totalPackets;
     }
-
-    public void setSuccessfulPacket(TrianglePacket packet) {
-        successfulPacket++;
-        inNetworkPacket--;
-        coins += 2;
-    }
-
-    public void setSuccessfulPacket(SquarePacket packet) {
-        successfulPacket++;
-        inNetworkPacket--;
-        coins++;
+    
+    public double getPacketLoss() { return packetLoss; }
+    
+    public void calculatePacketLoss() {
+        if (totalPackets > 0) {
+            this.packetLoss = ((double) lostPackets / totalPackets) * 100;
+        }
     }
 
     public void packetReached(TrianglePacket packet) {
@@ -47,29 +57,11 @@ public final class GameStats {
         coins++;
     }
 
-    public void setLostPacket(TrianglePacket packet) {
-        lostPacket++;
-        inNetworkPacket--;
-    }
-
-    public void setLostPacket(SquarePacket packet) {
-        lostPacket++;
-        inNetworkPacket--;
-    }
-
     public static GameStats getINSTANCE() {
         if (INSTANCE == null) {
             INSTANCE = new GameStats();
         }
         return INSTANCE;
-    }
-
-    public void update() {
-        packetLoss = ((double) (lostPacket / totalPacket)) * 100;
-    }
-
-    public double getPacketLoss() {
-        return packetLoss;
     }
 
     public void reset() {

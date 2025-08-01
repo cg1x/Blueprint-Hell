@@ -31,7 +31,7 @@ public class SquarePacketView extends PacketView {
     public void update() {
         rect.setX(packet.getX());
         rect.setY(packet.getY());
-        rect.setVisible(!packet.getWire().getEndPort().getSystem().getPendingPackets().contains(packet));
+        rect.setVisible(packet.isOnWire());
     }
 
     public void remove() {

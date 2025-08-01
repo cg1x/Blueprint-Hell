@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static game.controller.Constants.*;
 
-public class SquarePacket extends Packet implements Movable, Collidable {
+public class SquarePacket extends Packet implements Movable {
     public double x;
     public double y;
     public double deflectionX;
@@ -23,16 +23,11 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     public ArrayList<Collidable> collidingWith = new ArrayList<>();
     public int health = 2;
     public double speed;
+    private final int rewardValue = 1;
 
     public SquarePacket() {
-        deflectionX = 0;
-        deflectionY = 0;
-        Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
-        x = 0;
-        y = 0;
-        wire = port.getWire();
-        StartSystem.getINSTANCE().decideForPacket(this);
-        squarePackets.add(this);
+        this.x = 0;
+        this.y = 0;
     }
 
     public boolean isFirst() {
@@ -47,10 +42,18 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         this.onWire = onWire;
     }
 
+    @Override
+    public int getRewardValue() {
+        return rewardValue;
+    }
+
 
     public boolean reachedEndPort() {
-        // Removed view logic: should be handled in view
         return false;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     public void setSpeed() {
@@ -64,7 +67,6 @@ public class SquarePacket extends Packet implements Movable, Collidable {
 
     @Override
     public boolean deflected() {
-        // Removed view logic: should be handled in view
         return false;
     }
 
@@ -79,8 +81,8 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     }
 
     public void setPort(Port port) {
-        x = port.getPortView().getCenterX() - PORT_SIZE/2 + deflectionX;
-        y = port.getPortView().getCenterY() - PORT_SIZE/2 + deflectionY;
+        x = port.getCenterX() - PORT_SIZE/2 + deflectionX;
+        y = port.getCenterY() - PORT_SIZE/2 + deflectionY;
         wire = port.getWire();
         wire.setPacket(this);
         setSpeed();
@@ -89,39 +91,45 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         first = false;
     }
 
+    public void setWrie(Wire wire) {
+        this.wire = wire;
+    }
+
     public Wire getWire() {
         return wire;
+    }
+
+    public double getDeflectionX() {
+        return deflectionX;
+    }
+
+    public double getDeflectionY() {
+        return deflectionY;
     }
 
     public void setDeflectionX(double deflectionX) {
         this.deflectionX += deflectionX;
         x += deflectionX;
-        if (deflectionX > (PORT_SIZE + WIRE_WIDTH) / 2) {
-            kill();
-        }
     }
 
     public void setDeflectionY(double deflectionY) {
         this.deflectionY += deflectionY;
         y += deflectionY;
-        if (deflectionY > (PORT_SIZE + WIRE_WIDTH) / 2) {
-            kill();
-        }
     }
 
     @Override
-    public boolean isCollidingWith(Collidable collidable) {
-        return collidingWith.contains(collidable);
+    public boolean isCollidingWith(Packet packet) {
+        return collidingWith.contains(packet);
     }
 
     @Override
-    public void addCollidable(Collidable collidable) {
-        collidingWith.add(collidable);
+    public void addCollidable(Packet packet) {
+        collidingWith.add(packet);
     }
 
     @Override
-    public void removeCollidable(Collidable collidable) {
-        collidingWith.remove(collidable);
+    public void removeCollidable(Packet packet) {
+        collidingWith.remove(packet);
     }
 
     
@@ -142,6 +150,14 @@ public class SquarePacket extends Packet implements Movable, Collidable {
     @Override
     public void setY(double y) {
         this.y = y;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public double getSpeed() {
+        return speed;
     }
 
     @Override
@@ -170,16 +186,11 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         return y + PORT_SIZE/2;
     }
 
-    @Override
-    public SquarePacket getPacket() {
-        return this;
-    }
 
     @Override
     public void remove() {
         collidables.remove(this);
         squarePackets.remove(this);
-        GameStats.getINSTANCE().setSuccessfulPacket(this);
     }
 
     @Override
@@ -187,6 +198,10 @@ public class SquarePacket extends Packet implements Movable, Collidable {
         wire.getNewPacket();
         collidables.remove(this);
         squarePackets.remove(this);
-        GameStats.getINSTANCE().setLostPacket(this);
+    }
+
+    @Override
+    public void setWire(Wire wire) {
+        this.wire = wire;
     }
 }

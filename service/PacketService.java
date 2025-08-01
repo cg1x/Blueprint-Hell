@@ -1,26 +1,106 @@
 package game.service;
 
 import game.model.GameState;
+import game.model.GameStats;
 import game.model.PacketType;
 import game.model.SquarePacket;
+import game.model.StartSystem;
+import game.model.SystemModel;
 import game.model.TrianglePacket;
 import game.view.PacketViewManager;
+import game.view.ViewManager;
 import game.model.Packet;
+
+import static game.controller.Constants.PORT_SIZE;
+import static game.controller.Constants.WIRE_WIDTH;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PacketService {
     private MovementService movementService;
+    private ViewManager viewManager;
+    private SystemService systemService;
+    private GameState gameState;
+    private PacketViewManager manager;
 
-    public PacketService(MovementService movementService) {
-        this.movementService = movementService;
+    public PacketService(GameState gameState, SystemService systemService, ViewManager viewManager) {
+        this.gameState = gameState;
+        this.systemService = systemService;
+        this.viewManager = viewManager;
+        this.manager = viewManager.getPacketViewManager();
+        this.movementService = new MovementService();
     }
 
     public void movePackets(GameState gameState) {
+        List<SquarePacket> squarePackets = gameState.getSquarePackets();
+        List<TrianglePacket> trianglePackets = gameState.getTrianglePackets();
+        for (int i = 0; i < squarePackets.size(); i++) {
+            SquarePacket packet = squarePackets.get(i);
+            if (packet.isOnWire()) {
+                movementService.movePacket(packet);
+                if (hasPacketReachedEndPort(packet)) {
+                    if (packet.getWire().getEndPort().getSystem().canAcceptPacket()) {
+                        handlePacketReached(packet);
+                    } else {
+                        handlePacketLost(packet);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < trianglePackets.size(); i++) {
+            TrianglePacket packet = trianglePackets.get(i);
+            if (packet.isOnWire()) {
+                movementService.movePacket(packet);
+                if (hasPacketReachedEndPort(packet)) {
+                    if (packet.getWire().getEndPort().getSystem().canAcceptPacket()) {
+                        handlePacketReached(packet);
+                    } else {
+                        handlePacketLost(packet);
+                    }
+                }
+            }
+        }
 
     }
 
-    public Packet createPacket(PacketType packetType, GameState gameState, PacketViewManager manager) {
+    public void handlePacketReached(Packet packet) {
+        GameStats gameStats = gameState.getGameStats();
+        systemService.sendNewPacketTo(packet.getWire().getStartPort());
+        gameStats.addCoins(packet.getRewardValue());
+        if (packet.getWire().getEndPort().getSystem() instanceof SystemModel) {
+            systemService.decideForPacket((SystemModel) packet.getWire().getEndPort().getSystem(), packet);
+        } else if (packet.getWire().getEndPort().getSystem() instanceof StartSystem) {
+            gameStats.incrementSuccessfulPackets();
+            gameStats.decrementInNetworkPackets();
+            removePacket(packet);
+        }
+    }
+
+    public void handlePacketLost(Packet packet) {
+        GameStats gameStats = gameState.getGameStats();
+        removePacket(packet);
+        systemService.sendNewPacketTo(packet.getWire().getStartPort()); 
+        gameStats.incrementLostPackets();
+        gameStats.decrementInNetworkPackets();
+    }
+
+    public boolean hasPacketReachedEndPort(Packet packet) {
+        return viewManager.AreIntersecting(packet, packet.getWire().getEndPort());
+    }
+
+    public void handleDeflection(Packet packet, double deflectionX, double deflectionY) {
+        packet.setDeflectionX(deflectionX);
+        if (packet.getDeflectionX() > (PORT_SIZE + WIRE_WIDTH) / 2) {
+            handlePacketLost(packet);
+        }
+        packet.setDeflectionY(deflectionY);
+        if (packet.getDeflectionY() > (PORT_SIZE + WIRE_WIDTH) / 2) {
+            handlePacketLost(packet);
+        }
+    }
+
+    public Packet createPacket(PacketType packetType) {
         Packet packet = null;
         if (packetType == PacketType.SQUARE) {
             packet = new SquarePacket();
@@ -29,30 +109,40 @@ public class PacketService {
             packet = new TrianglePacket();
             gameState.addTrianglePacket((TrianglePacket) packet);
         }
+        gameState.getSystems().getFirst().getPendingPackets().add(packet);
         manager.addPacket(packet);
         return packet;
     }
 
-    public List<Packet> createPacketsForLevel(int level, GameState gameState, PacketViewManager manager) {
+    public void createPacketsForLevel(int level) {
         List<Packet> packets = new ArrayList<>();
         if (level == 1) {
-            packets.add(createPacket(PacketType.TRIANGLE, gameState, manager));
-            packets.add(createPacket(PacketType.SQUARE, gameState, manager));
-            packets.add(createPacket(PacketType.TRIANGLE, gameState, manager));
-            packets.add(createPacket(PacketType.SQUARE, gameState, manager));
-            packets.add(createPacket(PacketType.TRIANGLE, gameState, manager));
-            packets.add(createPacket(PacketType.SQUARE, gameState, manager));
+            packets.add(createPacket(PacketType.TRIANGLE));
+            packets.add(createPacket(PacketType.SQUARE));
+            packets.add(createPacket(PacketType.TRIANGLE));
+            packets.add(createPacket(PacketType.SQUARE));
+            packets.add(createPacket(PacketType.TRIANGLE));
+            packets.add(createPacket(PacketType.SQUARE));
         } else if (level == 2) {
             for (int i = 0; i < 5; i++) {
-                packets.add(createPacket(PacketType.TRIANGLE, gameState, manager));
-                packets.add(createPacket(PacketType.SQUARE, gameState, manager));
+                packets.add(createPacket(PacketType.TRIANGLE));
+                packets.add(createPacket(PacketType.SQUARE));
             }
         }
-        return packets;
+        
+        int totalPackets = gameState.getTrianglePackets().size() + gameState.getSquarePackets().size();
+        gameState.getGameStats().setTotalPackets(totalPackets);
     }
 
-    public void removePacket(Packet packet, PacketViewManager manager) {
-        manager.removePacket(packet);
-        packet.remove();
+    public void reduceHealth(Packet packet) {
+        packet.reduceHealth();
+        if (packet.getHealth() == 0) {
+            removePacket(packet);
+        }
+    }
+
+    public void removePacket(Packet packet) {
+        gameState.removePacket(packet);
+        viewManager.getPacketViewManager().removePacket(packet);
     }
 }

@@ -19,7 +19,6 @@ import static game.controller.Constants.SYSTEM_COLOR;
 import static game.controller.Constants.SYSTEM_SIZE;
 import static game.controller.Constants.SYSTEM_TOP_COLOR;
 import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
-import static game.model.SystemModel.systems;
 
 public class StartSystemView extends GeneralSystemView {
     double x;
@@ -32,7 +31,7 @@ public class StartSystemView extends GeneralSystemView {
     Rectangle topRectangle;
     Group shape;
     Rectangle indicator;
-    Button runButton;
+    public Button runButton;
     private GameController gameController;
 
     public StartSystemView(StartSystem system) {
@@ -89,32 +88,6 @@ public class StartSystemView extends GeneralSystemView {
         indicator.setFill(SYSTEM_TOP_COLOR);
         indicator.setStroke(SYSTEM_COLOR);
         shape.getChildren().addAll(mainRectangle, topRectangle, indicator);
-        // paint input ports
-        for (Port port : inputPorts) {
-            if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x - 5,
-                        y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (SquarePort) port);
-                shape.getChildren().addAll(portView);
-            }
-
-            if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x, y + 10 + ((inputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (TrianglePort) port);
-                shape.getChildren().addAll(portView);
-            }
-        }
-        // paint output ports
-        for (Port port : outputPorts) {
-            if (port instanceof SquarePort) {
-                SquarePortView portView = new SquarePortView(x + SYSTEM_SIZE - 5,
-                        y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (SquarePort) port);
-                shape.getChildren().add(portView);
-            }
-
-            if (port instanceof TrianglePort) {
-                TrianglePortView portView = new TrianglePortView(x + SYSTEM_SIZE, y + 10 + ((outputPorts.indexOf(port) + 1) * SYSTEM_TOP_HEIGHT), (TrianglePort) port);
-                shape.getChildren().add(portView);
-            }
-        }
         //paint run button
         runButton = new Button("Run");
         runButton.setPrefWidth(60);
@@ -134,16 +107,18 @@ public class StartSystemView extends GeneralSystemView {
     }
 
     public void updateButton() {
-        for (SystemModel system : systems) {
+        for (GeneralSystem system : gameController.getGameService().getGameState().getSystems()) {
             if (!system.isReady()) {
                 runButton.setDisable(true);
                 return;
             }
         }
-        runButton.setDisable(!this.system.isReady());
+        runButton.setDisable(false);
     }
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
+
+    
 }

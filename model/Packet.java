@@ -7,7 +7,8 @@ import game.model.movement.Movable;
 public abstract class Packet implements Movable, Collidable {
     public double x;
     public double y;
-    public Wire wire;
+    protected Wire wire;
+    protected boolean onWire;
 
     public abstract void remove();
 
@@ -19,6 +20,10 @@ public abstract class Packet implements Movable, Collidable {
 
     public abstract int getHealth();
 
+    public abstract double getDeflectionX();
+
+    public abstract double getDeflectionY();
+
     public abstract void setDeflectionX(double deflectionX);
 
     public abstract void setDeflectionY(double deflectionY);
@@ -27,29 +32,31 @@ public abstract class Packet implements Movable, Collidable {
 
     public abstract double getX();
 
+    public abstract Wire getWire();
+
+    public abstract boolean isOnWire();
+
+    public abstract void setWire(Wire wire);
+
+    public abstract void setOnWire(boolean onWire);
+
     public abstract void setX(double x);
 
     public abstract double getY();
 
     public abstract void setY(double y);
 
-    @Override
-    public abstract Packet getPacket();
+    public abstract void setSpeed(double speed);
 
-    @Override
-    public abstract void removeCollidable(Collidable collidable);
+    public abstract int getRewardValue();
 
-    @Override
-    public abstract void addCollidable(Collidable collidable);
+    public abstract void removeCollidable(Packet packet);
 
-    @Override
+    public abstract void addCollidable(Packet packet);
+
     public abstract double getCenterX();
 
-    @Override
     public abstract double getCenterY();
 
-    // Removed getPacketView() method and any PacketView references
-
-    @Override
-    public abstract boolean isCollidingWith(Collidable collidable);
+    public abstract boolean isCollidingWith(Packet packet);
 }

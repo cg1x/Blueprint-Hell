@@ -50,17 +50,14 @@ public class SquarePortView extends PortView {
 
     public void endLine(MouseEvent e) {
         if (wire != null) {
-            Object target = e.getPickResult().getIntersectedNode();
-            if (target instanceof SquarePortView && Controller.connectable(this, (SquarePortView) target)) {
-                wire.setEndX(((SquarePortView) target).getCenterX());
-                wire.setEndY(((SquarePortView) target).getCenterY());
-                wire.setStrokeWidth(Constants.WIRE_WIDTH);
-                port.available = false;
-                ((SquarePortView) target).port.available = false;
-                wire.setWireModel(this, (SquarePortView) target);
-            } else {
-                Root.getINSTANCE().getChildren().remove(wire);
+            Object object = e.getPickResult().getIntersectedNode();
+            if (object instanceof Polygon) {
+                Object target = ((Polygon) object).getUserData();
+                if (target instanceof SquarePortView && Controller.connectable(this, (SquarePortView) target)) {
+                    wireService.createWire(this.port, ((SquarePortView) target).getPort());
+                }
             }
+            Root.getINSTANCE().getChildren().remove(wire);
         }
         wire = null;
     }
@@ -78,6 +75,7 @@ public class SquarePortView extends PortView {
         shape.setFill(color);
         shape.setStroke(Color.BLACK);
         shape.setStrokeWidth(2);
+        shape.setUserData(this);
         Root.getINSTANCE().getChildren().add(shape);
         shape.setOnMouseEntered(e -> shape.setOpacity(0.5));
         shape.setOnMouseExited(e -> shape.setOpacity(1.0));
@@ -91,6 +89,10 @@ public class SquarePortView extends PortView {
     @Override
     public double getCenterY() {
         return y + PORT_SIZE/2;
+    }
+
+    public SquarePort getPort() {
+        return port;
     }
 }
 

@@ -1,47 +1,67 @@
 package game.service;
 
+import game.controller.GameController;
 import game.controller.Level1;
 import game.controller.Level2;
 import game.model.GameState;
+import game.model.Port;
+import game.model.StartSystem;
 import game.service.PacketService;
 import game.service.MovementService;
 import game.service.SystemService;
+import game.view.PortViewManager;
+import game.view.SystemViewManager;
 
 public class GameService {
+    private GameController gameController;
     private GameState gameState;
+    private CollisionService collisionService;
     private PacketService packetService;
     private SystemService systemService;
+    private PortService portService;
+    private WireService wireService;
 
-    public GameService() {
+    public GameService(GameController gameController) {
+        this.gameController = gameController;
         this.gameState = new GameState();
-        this.packetService = new PacketService(new MovementService());
-        this.systemService = new SystemService();
+        this.systemService = new SystemService(gameController.getGameView().getSystemViewManager());
+        this.packetService = new PacketService(gameState, systemService, gameController.getGameView().getViewManager());
+        this.collisionService = new CollisionService(packetService, gameController.getGameView().getViewManager());
+        this.wireService = new WireService(systemService, gameController.getGameView().getWireViewManager());
+        this.portService = new PortService(gameController.getGameView().getPortViewManager(), wireService);
+        systemService.setPortService(portService);
     }
 
-    public void initializeLevel(int level) {
+    public void initializeLevel(int level, SystemViewManager systemViewManager, PortViewManager portViewManager) {
         gameState.reset();
         gameState.setCurrentLevel(level);
         switch (level) {
             case 1:
-                new Level1(gameState).createLevel();
+                new Level1(gameState, systemViewManager, portViewManager).createLevel();
                 break;
             case 2:
-                new Level2(gameState).createLevel();
+                new Level2(gameState, systemViewManager, portViewManager).createLevel();
                 break;
             default:
                 break;
         }
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public void startGame() {
+        gameState.setGameRunning(true);
+        systemService.startSendingPackets((StartSystem) gameState.getSystems().getFirst());
     }
 
-    public PacketService getPacketService() {
-        return packetService;
+    public boolean isGameOver() {
+        return gameState.getGameStats().getInNetworkPackets() == 0;
     }
 
-    public SystemService getSystemService() {
-        return systemService;
+    public boolean isLevelComplete() {
+        return gameState.getGameStats().getPacketLoss() >= 50;
     }
+
+    public GameState getGameState() { return gameState; }
+    public PacketService getPacketService() { return packetService; }
+    public SystemService getSystemService() { return systemService; }
+    public CollisionService getCollisionService() { return collisionService; }
 }

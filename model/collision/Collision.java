@@ -15,19 +15,11 @@ public class Collision {
     public final double MAGNITUDE = PORT_SIZE / 2;
     public final double impactRadius = 1600;
 
-    public Collision(Collidable collidable1, Collidable collidable2) {
+    public Collision(Packet collidable1, Packet collidable2) {
         this.collidable1 = collidable1;
         collidable1.addCollidable(collidable2);
-        collidable1.getPacket().reduceHealth();
-        if (collidable1.getPacket().getHealth() == 0) {
-            collidable1.getPacket().kill();
-        }
         this.collidable2 = collidable2;
         collidable2.addCollidable(collidable1);
-        collidable2.getPacket().reduceHealth();
-        if (collidable2.getPacket().getHealth() == 0) {
-            collidable2.getPacket().kill();
-        }
         this.x = (collidable1.getCenterX() + collidable2.getCenterX()) / 2;
         this.y = (collidable1.getCenterY() + collidable2.getCenterY()) / 2;
         System.out.println("just hit");
@@ -42,11 +34,7 @@ public class Collision {
     }
 
     public void applyImpact(Collidable collidable) {
-        Packet packet = collidable.getPacket();
-        Direction direction = new Direction(packet, this);
-        double distance = Utils.measureDistance(packet.getX(), packet.getY(), x, y);
-        packet.setDeflectionX(direction.getX() * MAGNITUDE * (1 - distance/impactRadius));
-        packet.setDeflectionY(direction.getY() * MAGNITUDE * (1 - distance/impactRadius));
+        
     }
 
     public double getX() {

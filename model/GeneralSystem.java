@@ -26,9 +26,6 @@ public abstract class GeneralSystem {
         initialY = y;
     }
 
-    public abstract void decideForPacket(TrianglePacket packet);
-    public abstract void decideForPacket(SquarePacket packet);
-
     public ArrayList<Packet> getPendingPackets() {
         return pendingPackets;
     }
@@ -48,6 +45,10 @@ public abstract class GeneralSystem {
     public ArrayList<Port> getOutputPorts() {
         return outputPorts;
     }
+
+    public abstract boolean canSendPacket();
+
+    public abstract boolean canAcceptPacket();
 
     public void addPort(Port port, PortType portType) {
         if (portType == PortType.INPUT) {

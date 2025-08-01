@@ -5,6 +5,10 @@ import game.view.WireView;
 import java.util.ArrayList;
 
 public class Wire {
+    private double startX;
+    private double startY;
+    private double endX;
+    private double endY;
     public Port startPort;
     public Port endPort;
     public WireType wireType;
@@ -19,7 +23,10 @@ public class Wire {
         endPort.setWire(this);
         this.wireType = wireType;
         this.wireView = wireView;
-        update();
+        this.startX = startPort.getCenterX();
+        this.startY = startPort.getCenterY();
+        this.endX = endPort.getCenterX();
+        this.endY = endPort.getCenterY();
     }
 
     public Packet getPacket() {
@@ -56,9 +63,20 @@ public class Wire {
         return wireView;
     }
 
-    public void update() {
-        startPort.system.updateIndicator();
-        endPort.system.updateIndicator();
+    public double getStartX() {
+        return startX;
+    }
+
+    public double getStartY() {
+        return startY;
+    }
+
+    public double getEndX() {
+        return endX;
+    }
+
+    public double getEndY() {
+        return endY;
     }
 
 }

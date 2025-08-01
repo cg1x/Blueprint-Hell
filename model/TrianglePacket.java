@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static game.controller.Constants.PORT_SIZE;
 import static game.controller.Constants.WIRE_WIDTH;
 
-public class TrianglePacket extends Packet implements Movable, Collidable {
+public class TrianglePacket extends Packet implements Movable {
     public double x;
     public double y;
     public double deflectionX;
@@ -24,25 +24,20 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     public int health = 3;
     public double acceleration = 0.05;
     public double speed;
+    private final int rewardValue = 2;
 
     public TrianglePacket() {
-        deflectionX = 0;
-        deflectionY = 0;
-        Port port = StartSystem.getINSTANCE().getInputPorts().getFirst();
-        x = 0;
-        y = 0;
-        wire = port.getWire();
-        StartSystem.getINSTANCE().decideForPacket(this);
-        trianglePackets.add(this);
+        this.x = 0;
+        this.y = 0;
+    }
+
+    @Override
+    public int getRewardValue() {
+        return rewardValue;
     }
 
     public boolean isFirst() {
         return first;
-    }
-
-    public boolean reachedEndPort() {
-        Shape shape = Shape.intersect(this.getPacketView().getShape(), wire.getEndPort().getPortView());
-        return shape.getBoundsInLocal().getWidth() != -1;
     }
 
     public void setSpeed() {
@@ -55,8 +50,8 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     }
 
     public void setPort(Port port) {
-        x = port.getPortView().getCenterX() + deflectionX;
-        y = port.getPortView().getCenterY() - PORT_SIZE/2 + deflectionY;
+        x = port.getCenterX() + deflectionX;
+        y = port.getCenterY() - PORT_SIZE/2 + deflectionY;
         wire = port.getWire();
         wire.setPacket(this);
         setSpeed();
@@ -69,10 +64,13 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         return wire;
     }
 
+    public void setWrie(Wire wire) {
+        this.wire = wire;
+    }
+
     @Override
     public boolean deflected() {
-        Shape shape = Shape.intersect(this.getPacketView().getShape(), wire.getWireView());
-        return shape.getBoundsInLocal().getWidth() == -1;
+        return false;
     }
 
     @Override
@@ -85,42 +83,39 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         health--;
     }
 
+    public double getDeflectionX() {
+        return deflectionX;
+    }
+
+    public double getDeflectionY() {
+        return deflectionY;
+    }
+
     @Override
     public void setDeflectionX(double deflectionX) {
         this.deflectionX += deflectionX;
         x += deflectionX;
-        if (deflectionX > (PORT_SIZE + WIRE_WIDTH) / 2) {
-            kill();
-        }
     }
 
     @Override
     public void setDeflectionY(double deflectionY) {
         this.deflectionY += deflectionY;
         y += deflectionY;
-        if (deflectionY > (PORT_SIZE + WIRE_WIDTH) / 2) {
-            kill();
-        }
     }
 
     @Override
-    public boolean isCollidingWith(Collidable collidable) {
-        return collidingWith.contains(collidable);
+    public boolean isCollidingWith(Packet packet) {
+        return collidingWith.contains(packet);
     }
 
     @Override
-    public void addCollidable(Collidable collidable) {
-        collidingWith.add(collidable);
+    public void addCollidable(Packet packet) {
+        collidingWith.add(packet);
     }
 
     @Override
-    public void removeCollidable(Collidable collidable) {
-        collidingWith.remove(collidable);
-    }
-
-    @Override
-    public TrianglePacketView getPacketView() {
-        return null; // Removed packetView
+    public void removeCollidable(Packet packet) {
+        collidingWith.remove(packet);
     }
 
     public double getX() {
@@ -139,6 +134,30 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     @Override
     public void setY(double y) {
         this.y = y;
+    }
+
+    public boolean isOnWire() {
+        return onWire;
+    }
+
+    public void setOnWire(boolean onWire) {
+        this.onWire = onWire;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getAcceleration() {
+        return acceleration;
     }
 
     @Override
@@ -171,15 +190,9 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
     }
 
     @Override
-    public TrianglePacket getPacket() {
-        return this;
-    }
-
-    @Override
     public void remove() {
         collidables.remove(this);
         trianglePackets.remove(this);
-        GameStats.getINSTANCE().setSuccessfulPacket(this);
     }
 
     @Override
@@ -187,6 +200,10 @@ public class TrianglePacket extends Packet implements Movable, Collidable {
         wire.getNewPacket();
         collidables.remove(this);
         trianglePackets.remove(this);
-        GameStats.getINSTANCE().setLostPacket(this);
+    }
+
+    @Override
+    public void setWire(Wire wire) {
+        this.wire = wire;
     }
 }

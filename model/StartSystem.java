@@ -14,7 +14,6 @@ public final class StartSystem extends GeneralSystem {
     public double initialX;
     public double initialY;
     public boolean ready = false;
-    private GameState gameState;
 
     public ArrayList<Port> inputPorts = new ArrayList<>();
     public ArrayList<Port> outputPorts = new ArrayList<>();
@@ -31,16 +30,22 @@ public final class StartSystem extends GeneralSystem {
         return ready;
     }
 
+    public boolean canSendPacket() {
+        return !pendingPackets.isEmpty();
+    }
+
+    public boolean canAcceptPacket() {
+        return true;
+    }
+
     @Override
     public void setReady(boolean ready) {
-        super.setReady(ready);
+        this.ready = ready;
     }
 
     public ArrayList<Packet> getPendingPackets() {
         return pendingPackets;
     }
-
-    // Removed decideForPacket methods; now handled in SystemService
 
     @Override
     public double getInitialY() {
@@ -65,10 +70,6 @@ public final class StartSystem extends GeneralSystem {
         } else if (portType == PortType.OUTPUT) {
             outputPorts.add(port);
         }
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
     }
 
     public static StartSystem getINSTANCE() {

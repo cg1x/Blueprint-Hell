@@ -13,6 +13,8 @@ public class GameState {
 
     public GameState() {
         this.currentLevel = 1;
+        this.squarePackets = new ArrayList<>();
+        this.trianglePackets = new ArrayList<>();
         this.systems = new ArrayList<>();
         this.gameStats = new GameStats();
         this.gameRunning = false;
@@ -38,8 +40,17 @@ public class GameState {
         squarePackets.add(packet);
     }
 
+
     public void addTrianglePacket(TrianglePacket packet) {
         trianglePackets.add(packet);
+    }
+
+    public void removePacket(Packet packet) {
+        if (packet instanceof SquarePacket) {
+            squarePackets.remove(packet);
+        } else if (packet instanceof TrianglePacket) {
+            trianglePackets.remove(packet);
+        }
     }
 
     public GameStats getGameStats() {
@@ -59,6 +70,8 @@ public class GameState {
     }
 
     public void reset() {
+        squarePackets.clear();
+        trianglePackets.clear();
         systems.clear();
         gameStats = new GameStats();
         gameRunning = false;

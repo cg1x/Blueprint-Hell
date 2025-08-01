@@ -1,5 +1,7 @@
 package game.model;
 
+import static game.controller.Constants.PORT_SIZE;
+
 import game.view.PortView;
 import game.view.SquarePortView;
 import game.view.TrianglePortView;
@@ -9,6 +11,8 @@ public class TrianglePort extends Port {
     public PortType portType;
     public boolean available;
     public Wire wire;
+    private double x;
+    private double y;
 
     public TrianglePort(GeneralSystem system, PortType portType) {
         super(system, portType);
@@ -44,5 +48,35 @@ public class TrianglePort extends Port {
     @Override
     public PortType getPortType() {
         return portType;
+    }
+
+    @Override
+    public double getX() {
+        return x;
+    }
+
+    @Override
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    @Override
+    public double getY() {
+        return y;
+    }
+
+    @Override
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    @Override
+    public double getCenterX() {
+        return x;
+    }
+
+    @Override
+    public double getCenterY() {
+        return y + (PORT_SIZE / 2.0);
     }
 }

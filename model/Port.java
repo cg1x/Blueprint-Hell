@@ -8,6 +8,8 @@ public abstract class Port {
     public PortType portType;
     public boolean available;
     public Wire wire;
+    private double x;
+    private double y;
 
     public Port(GeneralSystem system, PortType portType) {
         this.system = system;
@@ -39,4 +41,23 @@ public abstract class Port {
     public PortType getPortType() {
         return portType;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public abstract double getCenterX();
+    public abstract double getCenterY();
 }

@@ -1,37 +1,40 @@
 package game.view;
 
+import static game.controller.Constants.WIRE_WIDTH;
+
 import game.model.Port;
 import game.model.Wire;
 import game.model.WireType;
+import game.service.WireService;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class WireView extends Line {
+public class WireView {
+    private Line shape;
     Wire wire;
     Port startPort;
     Port endPort;
 
-    public WireView() {
-        this.setOnMouseClicked(e -> {
+    public WireView(Wire wire) {
+        this.wire = wire;
+        shape = new Line(wire.getStartX(), wire.getStartY(), wire.getEndX(), wire.getEndY());
+        if (wire.getWireType() == WireType.SQUARE) {
+            shape.setStroke(Color.GREEN);
+        } else if (wire.getWireType() == WireType.TRIANGLE) {
+            shape.setStroke(Color.YELLOW);
+        }
+        shape.setStrokeWidth(WIRE_WIDTH);
+        Root.getINSTANCE().getChildren().add(shape);
+    }
+
+    public void enableWireRemoval(WireService wireService) {
+        shape.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
-                startPort.setAvailable(true);
-                endPort.setAvailable(true);
-                wire.update();
-                Root.getINSTANCE().getChildren().remove(this);
+                wireService.removeWire(wire);
+                Root.getINSTANCE().getChildren().remove(shape);
             }
         });
-    }
-
-    public void setWireModel(SquarePortView startPort, SquarePortView endPort) {
-        wire = new Wire(startPort.port, endPort.port, WireType.SQUARE, this);
-        this.startPort = startPort.port;
-        this.endPort = endPort.port;
-    }
-
-    public void setWireModel(TrianglePortView startPort, TrianglePortView endPort) {
-        wire = new Wire(startPort.port, endPort.port, WireType.TRIANGLE, this);
-        this.startPort = startPort.port;
-        this.endPort = endPort.port;
     }
 
 }

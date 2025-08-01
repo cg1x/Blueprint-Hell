@@ -13,9 +13,9 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.initStyle(StageStyle.UNDECORATED);
-        GameService gameService = new GameService();
         GameView gameView = new GameView(stage);
-        GameController gameController = new GameController(gameService, gameView);
+        GameController gameController = new GameController(gameView);
+        gameView.setGameController(gameController);
         gameView.showMenu();
 
     }

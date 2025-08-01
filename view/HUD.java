@@ -21,25 +21,25 @@ public class HUD {
         coins.setX(10);
         coins.setY(30);
 
-        successfulPacket = new Text("successfulPackets: " + gameStats.successfulPacket);
+        successfulPacket = new Text("successfulPackets: " + gameStats.getSuccessfulPackets());
         successfulPacket.setFill(Color.WHITE);
         successfulPacket.setFont(new Font("Verdana",18));
         successfulPacket.setX(10);
         successfulPacket.setY(60);
 
-        inNetworkPacket = new Text("inNetworkPackets: " + gameStats.inNetworkPacket);
+        inNetworkPacket = new Text("inNetworkPackets: " + gameStats.getInNetworkPackets());
         inNetworkPacket.setFill(Color.WHITE);
         inNetworkPacket.setFont(new Font("Verdana",18));
         inNetworkPacket.setX(10);
         inNetworkPacket.setY(90);
 
-        lostPacket = new Text("lostPackets: " + gameStats.lostPacket);
+        lostPacket = new Text("lostPackets: " + gameStats.getLostPackets());
         lostPacket.setFill(Color.WHITE);
         lostPacket.setFont(new Font("Verdana",18));
         lostPacket.setX(10);
         lostPacket.setY(120);
 
-        packetLoss = new Text("packetLoss: " + gameStats.packetLoss);
+        packetLoss = new Text("packetLoss: " + gameStats.getPacketLoss());
         packetLoss.setFill(Color.WHITE);
         packetLoss.setFont(new Font("Verdana",18));
         packetLoss.setX(10);
@@ -50,8 +50,9 @@ public class HUD {
 
     public void update() {
         coins.setText("coins: " + gameStats.coins);
-        successfulPacket.setText("successfulPackets: " + gameStats.successfulPacket);
-        inNetworkPacket.setText("inNetworkPackets: " + gameStats.inNetworkPacket);
-        lostPacket.setText("lostPackets: " + gameStats.lostPacket);
+        successfulPacket.setText("successfulPackets: " + gameStats.getSuccessfulPackets());
+        inNetworkPacket.setText("inNetworkPackets: " + gameStats.getInNetworkPackets());
+        lostPacket.setText("lostPackets: " + gameStats.getLostPackets());
+        packetLoss.setText("packetLoss: " + gameStats.getPacketLoss());
     }
 }
