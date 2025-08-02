@@ -1,16 +1,12 @@
 package game.service;
 
 import game.controller.GameController;
-import game.controller.Level1;
-import game.controller.Level2;
+import game.controller.levels.Level1;
+import game.controller.levels.Level2;
 import game.model.GameState;
-import game.model.Port;
-import game.model.StartSystem;
-import game.service.PacketService;
-import game.service.MovementService;
-import game.service.SystemService;
-import game.view.PortViewManager;
-import game.view.SystemViewManager;
+import game.model.systems.StartSystem;
+import game.view.manager.PortViewManager;
+import game.view.manager.SystemViewManager;
 
 public class GameService {
     private GameController gameController;

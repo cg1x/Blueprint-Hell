@@ -2,6 +2,7 @@ package game.view;
 
 import game.controller.GameController;
 import game.model.*;
+import game.view.manager.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

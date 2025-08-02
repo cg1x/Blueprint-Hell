@@ -1,21 +1,21 @@
 package game.service;
 
-import game.model.SystemModel;
-import game.model.StartSystem;
-import game.model.Packet;
-import game.model.SquarePacket;
-import game.model.TrianglePacket;
-import game.model.Port;
-import game.model.TrianglePort;
-import game.model.movement.Direction;
-import game.model.SquarePort;
-import game.model.GeneralSystem;
+import game.model.systems.SystemModel;
+import game.model.systems.StartSystem;
+import game.model.packets.Packet;
+import game.model.packets.SquarePacket;
+import game.model.packets.TrianglePacket;
+import game.model.ports.Port;
+import game.model.ports.TrianglePort;
+import game.model.Direction;
+import game.model.ports.SquarePort;
+import game.model.systems.GeneralSystem;
 import game.controller.GameController;
 
 import static game.controller.Constants.PORT_SIZE;
-import game.view.StartSystemView;
-import game.view.GeneralSystemView;
-import game.view.SystemViewManager;
+import game.view.systems.StartSystemView;
+import game.view.systems.GeneralSystemView;
+import game.view.manager.SystemViewManager;
 
 public class SystemService {
     private PortService portService;
@@ -77,13 +77,11 @@ public class SystemService {
     public Port findAvailablePort(GeneralSystem system, SquarePacket packet) {
         for (Port port : system.getOutputPorts()) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {
-                packet.setPort(port);
                 return port;
             }
         }
         for (Port port : system.getOutputPorts()) {
             if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
-                packet.setPort(port);
                 return port;
             }
         }
@@ -93,13 +91,11 @@ public class SystemService {
     public Port findAvailablePort(GeneralSystem system, TrianglePacket packet) {
         for (Port port : system.getOutputPorts()) {
             if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
-                packet.setPort(port);
                 return port;
             }
         }
         for (Port port : system.getOutputPorts()) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {
-                packet.setPort(port);
                 return port;
             }
         }

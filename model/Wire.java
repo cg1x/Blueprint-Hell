@@ -1,8 +1,8 @@
 package game.model;
 
+import game.model.packets.Packet;
+import game.model.ports.Port;
 import game.view.WireView;
-
-import java.util.ArrayList;
 
 public class Wire {
     private double startX;
@@ -29,54 +29,13 @@ public class Wire {
         this.endY = endPort.getCenterY();
     }
 
-    public Packet getPacket() {
-        return packet;
-    }
-
-    public void setPacket(Packet packet) {
-        this.packet = packet;
-    }
-
-    public void getNewPacket() {
-        if (startPort.getSystem().getPendingPackets().isEmpty()) {
-            packet = null;
-        } else {
-            packet = startPort.getSystem().getPendingPackets().getFirst();
-            startPort.getSystem().getPendingPackets().remove(packet);
-            packet.setPort(startPort);
-        }
-    }
-
-    public Port getStartPort() {
-        return startPort;
-    }
-
-    public Port getEndPort() {
-        return endPort;
-    }
-
-    public WireType getWireType() {
-        return wireType;
-    }
-
-    public WireView getWireView() {
-        return wireView;
-    }
-
-    public double getStartX() {
-        return startX;
-    }
-
-    public double getStartY() {
-        return startY;
-    }
-
-    public double getEndX() {
-        return endX;
-    }
-
-    public double getEndY() {
-        return endY;
-    }
-
+    public Packet getPacket() { return packet; }
+    public void setPacket(Packet packet) { this.packet = packet; }
+    public Port getStartPort() { return startPort; }
+    public Port getEndPort() { return endPort; }
+    public WireType getWireType() { return wireType; }
+    public double getStartX() { return startX; }
+    public double getStartY() { return startY; }
+    public double getEndX() { return endX; }
+    public double getEndY() { return endY; }
 }

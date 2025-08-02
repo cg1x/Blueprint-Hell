@@ -1,5 +1,8 @@
 package game.model;
 
+import game.model.packets.SquarePacket;
+import game.model.packets.TrianglePacket;
+
 public final class GameStats {
     public int coins;
     public double wireLength;

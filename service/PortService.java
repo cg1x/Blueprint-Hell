@@ -3,14 +3,11 @@ package game.service;
 import static game.controller.Constants.SYSTEM_SIZE;
 import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
 
-import game.model.GeneralSystem;
-import game.model.Port;
-import game.model.SquarePort;
-import game.model.TrianglePort;
-import game.view.SquarePortView;
-import game.view.TrianglePortView;
-import game.view.PortView;
-import game.view.PortViewManager;
+import game.model.systems.GeneralSystem;
+import game.model.ports.Port;
+import game.model.ports.SquarePort;
+import game.model.ports.TrianglePort;
+import game.view.manager.PortViewManager;
 
 public class PortService {
     private PortViewManager portViewManager;

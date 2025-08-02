@@ -7,10 +7,10 @@ import java.util.List;
 
 import game.controller.Utils;
 import game.model.GameState;
-import game.model.Packet;
-import game.model.collision.Collision;
-import game.model.movement.Direction;
-import game.view.ViewManager;
+import game.model.packets.Packet;
+import game.model.Collision;
+import game.model.Direction;
+import game.view.manager.ViewManager;
 
 public class CollisionService {
     private ViewManager viewManager;

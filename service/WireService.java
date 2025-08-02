@@ -1,10 +1,11 @@
 package game.service;
 
-import game.model.SquarePort;
-import game.model.TrianglePort;
-import game.model.Wire;
-import game.model.WireType;
-import game.view.WireViewManager;
+import game.model.*;
+import game.model.ports.Port;
+import game.model.ports.PortType;
+import game.model.ports.SquarePort;
+import game.model.ports.TrianglePort;
+import game.view.manager.WireViewManager;
 
 public class WireService {
     private SystemService systemService;
@@ -13,6 +14,25 @@ public class WireService {
     public WireService(SystemService systemService, WireViewManager wireViewManager) {
         this.systemService = systemService;
         this.wireViewManager = wireViewManager;
+    }
+
+    public void handleConnection(Port startPort, Port endPort) {
+        if (AreConnectable(startPort, endPort)) {
+            if (startPort instanceof SquarePort) {
+                createWire((SquarePort) startPort, (SquarePort) endPort);
+            } else {
+                createWire((TrianglePort) startPort, (TrianglePort) endPort);
+            }
+        }
+    }
+
+    public boolean AreConnectable(Port startPort, Port endPort) {
+        boolean bool1 = startPort.getPortType() == PortType.OUTPUT;
+        boolean bool2 = endPort.getPortType() == PortType.INPUT;
+        boolean bool3 = startPort.getSystem() != endPort.getSystem();
+        boolean bool4 = endPort.isAvailable();
+
+        return bool1 && bool2 && bool3 && bool4;
     }
 
     public void createWire(SquarePort port1, SquarePort port2) {

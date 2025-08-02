@@ -2,14 +2,14 @@ package game.service;
 
 import game.model.GameState;
 import game.model.GameStats;
-import game.model.PacketType;
-import game.model.SquarePacket;
-import game.model.StartSystem;
-import game.model.SystemModel;
-import game.model.TrianglePacket;
-import game.view.PacketViewManager;
-import game.view.ViewManager;
-import game.model.Packet;
+import game.model.packets.PacketType;
+import game.model.packets.SquarePacket;
+import game.model.systems.StartSystem;
+import game.model.systems.SystemModel;
+import game.model.packets.TrianglePacket;
+import game.view.manager.PacketViewManager;
+import game.view.manager.ViewManager;
+import game.model.packets.Packet;
 
 import static game.controller.Constants.PORT_SIZE;
 import static game.controller.Constants.WIRE_WIDTH;

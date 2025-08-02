@@ -1,7 +1,6 @@
 package game.view;
 
-import game.model.GeneralSystem;
-import javafx.event.ActionEvent;
+import game.model.systems.GeneralSystem;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 

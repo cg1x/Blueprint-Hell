@@ -1,5 +1,10 @@
 package game.model;
 
+import game.model.packets.Packet;
+import game.model.packets.SquarePacket;
+import game.model.packets.TrianglePacket;
+import game.model.systems.GeneralSystem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,11 +82,6 @@ public class GameState {
         gameRunning = false;
     }
 
-    public List<SquarePacket> getSquarePackets() {
-        return squarePackets;
-    }
-
-    public List<TrianglePacket> getTrianglePackets() {
-        return trianglePackets;
-    }
+    public List<SquarePacket> getSquarePackets() { return squarePackets; }
+    public List<TrianglePacket> getTrianglePackets() { return trianglePackets; }
 }

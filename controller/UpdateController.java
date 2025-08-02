@@ -1,24 +1,11 @@
 package game.controller;
 
-
-import game.model.GameStats;
-import game.model.SquarePacket;
-import game.model.TrianglePacket;
-import game.model.collision.Collision;
 import javafx.application.Platform;
 import game.service.CollisionService;
 import game.service.GameService;
-import game.service.MovementService;
 import game.service.PacketService;
-import game.model.GameState;
-
-import static game.model.SquarePacket.squarePackets;
-import static game.model.TrianglePacket.trianglePackets;
-import static game.model.collision.Collidable.collidables;
 
 public class UpdateController {
-
-    public boolean first = true;
     public boolean running = false;
     public Thread animator;
     public GameService gameService;

@@ -1,0 +1,62 @@
+package game.model.systems;
+
+import game.model.packets.Packet;
+import game.model.ports.Port;
+import game.model.ports.PortType;
+
+import java.util.ArrayList;
+
+public abstract class GeneralSystem {
+    public double initialX;
+    public double initialY;
+    public ArrayList<Port> inputPorts = new ArrayList<>();
+    public ArrayList<Port> outputPorts = new ArrayList<>();
+    public ArrayList<Packet> pendingPackets = new ArrayList<>();
+    public boolean ready;
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public GeneralSystem(double x, double y) {
+        initialX = x;
+        initialY = y;
+    }
+
+    public ArrayList<Packet> getPendingPackets() {
+        return pendingPackets;
+    }
+
+    public double getInitialY() {
+        return initialY;
+    }
+
+    public double getInitialX() {
+        return initialX;
+    }
+
+    public ArrayList<Port> getInputPorts() {
+        return inputPorts;
+    }
+
+    public ArrayList<Port> getOutputPorts() {
+        return outputPorts;
+    }
+
+    public abstract boolean canSendPacket();
+
+    public abstract boolean canAcceptPacket();
+
+    public void addPort(Port port, PortType portType) {
+        if (portType == PortType.INPUT) {
+            inputPorts.add(port);
+        } else if (portType == PortType.OUTPUT) {
+            outputPorts.add(port);
+        }
+    }
+
+}

@@ -1,7 +1,6 @@
 package game.controller;
 
 import game.model.GameState;
-import game.model.Packet;
 import game.service.GameService;
 import game.view.GameView;
 
