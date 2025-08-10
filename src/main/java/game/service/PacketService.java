@@ -39,7 +39,7 @@ public class PacketService {
             SquarePacket packet = squarePackets.get(i);
             if (packet.isOnWire()) {
                 movementService.movePacket(packet);
-                if (hasPacketReachedEndPort(packet)) {
+                if (packet.getT() == 1) {
                     if (packet.getWire().getEndPort().getSystem().canAcceptPacket()) {
                         handlePacketReached(packet);
                     } else {
@@ -52,7 +52,7 @@ public class PacketService {
             TrianglePacket packet = trianglePackets.get(i);
             if (packet.isOnWire()) {
                 movementService.movePacket(packet);
-                if (hasPacketReachedEndPort(packet)) {
+                if (packet.getT() == 1) {
                     if (packet.getWire().getEndPort().getSystem().canAcceptPacket()) {
                         handlePacketReached(packet);
                     } else {
@@ -83,10 +83,6 @@ public class PacketService {
         systemService.sendNewPacketTo(packet.getWire().getStartPort()); 
         gameStats.incrementLostPackets();
         gameStats.decrementInNetworkPackets();
-    }
-
-    public boolean hasPacketReachedEndPort(Packet packet) {
-        return viewManager.AreIntersecting(packet, packet.getWire().getEndPort());
     }
 
     public void handleDeflection(Packet packet, double deflectionX, double deflectionY) {

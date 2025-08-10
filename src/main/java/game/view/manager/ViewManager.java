@@ -1,25 +1,25 @@
 package game.view.manager;
 
+import game.model.Wire;
 import game.model.packets.Packet;
-import game.model.ports.Port;
+import game.model.systems.GeneralSystem;
 import game.view.packets.PacketView;
 import javafx.scene.shape.Shape;
+
+import static game.controller.Constants.PORT_SIZE;
 
 public class ViewManager {
     private PacketViewManager packetViewManager;
     private WireViewManager wireViewManager;
     private PortViewManager portViewManager;
+    private SystemViewManager systemViewManager;
 
-    public ViewManager(PacketViewManager packetViewManager, WireViewManager wireViewManager, PortViewManager portViewManager) {
+    public ViewManager(PacketViewManager packetViewManager, WireViewManager wireViewManager,
+                       PortViewManager portViewManager, SystemViewManager systemViewManager) {
         this.packetViewManager = packetViewManager;
         this.wireViewManager = wireViewManager;
         this.portViewManager = portViewManager;
-    }   
-
-    public boolean AreIntersecting(Packet packet, Port port) {
-        //remember to try the other way
-        Shape shape = Shape.intersect(packetViewManager.getView(packet).getShape(), portViewManager.getView(port).getShape());
-        return shape.getBoundsInLocal().getWidth() != -1;
+        this.systemViewManager = systemViewManager;
     }
 
     public boolean AreIntersecting(Packet packet1, Packet packet2) {
@@ -33,6 +33,11 @@ public class ViewManager {
         }
         Shape shape = Shape.intersect(view1.getShape(), view2.getShape());
         return shape.getBoundsInLocal().getWidth() != -1;
+    }
+
+    public boolean AreIntersecting(Wire wire, GeneralSystem system) {
+        Shape shape = Shape.intersect(wireViewManager.getView(wire).getShape(), systemViewManager.getView(system).getShape());
+        return shape.getBoundsInLocal().getWidth() > PORT_SIZE/2;
     }
 
     public PacketViewManager getPacketViewManager() {

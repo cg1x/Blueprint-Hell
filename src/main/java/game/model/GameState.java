@@ -13,6 +13,7 @@ public class GameState {
     private List<GeneralSystem> systems;
     private List<SquarePacket> squarePackets;
     private List<TrianglePacket> trianglePackets;
+    private List<Wire> wires;
     private GameStats gameStats;
     private boolean gameRunning;
 
@@ -21,6 +22,7 @@ public class GameState {
         this.squarePackets = new ArrayList<>();
         this.trianglePackets = new ArrayList<>();
         this.systems = new ArrayList<>();
+        this.wires = new ArrayList<>();
         this.gameStats = new GameStats();
         this.gameRunning = false;
     }
@@ -45,7 +47,6 @@ public class GameState {
         squarePackets.add(packet);
     }
 
-
     public void addTrianglePacket(TrianglePacket packet) {
         trianglePackets.add(packet);
     }
@@ -57,6 +58,12 @@ public class GameState {
             trianglePackets.remove(packet);
         }
     }
+
+    public void addWire(Wire wire) { wires.add(wire); }
+
+    public void removeWire(Wire wire) { wires.remove(wire); }
+
+    public List<Wire> getWires() { return wires; }
 
     public GameStats getGameStats() {
         return gameStats;

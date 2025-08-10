@@ -1,6 +1,5 @@
 package game.model.packets;
 
-import game.model.Direction;
 import game.model.Wire;
 
 import java.util.ArrayList;
@@ -9,10 +8,10 @@ import static game.controller.Constants.*;
 public class SquarePacket extends Packet {
     public double x;
     public double y;
+    public double t;
     public double deflectionX;
     public double deflectionY;
     public Wire wire;
-    public Direction direction;
     public boolean onWire;
     public ArrayList<Packet> collidingWith = new ArrayList<>();
     public int health = 2;
@@ -112,17 +111,23 @@ public class SquarePacket extends Packet {
         this.y = y;
     }
 
-    public Direction getDirection() {
-        return direction;
+    @Override
+    public double getT() {
+        return t;
+    }
+
+    @Override
+    public void setT(double t) {
+        this.t = t;
+    }
+
+    @Override
+    public void incrementT(double dt) {
+        t += dt;
     }
 
     public double getSpeed() {
         return speed;
-    }
-
-    @Override
-    public void setDirection(Direction direction) {
-        this.direction = direction;
     }
 
     @Override

@@ -17,5 +17,6 @@ public class Constants {
     public static final double INDICATOR_HEIGHT = 10;
     public static final double INDICATOR_MARGIN = 10;
     public static final double PORT_SIZE = 10;
+    public static final double PACKET_SIZE = 10;
     public static final int WIRE_WIDTH = 4;
 }

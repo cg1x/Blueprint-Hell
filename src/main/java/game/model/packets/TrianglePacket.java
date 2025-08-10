@@ -1,6 +1,5 @@
 package game.model.packets;
 
-import game.model.Direction;
 import game.model.Wire;
 
 import java.util.ArrayList;
@@ -10,10 +9,10 @@ import static game.controller.Constants.PORT_SIZE;
 public class TrianglePacket extends Packet {
     public double x;
     public double y;
+    public double t;
     public double deflectionX;
     public double deflectionY;
     public Wire wire;
-    public Direction direction;
     public ArrayList<Packet> collidingWith = new ArrayList<>();
     public int health = 3;
     public double acceleration = 0.05;
@@ -23,6 +22,10 @@ public class TrianglePacket extends Packet {
     public TrianglePacket() {
         this.x = 0;
         this.y = 0;
+    }
+
+    public void incrementSpeed() {
+        speed += acceleration;
     }
 
     @Override
@@ -102,16 +105,27 @@ public class TrianglePacket extends Packet {
         this.y = y;
     }
 
+    @Override
+    public double getT() {
+        return t;
+    }
+
+    @Override
+    public void setT(double t) {
+        this.t = t;
+    }
+
+    @Override
+    public void incrementT(double dt) {
+        t += dt;
+    }
+
     public boolean isOnWire() {
         return onWire;
     }
 
     public void setOnWire(boolean onWire) {
         this.onWire = onWire;
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     public double getSpeed() {
@@ -124,11 +138,6 @@ public class TrianglePacket extends Packet {
 
     public double getAcceleration() {
         return acceleration;
-    }
-
-    @Override
-    public void setDirection(Direction direction) {
-        this.direction = direction;
     }
 
     @Override

@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -88,4 +89,6 @@ public class SystemView extends GeneralSystemView {
         shape.getChildren().addAll(mainRectangle, topRectangle, indicator);
         Root.getINSTANCE().getChildren().addAll(shape);
     }
+
+    public Shape getShape() { return mainRectangle; }
 }

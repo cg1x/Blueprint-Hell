@@ -7,12 +7,15 @@ import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
 import game.model.ports.Port;
 import game.model.ports.TrianglePort;
-import game.model.Direction;
+import game.model.GameState;
 import game.model.ports.SquarePort;
 import game.model.systems.GeneralSystem;
 import game.controller.GameController;
 
 import static game.controller.Constants.PORT_SIZE;
+
+import java.util.List;
+
 import game.view.systems.StartSystemView;
 import game.view.systems.GeneralSystemView;
 import game.view.manager.SystemViewManager;
@@ -20,10 +23,12 @@ import game.view.manager.SystemViewManager;
 public class SystemService {
     private PortService portService;
     private SystemViewManager systemViewManager;
+    private GameState gameState;
     private StartSystem startSystem;
 
-    public SystemService(SystemViewManager systemViewManager) {
+    public SystemService(SystemViewManager systemViewManager, GameState gameState) {
         this.systemViewManager = systemViewManager;
+        this.gameState = gameState;
     }
 
     public void paintAllSystems(GameController gameController) {
@@ -41,6 +46,12 @@ public class SystemService {
         for (Port port : system.getOutputPorts()) {
             sendNewPacketTo(port);
         }
+    }
+
+    public void updateSystem(GeneralSystem system) {
+        updateSystemIndicator(system);
+        StartSystemView view2 = (StartSystemView) systemViewManager.getView(startSystem);
+        view2.updateButton();
     }
 
     public void updateSystemIndicator(GeneralSystem system) {
@@ -61,8 +72,6 @@ public class SystemService {
         }
         view.turnOnIndicator();
         system.setReady(true);
-        StartSystemView view2 = (StartSystemView) systemViewManager.getView(startSystem);
-        view2.updateButton();
     }
 
     public Port findAvailablePort(GeneralSystem system, Packet packet) {
@@ -122,16 +131,16 @@ public class SystemService {
                 packet.setSpeed(2);
             }
         }
+        packet.setT(0);
         packet.setWire(port.getWire());
         packet.getWire().setPacket(packet);
         packet.setOnWire(true);
-        packet.setDirection(new Direction(packet.getWire()));    
     }
 
     public void sendNewPacketTo(Port port) {
         GeneralSystem system = port.getSystem();
         if (system.canSendPacket()) {
-            Packet packet = system.getPendingPackets().remove(0);
+            Packet packet = system.getPendingPackets().removeFirst();
             assignPacketToPort(packet, port);
         } else {
             port.getWire().setPacket(null);
@@ -150,5 +159,18 @@ public class SystemService {
 
     public void setPortService(PortService portService) {
         this.portService = portService;
+    }
+
+    public List<GeneralSystem> getAllSystems() {
+        return gameState.getSystems();
+    }
+
+    public boolean AreSystemsReady() {
+        for (GeneralSystem system : gameState.getSystems()) {
+            if (!system.isReady()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
