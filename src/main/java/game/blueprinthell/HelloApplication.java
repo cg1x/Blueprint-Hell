@@ -1,7 +1,6 @@
 package game.blueprinthell;
 
 import game.controller.GameController;
-import game.service.GameService;
 import game.view.GameView;
 import javafx.application.Application;
 import javafx.stage.Stage;

@@ -38,7 +38,7 @@ public class GameView {
         systemViewManager = new SystemViewManager();
         wireViewManager = new WireViewManager();
         portViewManager = new PortViewManager();
-        viewManager = new ViewManager(packetViewManager, wireViewManager, portViewManager);
+        viewManager = new ViewManager(packetViewManager, wireViewManager, portViewManager, systemViewManager);
     }
 
     public void showMenu() {

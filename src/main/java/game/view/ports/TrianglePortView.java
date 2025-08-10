@@ -29,12 +29,8 @@ public class TrianglePortView extends PortView {
     }
 
     public void startLine(MouseEvent e) {
-        wire = new Line();
+        wire = new Line(getCenterX(), getCenterY(), e.getSceneX(), e.getSceneY());
         wire.setStroke(color);
-        wire.setStartX(getCenterX());
-        wire.setStartY(getCenterY());
-        wire.setEndX(e.getSceneX());
-        wire.setEndY(e.getSceneY());
         Root.getINSTANCE().getChildren().add(wire);
         Root.getINSTANCE().setOnMouseDragged(this::dragLine);
         Root.getINSTANCE().setOnMouseReleased(this::endLine);

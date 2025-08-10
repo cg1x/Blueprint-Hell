@@ -6,6 +6,7 @@ import game.model.systems.GeneralSystem;
 import game.model.systems.StartSystem;
 import game.view.Root;
 import javafx.scene.Group;
+import javafx.scene.shape.Shape;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -110,18 +111,12 @@ public class StartSystemView extends GeneralSystemView {
     }
 
     public void updateButton() {
-        for (GeneralSystem system : gameController.getGameService().getGameState().getSystems()) {
-            if (!system.isReady()) {
-                runButton.setDisable(true);
-                return;
-            }
-        }
-        runButton.setDisable(false);
+        runButton.setDisable(!gameController.getGameService().canStartGame());
     }
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 
-    
+    public Shape getShape() { return mainRectangle; }
 }

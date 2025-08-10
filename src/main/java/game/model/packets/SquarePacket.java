@@ -9,6 +9,7 @@ import static game.controller.Constants.*;
 public class SquarePacket extends Packet {
     public double x;
     public double y;
+    public double t;
     public double deflectionX;
     public double deflectionY;
     public Wire wire;
@@ -110,6 +111,16 @@ public class SquarePacket extends Packet {
     @Override
     public void setY(double y) {
         this.y = y;
+    }
+
+    @Override
+    public double getT() {
+        return t;
+    }
+
+    @Override
+    public void incrementT(double dt) {
+        t += dt;
     }
 
     public Direction getDirection() {

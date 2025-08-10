@@ -20,10 +20,11 @@ public class GameService {
     public GameService(GameController gameController) {
         this.gameController = gameController;
         this.gameState = new GameState();
-        this.systemService = new SystemService(gameController.getGameView().getSystemViewManager());
+        this.systemService = new SystemService(gameController.getGameView().getSystemViewManager(), gameState);
         this.packetService = new PacketService(gameState, systemService, gameController.getGameView().getViewManager());
         this.collisionService = new CollisionService(packetService, gameController.getGameView().getViewManager());
-        this.wireService = new WireService(systemService, gameController.getGameView().getWireViewManager());
+        this.wireService = new WireService(systemService, gameController.getGameView().getWireViewManager(), 
+                                            gameController.getGameView().getViewManager(), gameState);
         this.portService = new PortService(gameController.getGameView().getPortViewManager(), wireService);
         systemService.setPortService(portService);
     }
@@ -46,6 +47,10 @@ public class GameService {
     public void startGame() {
         gameState.setGameRunning(true);
         systemService.startSendingPackets((StartSystem) gameState.getSystems().getFirst());
+    }
+
+    public boolean canStartGame() {
+        return systemService.AreSystemsReady() && wireService.AreWiresReady();
     }
 
     public boolean isGameOver() {
