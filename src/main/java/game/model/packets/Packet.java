@@ -6,6 +6,7 @@ import game.model.Wire;
 public abstract class Packet {
     public double x;
     public double y;
+    protected double t;
     protected Wire wire;
     protected boolean onWire;
 
@@ -23,8 +24,6 @@ public abstract class Packet {
 
     public abstract void setDeflectionY(double deflectionY);
 
-    public abstract double getX();
-
     public abstract Wire getWire();
 
     public abstract boolean isOnWire();
@@ -33,11 +32,17 @@ public abstract class Packet {
 
     public abstract void setOnWire(boolean onWire);
 
+    public abstract double getX();
+
     public abstract void setX(double x);
 
     public abstract double getY();
 
     public abstract void setY(double y);
+
+    public abstract double getT();
+
+    public abstract void incrementT(double dt);
 
     public abstract void setSpeed(double speed);
 
