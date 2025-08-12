@@ -81,7 +81,8 @@ public class WireService {
             case 3:
                 x = Utils.getXOnQuad(wire, t);
                 break;
-            default:
+            case 4:
+                x = Utils.getXOnCubic(wire, t);
                 break;
         }
         return x;
@@ -96,7 +97,8 @@ public class WireService {
             case 3:
                 y = Utils.getYOnQuad(wire, t);
                 break;
-            default:
+            case 4:
+                y = Utils.getYOnCubic(wire, t);
                 break;
         }
         return y;
