@@ -6,8 +6,10 @@ import game.model.ports.Port;
 import game.model.ports.PortType;
 import game.model.ports.SquarePort;
 import game.model.systems.GeneralSystem;
+import game.view.WireView;
 import game.view.manager.ViewManager;
 import game.view.manager.WireViewManager;
+import javafx.geometry.Point2D;
 
 public class WireService {
     private SystemService systemService;
@@ -68,6 +70,58 @@ public class WireService {
 //            }
 //        }
         wire.setValid(true);
+    }
+
+    public double getPositionX(Wire wire, double t) {
+        double x = 0;
+        switch (wire.getControlPointsCount()) {
+            case 2:
+                x = Utils.getXOnLine(wire, t);
+            case 3:
+                x = Utils.getXOnQuad(wire, t);
+            default:
+                break;
+        }
+        return x;
+    }
+
+    public double getPositionY(Wire wire, double t) {
+        double y = 0;
+        switch (wire.getControlPointsCount()) {
+            case 2:
+                y = Utils.getYOnLine(wire, t);
+            case 3:
+                y = Utils.getYOnQuad(wire, t);
+            default:
+                break;
+        }
+        return y;
+    }
+
+    public void updateLength(Wire wire) {
+        final int segments = 1000;
+        double length = 0.0, t = 0.0;
+        double previousX = getPositionX(wire, t);
+        double previousY = getPositionY(wire, t);
+        double currentX, currentY;
+
+        for (int i = 1; i <= segments; i++) {
+            t = (double) i / segments;
+            currentX = getPositionX(wire, t);
+            currentY = getPositionY(wire, t);
+            length += Utils.measureDistance(currentX, currentY, previousX, previousY);
+
+            previousX = currentX;
+            previousY = currentY;
+        }
+
+        wire.setLength(length);
+    }
+
+    public void disableControlComponents() {
+        for (WireView view : wireViewManager.getWireMap().values()) {
+            view.disableControlComponents();
+        }
     }
 
     private void updatePortsAndSystems(Port port1, Port port2) {

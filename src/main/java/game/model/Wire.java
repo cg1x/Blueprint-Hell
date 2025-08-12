@@ -10,6 +10,7 @@ public class Wire {
     private double controlY;
     private double endX;
     private double endY;
+    private int controlPointsCount;
     private double length;
     public Port startPort;
     public Port endPort;
@@ -27,14 +28,11 @@ public class Wire {
         this.startY = startPort.getCenterY();
         this.endX = endPort.getCenterX();
         this.endY = endPort.getCenterY();
+        controlPointsCount = 2;
     }
 
-    public double getPositionX(double t) {
-        return startX * (1 - t) + endX * t;
-    }
-
-    public double getPositionY(double t) {
-        return startY * (1 - t) + endY * t;
+    public void incrementControlPoints() {
+        controlPointsCount++;
     }
 
     public Packet getPacket() { return packet; }
@@ -44,10 +42,13 @@ public class Wire {
     public WireType getWireType() { return wireType; }
     public double getStartX() { return startX; }
     public double getStartY() { return startY; }
+    public double getControlX() { return controlX; }
+    public double getControlY() { return controlY; }
     public void setControlX(double x) { this.controlX = x; }
     public void setControlY(double y) { this.controlY = y; }
     public double getEndX() { return endX; }
     public double getEndY() { return endY; }
+    public int getControlPointsCount() { return controlPointsCount; }
     public double getLength() { return length; }
     public void setLength(double length) { this.length = length; }
     public boolean isValid() { return valid; }

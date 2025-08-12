@@ -16,15 +16,17 @@ public class GameService {
     private SystemService systemService;
     private PortService portService;
     private WireService wireService;
+    private MovementService movementService;
 
     public GameService(GameController gameController) {
         this.gameController = gameController;
         this.gameState = new GameState();
         this.systemService = new SystemService(gameController.getGameView().getSystemViewManager(), gameState);
-        this.packetService = new PacketService(gameState, systemService, gameController.getGameView().getViewManager());
-        this.collisionService = new CollisionService(packetService, gameController.getGameView().getViewManager());
         this.wireService = new WireService(systemService, gameController.getGameView().getWireViewManager(), 
                                             gameController.getGameView().getViewManager(), gameState);
+        this.movementService = new MovementService(wireService);
+        this.packetService = new PacketService(gameState, systemService, movementService, gameController.getGameView().getViewManager());
+        this.collisionService = new CollisionService(packetService, gameController.getGameView().getViewManager());
         this.portService = new PortService(gameController.getGameView().getPortViewManager(), wireService);
         systemService.setPortService(portService);
     }
@@ -47,6 +49,7 @@ public class GameService {
     public void startGame() {
         gameState.setGameRunning(true);
         systemService.startSendingPackets((StartSystem) gameState.getSystems().getFirst());
+        wireService.disableControlComponents();
     }
 
     public boolean canStartGame() {

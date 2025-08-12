@@ -24,12 +24,13 @@ public class PacketService {
     private GameState gameState;
     private PacketViewManager manager;
 
-    public PacketService(GameState gameState, SystemService systemService, ViewManager viewManager) {
+    public PacketService(GameState gameState, SystemService systemService,
+                         MovementService movementService, ViewManager viewManager) {
         this.gameState = gameState;
         this.systemService = systemService;
         this.viewManager = viewManager;
         this.manager = viewManager.getPacketViewManager();
-        this.movementService = new MovementService();
+        this.movementService = movementService;
     }
 
     public void movePackets(GameState gameState) {

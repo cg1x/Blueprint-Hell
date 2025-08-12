@@ -69,6 +69,7 @@ public class WireView {
         isDragging = true;
         createControlLines(e.getX(), e.getY());
         createControlCircle(e.getX(), e.getY());
+        wire.incrementControlPoints();
         Root.getINSTANCE().setOnMouseDragged(this::handleMouseDrag);
         Root.getINSTANCE().setOnMouseReleased(this::handleMouseRelease);
     }
@@ -110,6 +111,7 @@ public class WireView {
         circle.toFront();
         wire.setControlX(controlX);
         wire.setControlY(controlY);
+        wireService.updateLength(wire);
         wireService.validateWire(wire);
         reduceOpacity();
         update();
@@ -167,6 +169,13 @@ public class WireView {
             shape.setStroke(color);
         } else {
             shape.setStroke(Color.RED);
+        }
+    }
+
+    public void disableControlComponents() {
+        circle.setVisible(false);
+        for (Line line : controlLines) {
+            line.setVisible(false);
         }
     }
 
