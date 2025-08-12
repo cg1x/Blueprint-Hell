@@ -173,6 +173,9 @@ public class WireView {
     }
 
     public void disableControlComponents() {
+        if (circle == null) {
+            return;
+        }
         circle.setVisible(false);
         for (Line line : controlLines) {
             line.setVisible(false);

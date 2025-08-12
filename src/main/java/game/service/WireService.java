@@ -77,8 +77,10 @@ public class WireService {
         switch (wire.getControlPointsCount()) {
             case 2:
                 x = Utils.getXOnLine(wire, t);
+                break;
             case 3:
                 x = Utils.getXOnQuad(wire, t);
+                break;
             default:
                 break;
         }
@@ -90,8 +92,10 @@ public class WireService {
         switch (wire.getControlPointsCount()) {
             case 2:
                 y = Utils.getYOnLine(wire, t);
+                break;
             case 3:
                 y = Utils.getYOnQuad(wire, t);
+                break;
             default:
                 break;
         }
