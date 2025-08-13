@@ -14,7 +14,7 @@ public final class GameStats {
     private static GameStats INSTANCE;
 
     public GameStats() {
-        coins = 0;
+        coins = 10;
         successfulPackets = 0;
         lostPackets = 0;
         totalPackets = 0;
@@ -25,6 +25,7 @@ public final class GameStats {
     public int getCoins() { return coins; }
     public void setCoins(int coins) { this.coins = coins; }
     public void addCoins(int coins) { this.coins += coins; }
+    public void decrementCoins(int coins) { this.coins -= coins; }
     
     public int getSuccessfulPackets() { return successfulPackets; }
     public void setSuccessfulPackets(int successfulPackets) { this.successfulPackets = successfulPackets; }

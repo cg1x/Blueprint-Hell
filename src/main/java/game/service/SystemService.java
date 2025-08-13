@@ -50,8 +50,7 @@ public class SystemService {
 
     public void updateSystem(GeneralSystem system) {
         updateSystemIndicator(system);
-        StartSystemView view2 = (StartSystemView) systemViewManager.getView(startSystem);
-        view2.updateButton();
+        updateStartButton();
     }
 
     public void updateSystemIndicator(GeneralSystem system) {
@@ -72,6 +71,11 @@ public class SystemService {
         }
         view.turnOnIndicator();
         system.setReady(true);
+    }
+
+    public void updateStartButton() {
+        StartSystemView view2 = (StartSystemView) systemViewManager.getView(startSystem);
+        view2.updateButton();
     }
 
     public Port findAvailablePort(GeneralSystem system, Packet packet) {

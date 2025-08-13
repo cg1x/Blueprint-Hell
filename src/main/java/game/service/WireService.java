@@ -6,10 +6,9 @@ import game.model.ports.Port;
 import game.model.ports.PortType;
 import game.model.ports.SquarePort;
 import game.model.systems.GeneralSystem;
-import game.view.WireView;
+import game.view.wire.WireView;
 import game.view.manager.ViewManager;
 import game.view.manager.WireViewManager;
-import javafx.geometry.Point2D;
 
 public class WireService {
     private SystemService systemService;
@@ -63,45 +62,43 @@ public class WireService {
     }
 
     public void validateWire(Wire wire) {
-//        for (GeneralSystem system : systemService.getAllSystems()) {
-//            if (viewManager.AreIntersecting(wire, system)) {
-//                wire.setValid(false);
-//                return;
-//            }
-//        }
+        for (GeneralSystem system : systemService.getAllSystems()) {
+            if (viewManager.AreIntersecting(wire, system)) {
+                wire.setValid(false);
+                return;
+            }
+        }
         wire.setValid(true);
+        systemService.updateStartButton();
+    }
+
+    public boolean canAddNewCurve() {
+        GameStats gameStats = gameState.getGameStats();
+        if (gameStats.getCoins() >= 1) {
+            gameStats.decrementCoins(1);
+            return true;
+        }
+        return false;
     }
 
     public double getPositionX(Wire wire, double t) {
-        double x = 0;
-        switch (wire.getControlPointsCount()) {
-            case 2:
-                x = Utils.getXOnLine(wire, t);
-                break;
-            case 3:
-                x = Utils.getXOnQuad(wire, t);
-                break;
-            case 4:
-                x = Utils.getXOnCubic(wire, t);
-                break;
-        }
-        return x;
+        return switch (wire.getControlPointsCount()) {
+            case 2 -> Utils.getXOnLine(wire, t);
+            case 3 -> Utils.getXOnQuad(wire, t);
+            case 4 -> Utils.getXOnCubic(wire, t);
+            case 5 -> Utils.getXOnQuartic(wire, t);
+            default -> 0;
+        };
     }
 
     public double getPositionY(Wire wire, double t) {
-        double y = 0;
-        switch (wire.getControlPointsCount()) {
-            case 2:
-                y = Utils.getYOnLine(wire, t);
-                break;
-            case 3:
-                y = Utils.getYOnQuad(wire, t);
-                break;
-            case 4:
-                y = Utils.getYOnCubic(wire, t);
-                break;
-        }
-        return y;
+        return switch (wire.getControlPointsCount()) {
+            case 2 -> Utils.getYOnLine(wire, t);
+            case 3 -> Utils.getYOnQuad(wire, t);
+            case 4 -> Utils.getYOnCubic(wire, t);
+            case 5 -> Utils.getYOnQuartic(wire, t);
+            default -> 0;
+        };
     }
 
     public void updateLength(Wire wire) {

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import game.model.Wire;
-import game.view.WireView;
+import game.view.wire.WireView;
 
 public class WireViewManager {
     private final Map<Wire, WireView> wireMap = new HashMap<>();

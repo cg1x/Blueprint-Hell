@@ -1,10 +1,11 @@
-package game.view;
+package game.view.wire;
 
 import static game.controller.Constants.WIRE_WIDTH;
 
 import game.model.Wire;
 import game.model.WireType;
 import game.service.WireService;
+import game.view.Root;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -52,7 +53,9 @@ public class WireView {
         this.wireService = wireService;
         shape.setOnMousePressed(e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                handleWirePress(e);
+                if (controlX.size() < 5 && wireService.canAddNewCurve()) {
+                    handleWirePress(e);
+                }
             }
             else if (e.getButton() == MouseButton.SECONDARY) {
                 wireService.removeWire(wire);
@@ -112,7 +115,7 @@ public class WireView {
                 controlLines.add(line2);
                 break;
             }
-            case 4: {
+            case 4, 5: {
                 Line line = new Line(controlX.get(currentIndex), controlY.get(currentIndex),
                         controlX.get(currentIndex + 1), controlY.get(currentIndex + 1));
                 controlLines.add(currentIndex, line);
@@ -180,7 +183,8 @@ public class WireView {
             case 4:
                 updateCubic();
                 break;
-            default:
+            case 5:
+                updateQuartic();
                 break;
         }
     }
@@ -216,6 +220,15 @@ public class WireView {
         ((CubicCurve) shape).setControlY2(controlY.get(2));
     }
 
+    private void updateQuartic() {
+        if (shape instanceof CubicCurve) {
+            Color currentColor = (Color) shape.getStroke();
+            Root.getINSTANCE().getChildren().remove(shape);
+            createNewShape(currentColor);
+        }
+        ((QuarticCurve) shape).updateCurve(controlX, controlY);
+    }
+
     private void createNewShape(Color color) {
         switch (controlX.size()) {
             case 3: {
@@ -228,6 +241,12 @@ public class WireView {
             case 4: {
                 shape = new CubicCurve(controlX.getFirst(), controlY.getFirst(), controlX.get(1), controlY.get(1),
                         controlX.get(2), controlY.get(2), controlX.get(3), controlY.get(3));
+                styleCurve(color);
+                enableEventHandling(wireService);
+                break;
+            }
+            case 5: {
+                shape = new QuarticCurve(controlX, controlY);
                 styleCurve(color);
                 enableEventHandling(wireService);
                 break;
