@@ -4,9 +4,10 @@ import game.model.GameState;
 import game.model.GameStats;
 import game.model.packets.PacketType;
 import game.model.packets.SquarePacket;
-import game.model.systems.StartSystem;
-import game.model.systems.SystemModel;
+import game.model.systems.Server;
+import game.model.systems.Transferor;
 import game.model.packets.TrianglePacket;
+import game.service.system.SystemService;
 import game.view.manager.PacketViewManager;
 import game.view.manager.ViewManager;
 import game.model.packets.Packet;
@@ -62,16 +63,15 @@ public class PacketService {
                 }
             }
         }
-
     }
 
     public void handlePacketReached(Packet packet) {
         GameStats gameStats = gameState.getGameStats();
         systemService.sendNewPacketTo(packet.getWire().getStartPort());
         gameStats.addCoins(packet.getRewardValue());
-        if (packet.getWire().getEndPort().getSystem() instanceof SystemModel) {
-            systemService.decideForPacket((SystemModel) packet.getWire().getEndPort().getSystem(), packet);
-        } else if (packet.getWire().getEndPort().getSystem() instanceof StartSystem) {
+        if (packet.getWire().getEndPort().getSystem() instanceof Transferor) {
+            systemService.decideForPacket((Transferor) packet.getWire().getEndPort().getSystem(), packet);
+        } else if (packet.getWire().getEndPort().getSystem() instanceof Server) {
             gameStats.incrementSuccessfulPackets();
             gameStats.decrementInNetworkPackets();
             removePacket(packet);

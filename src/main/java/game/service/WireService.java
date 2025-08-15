@@ -6,6 +6,7 @@ import game.model.ports.Port;
 import game.model.ports.PortType;
 import game.model.ports.SquarePort;
 import game.model.systems.GeneralSystem;
+import game.service.system.SystemService;
 import game.view.wire.WireView;
 import game.view.manager.ViewManager;
 import game.view.manager.WireViewManager;

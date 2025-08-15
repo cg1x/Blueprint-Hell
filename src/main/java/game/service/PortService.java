@@ -1,13 +1,16 @@
 package game.service;
 
-import static game.controller.Constants.SYSTEM_SIZE;
-import static game.controller.Constants.SYSTEM_TOP_HEIGHT;
-
+import game.model.packets.Packet;
+import game.model.packets.SquarePacket;
+import game.model.packets.TrianglePacket;
 import game.model.systems.GeneralSystem;
 import game.model.ports.Port;
 import game.model.ports.SquarePort;
 import game.model.ports.TrianglePort;
 import game.view.manager.PortViewManager;
+
+import static game.controller.Constants.*;
+import static game.controller.Constants.PORT_SIZE;
 
 public class PortService {
     private PortViewManager portViewManager;
@@ -16,6 +19,44 @@ public class PortService {
     public PortService(PortViewManager portViewManager, WireService wireService) {
         this.portViewManager = portViewManager;
         this.wireService = wireService;
+    }
+
+    public void assignPacketToPort(Packet packet, Port port) {
+        if (packet instanceof SquarePacket) {
+            assignSquarePacketToPort((SquarePacket) packet, port);
+        } else if (packet instanceof TrianglePacket) {
+            assignTrianglePacketToPort((TrianglePacket) packet, port);
+        }
+        refreshPacket(packet, port);
+    }
+
+    private void assignSquarePacketToPort(SquarePacket packet, Port port) {
+        packet.setX(port.getCenterX() - PORT_SIZE/2 + packet.getDeflectionX());
+        packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
+        if (port instanceof SquarePort) {
+            packet.setSpeed(2);
+        }
+        if (port instanceof TrianglePort) {
+            packet.setSpeed(4);
+        }
+    }
+
+    private void assignTrianglePacketToPort(TrianglePacket packet, Port port) {
+        packet.setX(port.getCenterX() - PORT_SIZE/2 + packet.getDeflectionX());
+        packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
+        if (port instanceof SquarePort) {
+            packet.setSpeed(2);
+        }
+        if (port instanceof TrianglePort) {
+            packet.setSpeed(4);
+        }
+    }
+
+    private void refreshPacket(Packet packet, Port port) {
+        packet.setT(0);
+        packet.setWire(port.getWire());
+        packet.getWire().setPacket(packet);
+        packet.setOnWire(true);
     }
 
     public void paintAllPorts(GeneralSystem system) {

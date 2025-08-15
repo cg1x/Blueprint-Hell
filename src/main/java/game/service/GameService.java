@@ -4,7 +4,8 @@ import game.controller.GameController;
 import game.controller.levels.Level1;
 import game.controller.levels.Level2;
 import game.model.GameState;
-import game.model.systems.StartSystem;
+import game.model.systems.Server;
+import game.service.system.SystemService;
 import game.view.manager.PortViewManager;
 import game.view.manager.SystemViewManager;
 
@@ -48,7 +49,7 @@ public class GameService {
 
     public void startGame() {
         gameState.setGameRunning(true);
-        systemService.startSendingPackets((StartSystem) gameState.getSystems().getFirst());
+        systemService.startSendingPackets((Server) gameState.getSystems().getFirst());
         wireService.disableControlComponents();
     }
 

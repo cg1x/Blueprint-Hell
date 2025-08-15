@@ -7,24 +7,17 @@ import game.model.ports.PortType;
 import java.util.ArrayList;
 
 public abstract class GeneralSystem {
-    public double initialX;
-    public double initialY;
-    public ArrayList<Port> inputPorts = new ArrayList<>();
-    public ArrayList<Port> outputPorts = new ArrayList<>();
-    public ArrayList<Packet> pendingPackets = new ArrayList<>();
-    public boolean ready;
-
-    public boolean isReady() {
-        return ready;
-    }
-
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
+    protected double initialX;
+    protected double initialY;
+    protected ArrayList<Port> inputPorts = new ArrayList<>();
+    protected ArrayList<Port> outputPorts = new ArrayList<>();
+    protected ArrayList<Packet> pendingPackets = new ArrayList<>();
+    protected boolean ready;
 
     public GeneralSystem(double x, double y) {
         initialX = x;
         initialY = y;
+        ready = false;
     }
 
     public ArrayList<Packet> getPendingPackets() {
@@ -57,6 +50,14 @@ public abstract class GeneralSystem {
         } else if (portType == PortType.OUTPUT) {
             outputPorts.add(port);
         }
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 
 }

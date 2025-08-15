@@ -4,8 +4,8 @@ import game.model.*;
 import game.model.ports.PortType;
 import game.model.ports.SquarePort;
 import game.model.ports.TrianglePort;
-import game.model.systems.StartSystem;
-import game.model.systems.SystemModel;
+import game.model.systems.Server;
+import game.model.systems.Transferor;
 import game.view.manager.PortViewManager;
 import game.view.manager.SystemViewManager;
 
@@ -21,37 +21,37 @@ public class Level2 {
     }
 
     public void createLevel() {
-        StartSystem generalSystem3 = new StartSystem(200, 390);
-        portViewManager.addPort(new SquarePort(generalSystem3, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem3, PortType.INPUT));
-        portViewManager.addPort(new SquarePort(generalSystem3, PortType.OUTPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem3, PortType.OUTPUT));
+        Server server = new Server(200, 390);
+        portViewManager.addPort(new SquarePort(server, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(server, PortType.INPUT));
+        portViewManager.addPort(new SquarePort(server, PortType.OUTPUT));
+        portViewManager.addPort(new TrianglePort(server, PortType.OUTPUT));
 
-        SystemModel generalSystem = new SystemModel(600, 600);
-        portViewManager.addPort(new SquarePort(generalSystem, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem, PortType.INPUT));
-        portViewManager.addPort(new SquarePort(generalSystem, PortType.OUTPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem, PortType.OUTPUT));
+        Transferor transferor1 = new Transferor(600, 600);
+        portViewManager.addPort(new SquarePort(transferor1, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(transferor1, PortType.INPUT));
+        portViewManager.addPort(new SquarePort(transferor1, PortType.OUTPUT));
+        portViewManager.addPort(new TrianglePort(transferor1, PortType.OUTPUT));
 
-        SystemModel generalSystem2 = new SystemModel(1000, 600);
-        portViewManager.addPort(new SquarePort(generalSystem2, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem2, PortType.INPUT));
-        portViewManager.addPort(new SquarePort(generalSystem2, PortType.OUTPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem2, PortType.OUTPUT));
+        Transferor transferor2 = new Transferor(1000, 600);
+        portViewManager.addPort(new SquarePort(transferor2, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(transferor2, PortType.INPUT));
+        portViewManager.addPort(new SquarePort(transferor2, PortType.OUTPUT));
+        portViewManager.addPort(new TrianglePort(transferor2, PortType.OUTPUT));
 
-        SystemModel generalSystem4 = new SystemModel(1300, 200);
-        portViewManager.addPort(new SquarePort(generalSystem4, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem4, PortType.INPUT));
-        portViewManager.addPort(new SquarePort(generalSystem4, PortType.OUTPUT));
-        portViewManager.addPort(new TrianglePort(generalSystem4, PortType.OUTPUT));
+        Transferor transferor3 = new Transferor(1300, 200);
+        portViewManager.addPort(new SquarePort(transferor3, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(transferor3, PortType.INPUT));
+        portViewManager.addPort(new SquarePort(transferor3, PortType.OUTPUT));
+        portViewManager.addPort(new TrianglePort(transferor3, PortType.OUTPUT));
 
-        gameState.addSystem(generalSystem3);
-        systemViewManager.addSystem(generalSystem3);
-        gameState.addSystem(generalSystem);
-        systemViewManager.addSystem(generalSystem);
-        gameState.addSystem(generalSystem2);
-        systemViewManager.addSystem(generalSystem2);
-        gameState.addSystem(generalSystem4);
-        systemViewManager.addSystem(generalSystem4);
+        gameState.addSystem(server);
+        systemViewManager.addSystem(server);
+        gameState.addSystem(transferor1);
+        systemViewManager.addSystem(transferor1);
+        gameState.addSystem(transferor2);
+        systemViewManager.addSystem(transferor2);
+        gameState.addSystem(transferor3);
+        systemViewManager.addSystem(transferor3);
     }
 }

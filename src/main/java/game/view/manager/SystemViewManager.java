@@ -1,11 +1,11 @@
 package game.view.manager;
 
 import game.model.systems.GeneralSystem;
-import game.model.systems.SystemModel;
-import game.model.systems.StartSystem;
+import game.model.systems.Transferor;
+import game.model.systems.Server;
 import game.view.systems.GeneralSystemView;
-import game.view.systems.StartSystemView;
-import game.view.systems.SystemView;
+import game.view.systems.ServerView;
+import game.view.systems.TransferorView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +15,10 @@ public class SystemViewManager {
 
     public void addSystem(GeneralSystem system) {
         GeneralSystemView view = null;
-        if (system instanceof SystemModel) {
-            view = new SystemView((SystemModel) system);
-        } else if (system instanceof StartSystem) {
-            view = new StartSystemView((StartSystem) system);
+        if (system instanceof Transferor) {
+            view = new TransferorView((Transferor) system);
+        } else if (system instanceof Server) {
+            view = new ServerView((Server) system);
         } 
         systemMap.put(system, view);
     }
