@@ -4,6 +4,7 @@ import game.model.packets.Packet;
 import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
 import game.model.systems.GeneralSystem;
+import game.model.systems.Spy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class GameState {
     private int currentLevel;
     private List<GeneralSystem> systems;
+    private List<Spy> outputSpySystems;
     private List<SquarePacket> squarePackets;
     private List<TrianglePacket> trianglePackets;
     private List<Wire> wires;
@@ -22,6 +24,7 @@ public class GameState {
         this.squarePackets = new ArrayList<>();
         this.trianglePackets = new ArrayList<>();
         this.systems = new ArrayList<>();
+        this.outputSpySystems = new ArrayList<>();
         this.wires = new ArrayList<>();
         this.gameStats = new GameStats();
         this.gameRunning = false;
@@ -39,8 +42,15 @@ public class GameState {
         return systems;
     }
 
+    public List<Spy> getOutputSpySystems() {
+        return outputSpySystems;
+    }
+
     public void addSystem(GeneralSystem system) {
         systems.add(system);
+        if (system instanceof Spy && system.getInputPorts().isEmpty()) {
+            outputSpySystems.add((Spy) system);
+        }
     }
 
     public void addSquarePacket(SquarePacket packet) {

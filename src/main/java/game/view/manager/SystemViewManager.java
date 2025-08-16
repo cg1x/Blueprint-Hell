@@ -1,10 +1,12 @@
 package game.view.manager;
 
 import game.model.systems.GeneralSystem;
+import game.model.systems.Spy;
 import game.model.systems.Transferor;
 import game.model.systems.Server;
 import game.view.systems.GeneralSystemView;
 import game.view.systems.ServerView;
+import game.view.systems.SpyView;
 import game.view.systems.TransferorView;
 
 import java.util.HashMap;
@@ -19,7 +21,9 @@ public class SystemViewManager {
             view = new TransferorView((Transferor) system);
         } else if (system instanceof Server) {
             view = new ServerView((Server) system);
-        } 
+        } else if (system instanceof Spy) {
+            view = new SpyView((Spy) system);
+        }
         systemMap.put(system, view);
     }
 

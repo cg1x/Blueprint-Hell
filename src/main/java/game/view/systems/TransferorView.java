@@ -21,10 +21,6 @@ public class TransferorView extends GeneralSystemView<Transferor> {
         super(system);
         enableDragging(false);
     }
-    @Override
-    public Transferor getModel() {
-        return system;
-    }
 
     public void enableDragging(boolean bool) {
         if (bool) {

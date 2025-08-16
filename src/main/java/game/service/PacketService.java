@@ -66,16 +66,8 @@ public class PacketService {
     }
 
     public void handlePacketReached(Packet packet) {
-        GameStats gameStats = gameState.getGameStats();
         systemService.sendNewPacketTo(packet.getWire().getStartPort());
-        gameStats.addCoins(packet.getRewardValue());
-        if (packet.getWire().getEndPort().getSystem() instanceof Transferor) {
-            systemService.decideForPacket((Transferor) packet.getWire().getEndPort().getSystem(), packet);
-        } else if (packet.getWire().getEndPort().getSystem() instanceof Server) {
-            gameStats.incrementSuccessfulPackets();
-            gameStats.decrementInNetworkPackets();
-            removePacket(packet);
-        }
+        systemService.handlePacketReached(packet, this);
     }
 
     public void handlePacketLost(Packet packet) {

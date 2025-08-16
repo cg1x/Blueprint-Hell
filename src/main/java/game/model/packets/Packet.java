@@ -2,12 +2,20 @@ package game.model.packets;
 
 import game.model.Wire;
 
+import java.util.List;
+
 public abstract class Packet {
-    public double x;
-    public double y;
+    protected double x;
+    protected double y;
     protected double t;
+    protected double deflectionX;
+    protected double deflectionY;
+    protected List<Packet> collidingWith;
     protected Wire wire;
     protected boolean onWire;
+    protected int health;
+    protected int rewardValue;
+    protected double speed;
 
     public abstract void reduceHealth();
 

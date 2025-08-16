@@ -1,5 +1,7 @@
 package game.service.system;
 
+import game.model.GameStats;
+import game.model.systems.Spy;
 import game.model.systems.Transferor;
 import game.model.systems.Server;
 import game.model.packets.Packet;
@@ -10,6 +12,7 @@ import game.controller.GameController;
 
 import java.util.List;
 
+import game.service.PacketService;
 import game.service.PortService;
 import game.view.systems.ServerView;
 import game.view.systems.GeneralSystemView;
@@ -20,12 +23,19 @@ public class SystemService {
     private SystemViewManager systemViewManager;
     private GameState gameState;
     private Server server;
+
     private PortFinder portFinder;
+    private ServerService serverService;
+    private SpyService spyService;
+    private TransferorService transferorService;
 
     public SystemService(SystemViewManager systemViewManager, GameState gameState) {
         this.systemViewManager = systemViewManager;
         this.gameState = gameState;
         this.portFinder = new PortFinder();
+        this.serverService = new ServerService(gameState);
+        this.spyService = new SpyService(gameState);
+        this.transferorService = new TransferorService(gameState);
     }
 
     public void paintAllSystems(GameController gameController) {
@@ -41,9 +51,7 @@ public class SystemService {
     }
 
     public void startSendingPackets(Server system) {
-        for (Port port : system.getOutputPorts()) {
-            sendNewPacketTo(port);
-        }
+        serverService.startSendingPackets(system);
     }
 
     public void updateSystem(GeneralSystem system) {
@@ -78,21 +86,25 @@ public class SystemService {
 
     public void sendNewPacketTo(Port port) {
         GeneralSystem system = port.getSystem();
-        if (system.canSendPacket()) {
-            Packet packet = system.getPendingPackets().removeFirst();
-            portService.assignPacketToPort(packet, port);
-        } else {
-            port.getWire().setPacket(null);
+        switch (system) {
+            case Server server1 -> serverService.sendNewPacketTo(port);
+            case Transferor transferor -> transferorService.sendNewPacketTo(port);
+            case Spy spy -> spyService.sendNewPacketTo(port);
+            default -> {
+                return;
+            }
         }
     }
 
-    public void decideForPacket(Transferor system, Packet packet) {
-        Port availablePort = portFinder.findAvailablePort(system, packet);
-        if (availablePort != null) {
-            portService.assignPacketToPort(packet, availablePort);
-        } else {
-            system.getPendingPackets().add(packet);
-            packet.setOnWire(false);
+    public void handlePacketReached(Packet packet, PacketService packetService) {
+        GeneralSystem system = packet.getWire().getEndPort().getSystem();
+        switch (system) {
+            case Server server1 -> serverService.handlePacketReached(packet, packetService);
+            case Transferor transferor -> transferorService.handlePacketReached(packet, packetService);
+            case Spy spy -> spyService.handlePacketReached(packet, packetService);
+            default -> {
+                return;
+            }
         }
     }
 
