@@ -24,6 +24,14 @@ public abstract class GeneralSystem {
         return pendingPackets;
     }
 
+    public void addPendingPacket(Packet packet) {
+        pendingPackets.add(packet);
+    }
+
+    public void removePendingPacket(Packet packet) {
+        pendingPackets.remove(packet);
+    }
+
     public double getInitialY() {
         return initialY;
     }

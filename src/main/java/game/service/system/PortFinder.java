@@ -13,10 +13,9 @@ public class PortFinder {
     public Port findAvailablePort(GeneralSystem system, Packet packet) {
         if (packet instanceof SquarePacket) {
             return findAvailablePortForSquare(system);
-        } else if (packet instanceof TrianglePacket) {
+        } else {
             return findAvailablePortForTriangle(system);
         }
-        return null;
     }
 
     private Port findAvailablePortForSquare(GeneralSystem system) {
@@ -26,7 +25,7 @@ public class PortFinder {
             }
         }
         for (Port port : system.getOutputPorts()) {
-            if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
+            if ((!(port instanceof SquarePort)) && port.getWire().getPacket() == null) {
                 return port;
             }
         }
@@ -40,7 +39,43 @@ public class PortFinder {
             }
         }
         for (Port port : system.getOutputPorts()) {
+            if ((!(port instanceof TrianglePort)) && port.getWire().getPacket() == null) {
+                return port;
+            }
+        }
+        return null;
+    }
+
+    public Port findUnsuitablePort(GeneralSystem system, Packet packet) {
+        if (packet instanceof SquarePacket) {
+            return findUnsuitablePortForSquare(system);
+        } else {
+            return findUnsuitablePortForTriangle(system);
+        }
+    }
+
+    private Port findUnsuitablePortForSquare(GeneralSystem system) {
+        for (Port port : system.getOutputPorts()) {
+            if ((!(port instanceof SquarePort)) && port.getWire().getPacket() == null) {
+                return port;
+            }
+        }
+        for (Port port : system.getOutputPorts()) {
             if (port instanceof SquarePort && port.getWire().getPacket() == null) {
+                return port;
+            }
+        }
+        return null;
+    }
+
+    private Port findUnsuitablePortForTriangle(GeneralSystem system) {
+        for (Port port : system.getOutputPorts()) {
+            if ((!(port instanceof TrianglePort)) && port.getWire().getPacket() == null) {
+                return port;
+            }
+        }
+        for (Port port : system.getOutputPorts()) {
+            if (port instanceof TrianglePort && port.getWire().getPacket() == null) {
                 return port;
             }
         }

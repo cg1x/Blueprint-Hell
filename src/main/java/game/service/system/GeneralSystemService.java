@@ -59,13 +59,13 @@ public abstract class GeneralSystemService {
     }
 
     private void assignTrianglePacketToPort(TrianglePacket packet, Port port) {
-        packet.setX(port.getCenterX() - PORT_SIZE/2 + packet.getDeflectionX());
+        packet.setX(port.getCenterX() + packet.getDeflectionX());
         packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
         if (port instanceof SquarePort) {
-            packet.setSpeed(2);
+            packet.setSpeed(1);
         }
         if (port instanceof TrianglePort) {
-            packet.setSpeed(4);
+            packet.setSpeed(2);
         }
     }
 

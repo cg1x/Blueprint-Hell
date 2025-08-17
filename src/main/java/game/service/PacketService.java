@@ -4,6 +4,7 @@ import game.model.GameState;
 import game.model.GameStats;
 import game.model.packets.PacketType;
 import game.model.packets.SquarePacket;
+import game.model.systems.GeneralSystem;
 import game.model.systems.Server;
 import game.model.systems.Transferor;
 import game.model.packets.TrianglePacket;
@@ -73,7 +74,12 @@ public class PacketService {
     public void handlePacketLost(Packet packet) {
         GameStats gameStats = gameState.getGameStats();
         removePacket(packet);
-        systemService.sendNewPacketTo(packet.getWire().getStartPort()); 
+        if (packet.isOnWire()) {
+            systemService.sendNewPacketTo(packet.getWire().getStartPort());
+        } else {
+            GeneralSystem system = packet.getWire().getEndPort().getSystem();
+            system.removePendingPacket(packet);
+        }
         gameStats.incrementLostPackets();
         gameStats.decrementInNetworkPackets();
     }

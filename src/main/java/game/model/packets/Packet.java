@@ -2,6 +2,7 @@ package game.model.packets;
 
 import game.model.Wire;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Packet {
@@ -13,57 +14,119 @@ public abstract class Packet {
     protected List<Packet> collidingWith;
     protected Wire wire;
     protected boolean onWire;
+    protected boolean trojan;
     protected int health;
-    protected int rewardValue;
     protected double speed;
 
-    public abstract void reduceHealth();
+    public Packet() {
+        x = 0;
+        y = 0;
+        collidingWith = new ArrayList<>();
+        trojan = false;
+    }
 
-    public abstract int getHealth();
+    public void reduceHealth() {
+        health--;
+    }
 
-    public abstract boolean deflected();
+    public int getHealth() {
+        return health;
+    }
 
-    public abstract double getDeflectionX();
+    public double getDeflectionX() {
+        return deflectionX;
+    }
 
-    public abstract double getDeflectionY();
+    public double getDeflectionY() {
+        return deflectionY;
+    }
 
-    public abstract void setDeflectionX(double deflectionX);
+    public void setDeflectionX(double deflectionX) {
+        this.deflectionX += deflectionX;
+        x += deflectionX;
+    }
 
-    public abstract void setDeflectionY(double deflectionY);
+    public void setDeflectionY(double deflectionY) {
+        this.deflectionY += deflectionY;
+        y += deflectionY;
+    }
 
-    public abstract Wire getWire();
+    public Wire getWire() {
+        return wire;
+    }
 
-    public abstract boolean isOnWire();
+    public boolean isOnWire() {
+        return onWire;
+    }
 
-    public abstract void setWire(Wire wire);
+    public void setWire(Wire wire) {
+        this.wire = wire;
+    }
 
-    public abstract void setOnWire(boolean onWire);
+    public void setOnWire(boolean onWire) {
+        this.onWire = onWire;
+    }
 
-    public abstract double getX();
+    public boolean isTrojan() {
+        return trojan;
+    }
 
-    public abstract void setX(double x);
+    public void setTrojan(boolean b) {
+        this.trojan = b;
+    }
 
-    public abstract double getY();
+    public double getX() {
+        return x;
+    }
 
-    public abstract void setY(double y);
+    public void setX(double x) {
+        this.x = x;
+    }
 
-    public abstract double getT();
+    public double getY() {
+        return y;
+    }
 
-    public abstract void setT(double t);
+    public void setY(double y) {
+        this.y = y;
+    }
 
-    public abstract void incrementT(double dt);
+    public double getT() {
+        return t;
+    }
+    public void setT(double t) {
+        this.t = t;
+    }
 
-    public abstract void setSpeed(double speed);
+    public void incrementT(double dt) {
+        t += dt;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 
     public abstract int getRewardValue();
 
-    public abstract void removeCollidable(Packet packet);
+    public void removeCollidable(Packet packet) {
+        collidingWith.remove(packet);
+    }
 
-    public abstract void addCollidable(Packet packet);
+    public void addCollidable(Packet packet) {
+        collidingWith.add(packet);
+    }
 
     public abstract double getCenterX();
 
     public abstract double getCenterY();
 
-    public abstract boolean isCollidingWith(Packet packet);
+    public boolean isCollidingWith(Packet packet) {
+        return collidingWith.contains(packet);
+    }
+
+    public abstract int getInitialHealth();
 }

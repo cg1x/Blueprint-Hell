@@ -21,7 +21,7 @@ public class TransferorService extends GeneralSystemService {
         if (availablePort != null) {
             assignPacketToPort(packet, availablePort);
         } else {
-            system.getPendingPackets().add(packet);
+            system.addPendingPacket(packet);
             packet.setOnWire(false);
         }
     }

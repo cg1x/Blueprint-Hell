@@ -1,13 +1,7 @@
 package game.view.manager;
 
-import game.model.systems.GeneralSystem;
-import game.model.systems.Spy;
-import game.model.systems.Transferor;
-import game.model.systems.Server;
-import game.view.systems.GeneralSystemView;
-import game.view.systems.ServerView;
-import game.view.systems.SpyView;
-import game.view.systems.TransferorView;
+import game.model.systems.*;
+import game.view.systems.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +17,8 @@ public class SystemViewManager {
             view = new ServerView((Server) system);
         } else if (system instanceof Spy) {
             view = new SpyView((Spy) system);
+        } else if (system instanceof Ddos) {
+            view = new DdosView((Ddos) system);
         }
         systemMap.put(system, view);
     }

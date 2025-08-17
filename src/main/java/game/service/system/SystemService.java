@@ -1,13 +1,10 @@
 package game.service.system;
 
 import game.model.GameStats;
-import game.model.systems.Spy;
-import game.model.systems.Transferor;
-import game.model.systems.Server;
+import game.model.systems.*;
 import game.model.packets.Packet;
 import game.model.ports.Port;
 import game.model.GameState;
-import game.model.systems.GeneralSystem;
 import game.controller.GameController;
 
 import java.util.List;
@@ -25,6 +22,7 @@ public class SystemService {
     private Server server;
 
     private PortFinder portFinder;
+    private DdosService ddosService;
     private ServerService serverService;
     private SpyService spyService;
     private TransferorService transferorService;
@@ -33,6 +31,7 @@ public class SystemService {
         this.systemViewManager = systemViewManager;
         this.gameState = gameState;
         this.portFinder = new PortFinder();
+        this.ddosService = new DdosService(gameState);
         this.serverService = new ServerService(gameState);
         this.spyService = new SpyService(gameState);
         this.transferorService = new TransferorService(gameState);
@@ -90,6 +89,7 @@ public class SystemService {
             case Server server1 -> serverService.sendNewPacketTo(port);
             case Transferor transferor -> transferorService.sendNewPacketTo(port);
             case Spy spy -> spyService.sendNewPacketTo(port);
+            case Ddos ddos -> ddosService.sendNewPacketTo(port);
             default -> {
                 return;
             }
@@ -102,6 +102,7 @@ public class SystemService {
             case Server server1 -> serverService.handlePacketReached(packet, packetService);
             case Transferor transferor -> transferorService.handlePacketReached(packet, packetService);
             case Spy spy -> spyService.handlePacketReached(packet, packetService);
+            case Ddos ddos -> ddosService.handlePacketReached(packet, packetService);
             default -> {
                 return;
             }
