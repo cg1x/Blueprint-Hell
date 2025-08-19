@@ -1,5 +1,6 @@
 package game.service.system;
 
+import game.controller.Constants;
 import game.model.GameStats;
 import game.model.systems.*;
 import game.model.packets.Packet;
@@ -14,6 +15,9 @@ import game.service.PortService;
 import game.view.systems.ServerView;
 import game.view.systems.GeneralSystemView;
 import game.view.manager.SystemViewManager;
+
+import static game.controller.Constants.DEACTIVATION_PERIOD;
+import static game.controller.Constants.SPEED_LIMIT;
 
 public class SystemService {
     private PortService portService;
@@ -62,20 +66,20 @@ public class SystemService {
         GeneralSystemView view = systemViewManager.getView(system);
         for (Port port : system.getInputPorts()) {
             if (port.isAvailable()) {
-                view.turnOffIndicator();
                 system.setReady(false);
+                view.updateIndicator();
                 return;
             }
         }
         for (Port port : system.getOutputPorts()) {
             if (port.isAvailable()) {
-                view.turnOffIndicator();
                 system.setReady(false);
+                view.updateIndicator();
                 return;
             }
         }
-        view.turnOnIndicator();
         system.setReady(true);
+        view.updateIndicator();
     }
 
     public void updateStartButton() {
@@ -98,13 +102,75 @@ public class SystemService {
 
     public void handlePacketReached(Packet packet, PacketService packetService) {
         GeneralSystem system = packet.getWire().getEndPort().getSystem();
-        switch (system) {
-            case Server server1 -> serverService.handlePacketReached(packet, packetService);
-            case Transferor transferor -> transferorService.handlePacketReached(packet, packetService);
-            case Spy spy -> spyService.handlePacketReached(packet, packetService);
-            case Ddos ddos -> ddosService.handlePacketReached(packet, packetService);
-            default -> {
-                return;
+        if (packet.isMovingForward()) {
+            checkSpeedLimit(packet);
+            if (system.isActive()) {
+                handlePacketReachedActiveSystem(packet, packetService);
+            } else {
+                packet.setMovingForward(false);
+            }
+        } else {
+            handlePacketReturned(packet, packetService);
+        }
+    }
+
+    private void handlePacketReachedActiveSystem(Packet packet, PacketService packetService) {
+        GeneralSystem system = packet.getWire().getEndPort().getSystem();
+        if (system.canAcceptPacket()) {
+            sendNewPacketTo(packet.getWire().getStartPort());
+            switch (system) {
+                case Server server1 -> serverService.handlePacketReached(packet, packetService);
+                case Transferor transferor -> transferorService.handlePacketReached(packet, packetService);
+                case Spy spy -> spyService.handlePacketReached(packet, packetService);
+                case Ddos ddos -> ddosService.handlePacketReached(packet, packetService);
+                default -> {
+                    return;
+                }
+            }
+        } else {
+            packetService.handlePacketLost(packet);
+        }
+    }
+
+    private void handlePacketReturned(Packet packet, PacketService packetService) {
+        GeneralSystem system = packet.getWire().getStartPort().getSystem();
+        if (system.canAcceptPacket()) {
+            system.addPendingPacket(packet);
+            packet.setOnWire(false);
+        } else {
+            packetService.handlePacketLost(packet);
+        }
+    }
+
+    public void checkSpeedLimit(Packet packet) {
+        GeneralSystem system = packet.getWire().getEndPort().getSystem();
+        if (packet.getSpeed() > SPEED_LIMIT) {
+            deactivateSystem(system);
+        }
+    }
+
+    private void activateSystem(GeneralSystem system) {
+        system.setActive(true);
+        systemViewManager.getView(system).updateIndicator();
+        for (Port port : system.getInputPorts()) {
+            sendNewPacketTo(port.getWire().getStartPort());
+        }
+    }
+
+    private void deactivateSystem(GeneralSystem system) {
+        system.setActive(false);
+        system.setDeactivationPeriod(DEACTIVATION_PERIOD * 60);
+        systemViewManager.getView(system).updateIndicator();
+    }
+
+    public void updateInactiveSystems() {
+        List<GeneralSystem> systems = getAllSystems();
+        for (GeneralSystem system : systems) {
+            if (!system.isActive()) {
+                system.decrementDeactivationPeriod();
+                if (system.getDeactivationPeriod() == 0) {
+                    activateSystem(system);
+                }
             }
         }
     }

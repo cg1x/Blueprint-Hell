@@ -17,12 +17,14 @@ public abstract class Packet {
     protected boolean trojan;
     protected int health;
     protected double speed;
+    protected boolean movingForward;
 
     public Packet() {
         x = 0;
         y = 0;
         collidingWith = new ArrayList<>();
         trojan = false;
+        movingForward = true;
     }
 
     public void reduceHealth() {
@@ -94,12 +96,17 @@ public abstract class Packet {
     public double getT() {
         return t;
     }
+
     public void setT(double t) {
         this.t = t;
     }
 
     public void incrementT(double dt) {
         t += dt;
+    }
+
+    public void decrementT(double dt) {
+        t -= dt;
     }
 
     public double getSpeed() {
@@ -129,4 +136,12 @@ public abstract class Packet {
     }
 
     public abstract int getInitialHealth();
+
+    public boolean isMovingForward() {
+        return movingForward;
+    }
+
+    public void setMovingForward(boolean movingForward) {
+        this.movingForward = movingForward;
+    }
 }

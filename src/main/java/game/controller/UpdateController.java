@@ -1,5 +1,6 @@
 package game.controller;
 
+import game.service.system.SystemService;
 import javafx.application.Platform;
 import game.service.CollisionService;
 import game.service.GameService;
@@ -12,11 +13,13 @@ public class UpdateController {
     public GameController gameController;
     private PacketService packetService;
     private CollisionService collisionService;
+    private SystemService systemService;
 
     public UpdateController(GameService gameService, GameController gameController) {
         this.gameService = gameService;
         this.packetService = gameService.getPacketService();
         this.collisionService = gameService.getCollisionService();
+        this.systemService = gameService.getSystemService();
         this.gameController = gameController;
     }
 
@@ -46,6 +49,7 @@ public class UpdateController {
     }
 
     public void updateModel() {
+        systemService.updateInactiveSystems();
         packetService.movePackets(gameController.getGameService().getGameState());
         collisionService.detectCollisions(gameController.getGameService().getGameState()); 
         if (gameService.isGameOver()) {

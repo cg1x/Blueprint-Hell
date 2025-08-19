@@ -56,12 +56,18 @@ public abstract class GeneralSystemView<System extends GeneralSystem> {
         Root.getINSTANCE().getChildren().addAll(shape);
     }
 
-    public void turnOnIndicator() {
-        indicator.setFill(Color.CYAN);
-    }
-
-    public void turnOffIndicator() {
-        indicator.setFill(SYSTEM_TOP_COLOR);
+    public void updateIndicator() {
+        if (system.isReady()) {
+            if (system.isActive()) {
+                indicator.setFill(Color.CYAN);
+                shape.setOpacity(1);
+            } else {
+                indicator.setFill(Color.RED);
+                shape.setOpacity(0.5);
+            }
+        } else {
+            indicator.setFill(SYSTEM_TOP_COLOR);
+        }
     }
 
     public Shape getShape() { return mainRectangle; }

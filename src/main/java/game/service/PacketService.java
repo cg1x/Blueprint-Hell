@@ -5,9 +5,8 @@ import game.model.GameStats;
 import game.model.packets.PacketType;
 import game.model.packets.SquarePacket;
 import game.model.systems.GeneralSystem;
-import game.model.systems.Server;
-import game.model.systems.Transferor;
 import game.model.packets.TrianglePacket;
+import game.service.movement.MovementService;
 import game.service.system.SystemService;
 import game.view.manager.PacketViewManager;
 import game.view.manager.ViewManager;
@@ -42,12 +41,8 @@ public class PacketService {
             SquarePacket packet = squarePackets.get(i);
             if (packet.isOnWire()) {
                 movementService.movePacket(packet);
-                if (packet.getT() == 1) {
-                    if (packet.getWire().getEndPort().getSystem().canAcceptPacket()) {
-                        handlePacketReached(packet);
-                    } else {
-                        handlePacketLost(packet);
-                    }
+                if (movementService.hasPacketReachedSystem(packet)) {
+                    systemService.handlePacketReached(packet, this);
                 }
             }
         }
@@ -55,20 +50,11 @@ public class PacketService {
             TrianglePacket packet = trianglePackets.get(i);
             if (packet.isOnWire()) {
                 movementService.movePacket(packet);
-                if (packet.getT() == 1) {
-                    if (packet.getWire().getEndPort().getSystem().canAcceptPacket()) {
-                        handlePacketReached(packet);
-                    } else {
-                        handlePacketLost(packet);
-                    }
+                if (movementService.hasPacketReachedSystem(packet)) {
+                    systemService.handlePacketReached(packet, this);
                 }
             }
         }
-    }
-
-    public void handlePacketReached(Packet packet) {
-        systemService.sendNewPacketTo(packet.getWire().getStartPort());
-        systemService.handlePacketReached(packet, this);
     }
 
     public void handlePacketLost(Packet packet) {

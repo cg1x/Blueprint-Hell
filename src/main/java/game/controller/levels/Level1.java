@@ -25,13 +25,13 @@ public class Level1 {
     public void createLevel() {
         Server server = new Server(200, 390);
         portViewManager.addPort(new SquarePort(server, PortType.OUTPUT));
-        portViewManager.addPort(new SquarePort(server, PortType.OUTPUT));
+        portViewManager.addPort(new TrianglePort(server, PortType.OUTPUT));
         portViewManager.addPort(new TrianglePort(server, PortType.INPUT));
         portViewManager.addPort(new TrianglePort(server, PortType.INPUT));
 
         Ddos ddos = new Ddos(600, 390);
         portViewManager.addPort(new SquarePort(ddos, PortType.INPUT));
-        portViewManager.addPort(new SquarePort(ddos, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(ddos, PortType.INPUT));
         portViewManager.addPort(new TrianglePort(ddos, PortType.OUTPUT));
         portViewManager.addPort(new SquarePort(ddos, PortType.OUTPUT));
 

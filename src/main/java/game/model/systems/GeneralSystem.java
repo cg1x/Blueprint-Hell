@@ -13,11 +13,15 @@ public abstract class GeneralSystem {
     protected ArrayList<Port> outputPorts = new ArrayList<>();
     protected ArrayList<Packet> pendingPackets = new ArrayList<>();
     protected boolean ready;
+    protected boolean active;
+    protected int deactivationPeriod;
 
     public GeneralSystem(double x, double y) {
         initialX = x;
         initialY = y;
         ready = false;
+        active = true;
+        deactivationPeriod = 0;
     }
 
     public ArrayList<Packet> getPendingPackets() {
@@ -68,4 +72,23 @@ public abstract class GeneralSystem {
         this.ready = ready;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getDeactivationPeriod() {
+        return deactivationPeriod;
+    }
+
+    public void setDeactivationPeriod(int t) {
+        deactivationPeriod = t;
+    }
+
+    public void decrementDeactivationPeriod() {
+        deactivationPeriod--;
+    }
 }

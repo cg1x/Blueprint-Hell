@@ -70,6 +70,7 @@ public abstract class GeneralSystemService {
     }
 
     private void refreshPacket(Packet packet, Port port) {
+        packet.setMovingForward(true);
         packet.setT(0);
         packet.setWire(port.getWire());
         packet.getWire().setPacket(packet);
