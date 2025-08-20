@@ -4,8 +4,8 @@ import game.model.systems.GeneralSystem;
 
 import static game.controller.Constants.PORT_SIZE;
 
-public class TrianglePort extends Port {
-    public TrianglePort(GeneralSystem system, PortType portType) {
+public class BitPort extends Port {
+    public BitPort(GeneralSystem system, PortType portType) {
         super(system, portType);
         this.system = system;
         this.portType = portType;
@@ -14,7 +14,7 @@ public class TrianglePort extends Port {
 
     @Override
     public double getCenterX() {
-        return x;
+        return x + (PORT_SIZE / 2.0);
     }
 
     @Override

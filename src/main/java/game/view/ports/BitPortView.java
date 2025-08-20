@@ -1,20 +1,18 @@
 package game.view.ports;
 
-import game.model.ports.PortType;
-import game.model.ports.TrianglePort;
-import game.service.WireService;
+import game.model.ports.BitPort;
+import game.model.ports.Port;
 import game.view.Root;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 
 import static game.controller.Constants.PORT_SIZE;
 
-public class TrianglePortView extends PortView {
-    public TrianglePortView(TrianglePort port) {
+public class BitPortView extends PortView {
+    public BitPortView(BitPort port) {
         super(port);
-        color = Color.YELLOW;
+        color = Color.BLUEVIOLET;
     }
 
     @Override
@@ -22,10 +20,13 @@ public class TrianglePortView extends PortView {
         this.x = port.getX();
         this.y = port.getY();
         shape = new Polygon(
-            x, y,
-            x + PORT_SIZE/2, y + PORT_SIZE,
-            x - PORT_SIZE/2, y + PORT_SIZE
+                x, y,
+                x + PORT_SIZE, y,
+                x + PORT_SIZE, y + PORT_SIZE,
+                x, y + PORT_SIZE
         );
+        Rotate rotate = new Rotate(45, getCenterX(), getCenterY());
+        shape.getTransforms().add(rotate);
         shape.setFill(color);
         shape.setStroke(Color.BLACK);
         shape.setStrokeWidth(2);
@@ -37,7 +38,7 @@ public class TrianglePortView extends PortView {
 
     @Override
     public double getCenterX() {
-        return x;
+        return x + PORT_SIZE/2;
     }
 
     @Override
@@ -45,4 +46,3 @@ public class TrianglePortView extends PortView {
         return y + PORT_SIZE/2;
     }
 }
-

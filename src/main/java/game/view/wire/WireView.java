@@ -35,8 +35,10 @@ public class WireView {
         controlY.add(wire.getControlY(1));
         if (wire.getWireType() == WireType.SQUARE) {
             color = Color.GREEN;
-        } else {
+        } else if (wire.getWireType() == WireType.TRIANGLE) {
             color = Color.YELLOW;
+        } else {
+            color = Color.BLUEVIOLET;
         }
         initializeView();
     }

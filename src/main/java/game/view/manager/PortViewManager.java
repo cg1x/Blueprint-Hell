@@ -3,9 +3,11 @@ package game.view.manager;
 import java.util.HashMap;
 import java.util.Map;
 
+import game.model.ports.BitPort;
 import game.model.ports.Port;
 import game.model.ports.SquarePort;
 import game.model.ports.TrianglePort;
+import game.view.ports.BitPortView;
 import game.view.ports.PortView;
 import game.view.ports.SquarePortView;
 import game.view.ports.TrianglePortView;
@@ -18,6 +20,8 @@ public class PortViewManager {
             portViews.put(port, new SquarePortView((SquarePort) port));
         } else if (port instanceof TrianglePort) {
             portViews.put(port, new TrianglePortView((TrianglePort) port));
+        } else if (port instanceof BitPort) {
+            portViews.put(port, new BitPortView((BitPort) port));
         }
     }
 

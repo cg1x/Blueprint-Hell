@@ -35,19 +35,9 @@ public class PacketService {
     }
 
     public void movePackets(GameState gameState) {
-        List<SquarePacket> squarePackets = gameState.getSquarePackets();
-        List<TrianglePacket> trianglePackets = gameState.getTrianglePackets();
-        for (int i = 0; i < squarePackets.size(); i++) {
-            SquarePacket packet = squarePackets.get(i);
-            if (packet.isOnWire()) {
-                movementService.movePacket(packet);
-                if (movementService.hasPacketReachedSystem(packet)) {
-                    systemService.handlePacketReached(packet, this);
-                }
-            }
-        }
-        for (int i = 0; i < trianglePackets.size(); i++) {
-            TrianglePacket packet = trianglePackets.get(i);
+        List<Packet> packets = gameState.getPackets();
+        for (int i = 0; i < packets.size(); i++) {
+            Packet packet = packets.get(i);
             if (packet.isOnWire()) {
                 movementService.movePacket(packet);
                 if (movementService.hasPacketReachedSystem(packet)) {
@@ -85,11 +75,10 @@ public class PacketService {
         Packet packet = null;
         if (packetType == PacketType.SQUARE) {
             packet = new SquarePacket();
-            gameState.addSquarePacket((SquarePacket) packet);
         } else if (packetType == PacketType.TRIANGLE) {
             packet = new TrianglePacket();
-            gameState.addTrianglePacket((TrianglePacket) packet);
         }
+        gameState.addPacket(packet);
         gameState.getSystems().getFirst().getPendingPackets().add(packet);
         manager.addPacket(packet);
         return packet;
@@ -111,7 +100,7 @@ public class PacketService {
             }
         }
         
-        int totalPackets = gameState.getTrianglePackets().size() + gameState.getSquarePackets().size();
+        int totalPackets = gameState.getPackets().size();
         gameState.getGameStats().setTotalPackets(totalPackets);
     }
 

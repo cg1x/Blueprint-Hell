@@ -103,10 +103,11 @@ public class SystemService {
     public void handlePacketReached(Packet packet, PacketService packetService) {
         GeneralSystem system = packet.getWire().getEndPort().getSystem();
         if (packet.isMovingForward()) {
-            checkSpeedLimit(packet);
+            //checkSpeedLimit(packet);
             if (system.isActive()) {
                 handlePacketReachedActiveSystem(packet, packetService);
             } else {
+                portService.resetSpeed(packet);
                 packet.setMovingForward(false);
             }
         } else {

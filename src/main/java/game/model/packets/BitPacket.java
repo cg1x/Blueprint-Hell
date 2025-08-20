@@ -1,20 +1,15 @@
 package game.model.packets;
 
-import game.model.Wire;
+import static game.controller.Constants.PORT_SIZE;
 
-import java.util.ArrayList;
-import static game.controller.Constants.*;
-
-public class SquarePacket extends Packet {
-//    private final int initialHealth = 2;
-//    private final int rewardValue = 1;
-
-    public SquarePacket() {
+public class BitPacket extends Packet {
+    public BitPacket() {
         super();
-        initialHealth = 2;
+        initialHealth = 1;
         rewardValue = 1;
         health = initialHealth;
     }
+
 
     @Override
     public double getCenterX() {

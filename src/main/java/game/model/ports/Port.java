@@ -4,12 +4,12 @@ import game.model.Wire;
 import game.model.systems.GeneralSystem;
 
 public abstract class Port {
-    public GeneralSystem system;
-    public PortType portType;
-    public boolean available;
-    public Wire wire;
-    private double x;
-    private double y;
+    protected GeneralSystem system;
+    protected PortType portType;
+    protected boolean available;
+    protected Wire wire;
+    protected double x;
+    protected double y;
 
     public Port(GeneralSystem system, PortType portType) {
         this.system = system;

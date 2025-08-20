@@ -13,6 +13,7 @@ public class GameState {
     private int currentLevel;
     private List<GeneralSystem> systems;
     private List<Spy> outputSpySystems;
+    private List<Packet> packets;
     private List<SquarePacket> squarePackets;
     private List<TrianglePacket> trianglePackets;
     private List<Wire> wires;
@@ -23,6 +24,7 @@ public class GameState {
         this.currentLevel = 1;
         this.squarePackets = new ArrayList<>();
         this.trianglePackets = new ArrayList<>();
+        this.packets = new ArrayList<>();
         this.systems = new ArrayList<>();
         this.outputSpySystems = new ArrayList<>();
         this.wires = new ArrayList<>();
@@ -53,6 +55,10 @@ public class GameState {
         }
     }
 
+    public void addPacket(Packet packet) {
+        packets.add(packet);
+    }
+
     public void addSquarePacket(SquarePacket packet) {
         squarePackets.add(packet);
     }
@@ -62,11 +68,12 @@ public class GameState {
     }
 
     public void removePacket(Packet packet) {
-        if (packet instanceof SquarePacket) {
-            squarePackets.remove(packet);
-        } else if (packet instanceof TrianglePacket) {
-            trianglePackets.remove(packet);
-        }
+//        if (packet instanceof SquarePacket) {
+//            squarePackets.remove(packet);
+//        } else if (packet instanceof TrianglePacket) {
+//            trianglePackets.remove(packet);
+//        }
+        packets.remove(packet);
     }
 
     public void addWire(Wire wire) { wires.add(wire); }
@@ -101,4 +108,5 @@ public class GameState {
 
     public List<SquarePacket> getSquarePackets() { return squarePackets; }
     public List<TrianglePacket> getTrianglePackets() { return trianglePackets; }
+    public List<Packet> getPackets() { return packets; }
 }

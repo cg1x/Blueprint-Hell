@@ -5,6 +5,7 @@ import game.model.*;
 import game.model.ports.Port;
 import game.model.ports.PortType;
 import game.model.ports.SquarePort;
+import game.model.ports.TrianglePort;
 import game.model.systems.GeneralSystem;
 import game.service.system.SystemService;
 import game.view.wire.WireView;
@@ -44,8 +45,10 @@ public class WireService {
         Wire wire = null;
         if (port1 instanceof SquarePort) {
             wire = new Wire(port1, port2, WireType.SQUARE);
-        } else {
+        } else if (port1 instanceof TrianglePort){
             wire = new Wire(port1, port2, WireType.TRIANGLE);
+        } else {
+            wire = new Wire(port1, port2, WireType.BIT);
         }
         wire.setLength(calculateDistance(port1, port2));
         wireViewManager.addWire(wire);

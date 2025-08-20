@@ -17,7 +17,10 @@ public abstract class Packet {
     protected boolean trojan;
     protected int health;
     protected double speed;
+    protected double acceleration;
     protected boolean movingForward;
+    protected int initialHealth;
+    protected int rewardValue;
 
     public Packet() {
         x = 0;
@@ -117,7 +120,13 @@ public abstract class Packet {
         this.speed = speed;
     }
 
-    public abstract int getRewardValue();
+    public void incrementSpeed() {
+        speed += acceleration;
+    }
+
+    public int getRewardValue() {
+        return rewardValue;
+    }
 
     public void removeCollidable(Packet packet) {
         collidingWith.remove(packet);
@@ -127,15 +136,21 @@ public abstract class Packet {
         collidingWith.add(packet);
     }
 
-    public abstract double getCenterX();
+    public double getAcceleration() {
+        return acceleration;
+    }
 
-    public abstract double getCenterY();
+    public void setAcceleration(double acceleration) {
+        this.acceleration = acceleration;
+    }
 
     public boolean isCollidingWith(Packet packet) {
         return collidingWith.contains(packet);
     }
 
-    public abstract int getInitialHealth();
+    public int getInitialHealth() {
+        return initialHealth;
+    }
 
     public boolean isMovingForward() {
         return movingForward;
@@ -144,4 +159,8 @@ public abstract class Packet {
     public void setMovingForward(boolean movingForward) {
         this.movingForward = movingForward;
     }
+
+    public abstract double getCenterX();
+
+    public abstract double getCenterY();
 }

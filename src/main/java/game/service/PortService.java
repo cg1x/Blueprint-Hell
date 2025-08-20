@@ -3,6 +3,7 @@ package game.service;
 import game.model.packets.Packet;
 import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
+import game.model.ports.BitPort;
 import game.model.systems.GeneralSystem;
 import game.model.ports.Port;
 import game.model.ports.SquarePort;
@@ -21,13 +22,13 @@ public class PortService {
         this.wireService = wireService;
     }
 
-    public void assignPacketToPort(Packet packet, Port port) {
+    public void resetSpeed(Packet packet) {
+        Port port = packet.getWire().getEndPort();
         if (packet instanceof SquarePacket) {
             assignSquarePacketToPort((SquarePacket) packet, port);
         } else if (packet instanceof TrianglePacket) {
             assignTrianglePacketToPort((TrianglePacket) packet, port);
         }
-        refreshPacket(packet, port);
     }
 
     private void assignSquarePacketToPort(SquarePacket packet, Port port) {
@@ -42,21 +43,14 @@ public class PortService {
     }
 
     private void assignTrianglePacketToPort(TrianglePacket packet, Port port) {
-        packet.setX(port.getCenterX() - PORT_SIZE/2 + packet.getDeflectionX());
+        packet.setX(port.getCenterX() + packet.getDeflectionX());
         packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
         if (port instanceof SquarePort) {
-            packet.setSpeed(2);
+            packet.setSpeed(1);
         }
         if (port instanceof TrianglePort) {
-            packet.setSpeed(4);
+            packet.setSpeed(2);
         }
-    }
-
-    private void refreshPacket(Packet packet, Port port) {
-        packet.setT(0);
-        packet.setWire(port.getWire());
-        packet.getWire().setPacket(packet);
-        packet.setOnWire(true);
     }
 
     public void paintAllPorts(GeneralSystem system) {
@@ -64,7 +58,7 @@ public class PortService {
         double y = system.getInitialY();
         // paint input ports
         for (Port port : system.getInputPorts()) {
-            if (port instanceof SquarePort) {
+            if (port instanceof SquarePort || port instanceof BitPort) {
                 port.setX(x - 5);
                 port.setY(y + 10 + ((system.getInputPorts().indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
             }
@@ -77,7 +71,7 @@ public class PortService {
         }
         // paint output ports
         for (Port port : system.getOutputPorts()) {
-            if (port instanceof SquarePort) {
+            if (port instanceof SquarePort || port instanceof BitPort) {
                 port.setX(x + SYSTEM_SIZE - 5);
                 port.setY(y + 10 + ((system.getOutputPorts().indexOf(port) + 1) * SYSTEM_TOP_HEIGHT));
             }

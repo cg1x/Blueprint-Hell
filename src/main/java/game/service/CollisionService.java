@@ -24,7 +24,7 @@ public class CollisionService {
     }
 
     public void detectCollisions(GameState gameState) {
-        List<Packet> packets = getAllPackets(gameState);
+        List<Packet> packets = gameState.getPackets();
 
         for (int i = 0; i < packets.size(); i++) {
             if (!packets.get(i).isOnWire()) {
@@ -77,13 +77,6 @@ public class CollisionService {
         packetService.reduceHealth(packet1);
         packetService.reduceHealth(packet2);
         return new Collision(packet1, packet2);
-    }
-
-    private List<Packet> getAllPackets(GameState gameState) {
-        List<Packet> allPackets = new ArrayList<>();
-        allPackets.addAll(gameState.getSquarePackets());
-        allPackets.addAll(gameState.getTrianglePackets());
-        return allPackets;
     }
 
 }
