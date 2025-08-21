@@ -1,7 +1,6 @@
 package game.view.ports;
 
 import game.model.ports.BitPort;
-import game.model.ports.Port;
 import game.view.Root;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;

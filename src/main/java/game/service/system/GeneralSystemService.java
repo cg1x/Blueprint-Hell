@@ -3,9 +3,11 @@ package game.service.system;
 
 import game.model.GameState;
 import game.model.GameStats;
+import game.model.packets.BitPacket;
 import game.model.packets.Packet;
 import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
+import game.model.ports.BitPort;
 import game.model.ports.Port;
 import game.model.ports.SquarePort;
 import game.model.ports.TrianglePort;
@@ -40,6 +42,7 @@ public abstract class GeneralSystemService {
         switch (packet) {
             case SquarePacket s -> assignSquarePacketToPort((SquarePacket) packet, port);
             case TrianglePacket t -> assignTrianglePacketToPort((TrianglePacket) packet, port);
+            case BitPacket b -> assignBitPacketToPort((BitPacket) packet, port);
             default -> {
                 break;
             }
@@ -53,7 +56,7 @@ public abstract class GeneralSystemService {
         if (port instanceof SquarePort) {
             packet.setSpeed(2);
         }
-        if (port instanceof TrianglePort) {
+        else {
             packet.setSpeed(4);
         }
     }
@@ -61,11 +64,22 @@ public abstract class GeneralSystemService {
     private void assignTrianglePacketToPort(TrianglePacket packet, Port port) {
         packet.setX(port.getCenterX() + packet.getDeflectionX());
         packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
-        if (port instanceof SquarePort) {
-            packet.setSpeed(1);
-        }
         if (port instanceof TrianglePort) {
             packet.setSpeed(2);
+        } else {
+            packet.setSpeed(1);
+        }
+    }
+
+    private void assignBitPacketToPort(BitPacket packet, Port port) {
+        packet.setX(port.getCenterX() - PORT_SIZE/2 + packet.getDeflectionX());
+        packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
+        if (port instanceof BitPort) {
+            packet.setSpeed(1);
+            packet.setAcceleration(0.05);
+        } else {
+            packet.setSpeed(1);
+            packet.setAcceleration(0.2);
         }
     }
 

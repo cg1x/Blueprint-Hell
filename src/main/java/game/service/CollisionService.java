@@ -7,6 +7,7 @@ import java.util.List;
 
 import game.controller.Utils;
 import game.model.GameState;
+import game.model.packets.BitPacket;
 import game.model.packets.Packet;
 import game.model.Collision;
 import game.model.Direction;
@@ -47,7 +48,8 @@ public class CollisionService {
     }
 
     public void applyImpact(Collision collision, List<Packet> packets) {
-        for (Packet packet : packets) {
+        for (int i = 0; i < packets.size(); i++) {
+            Packet packet = packets.get(i);
             if (packet.isOnWire() && packet != collision.collidable1 && packet != collision.collidable2) {
                 applyImpact(collision, packet);
             }
@@ -76,6 +78,12 @@ public class CollisionService {
     public Collision handleCollision(Packet packet1, Packet packet2) {
         packetService.reduceHealth(packet1);
         packetService.reduceHealth(packet2);
+        if (packet1 instanceof BitPacket) {
+            packet1.setMovingForward(false);
+        }
+        if (packet2 instanceof BitPacket) {
+            packet2.setMovingForward(false);
+        }
         return new Collision(packet1, packet2);
     }
 

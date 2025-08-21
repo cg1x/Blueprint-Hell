@@ -138,6 +138,9 @@ public class SystemService {
         if (system.canAcceptPacket()) {
             system.addPendingPacket(packet);
             packet.setOnWire(false);
+            if (packet.getWire().getEndPort().getSystem().isActive()) {
+                sendNewPacketTo(packet.getWire().getStartPort());
+            }
         } else {
             packetService.handlePacketLost(packet);
         }

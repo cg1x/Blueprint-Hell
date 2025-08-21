@@ -1,8 +1,10 @@
 package game.view.manager;
 
+import game.model.packets.BitPacket;
 import game.model.packets.Packet;
 import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
+import game.view.packets.BitPacketView;
 import game.view.packets.PacketView;
 import game.view.packets.SquarePacketView;
 import game.view.packets.TrianglePacketView;
@@ -18,6 +20,8 @@ public class PacketViewManager {
             packetViews.put(packet, new SquarePacketView((SquarePacket) packet));
         } else if (packet instanceof TrianglePacket) {
             packetViews.put(packet, new TrianglePacketView((TrianglePacket) packet));
+        } else if (packet instanceof BitPacket) {
+            packetViews.put(packet, new BitPacketView((BitPacket) packet));
         }
     }
 

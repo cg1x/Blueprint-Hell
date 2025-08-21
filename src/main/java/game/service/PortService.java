@@ -1,5 +1,6 @@
 package game.service;
 
+import game.model.packets.BitPacket;
 import game.model.packets.Packet;
 import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
@@ -28,6 +29,8 @@ public class PortService {
             assignSquarePacketToPort((SquarePacket) packet, port);
         } else if (packet instanceof TrianglePacket) {
             assignTrianglePacketToPort((TrianglePacket) packet, port);
+        } else {
+            assignBitPacketToPort((BitPacket) packet, port);
         }
     }
 
@@ -51,6 +54,13 @@ public class PortService {
         if (port instanceof TrianglePort) {
             packet.setSpeed(2);
         }
+    }
+
+    private void assignBitPacketToPort(BitPacket packet, Port port) {
+        packet.setX(port.getCenterX() - PORT_SIZE/2 + packet.getDeflectionX());
+        packet.setY(port.getCenterY() - PORT_SIZE/2 + packet.getDeflectionY());
+        packet.setSpeed(1);
+        packet.setAcceleration(0.005);
     }
 
     public void paintAllPorts(GeneralSystem system) {

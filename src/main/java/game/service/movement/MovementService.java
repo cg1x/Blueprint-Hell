@@ -1,5 +1,6 @@
 package game.service.movement;
 
+import game.model.packets.BitPacket;
 import game.model.packets.Packet;
 import game.model.packets.SquarePacket;
 import game.model.packets.TrianglePacket;
@@ -15,6 +16,7 @@ public class MovementService {
         this.movementServices = new HashMap<>();
         this.movementServices.put(SquarePacket.class, new SquarePacketMovementService(wireService));
         this.movementServices.put(TrianglePacket.class, new TrianglePacketMovementService(wireService));
+        this.movementServices.put(BitPacket.class, new BitPacketMovementService(wireService));
     }
 
     @SuppressWarnings("unchecked")

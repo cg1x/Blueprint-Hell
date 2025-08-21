@@ -3,7 +3,9 @@ package game.view.manager;
 import game.model.Wire;
 import game.model.packets.Packet;
 import game.model.systems.GeneralSystem;
+import game.view.Root;
 import game.view.packets.PacketView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 import static game.controller.Constants.PORT_SIZE;

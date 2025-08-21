@@ -31,14 +31,14 @@ public class Level1 {
         portViewManager.addPort(new TrianglePort(server, PortType.INPUT));
 
         Ddos ddos = new Ddos(600, 390);
-        portViewManager.addPort(new TrianglePort(ddos, PortType.INPUT));
         portViewManager.addPort(new BitPort(ddos, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(ddos, PortType.INPUT));
         portViewManager.addPort(new TrianglePort(ddos, PortType.OUTPUT));
         portViewManager.addPort(new BitPort(ddos, PortType.OUTPUT));
 
         Transferor transferor2 = new Transferor(1200, 500);
-        portViewManager.addPort(new TrianglePort(transferor2, PortType.INPUT));
         portViewManager.addPort(new BitPort(transferor2, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(transferor2, PortType.INPUT));
         portViewManager.addPort(new TrianglePort(transferor2, PortType.OUTPUT));
         portViewManager.addPort(new TrianglePort(transferor2, PortType.OUTPUT));
 

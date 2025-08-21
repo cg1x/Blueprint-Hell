@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import static game.controller.Constants.*;
 
 public class SquarePacket extends Packet {
-//    private final int initialHealth = 2;
-//    private final int rewardValue = 1;
 
     public SquarePacket() {
         super();

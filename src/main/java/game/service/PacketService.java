@@ -2,15 +2,12 @@ package game.service;
 
 import game.model.GameState;
 import game.model.GameStats;
-import game.model.packets.PacketType;
-import game.model.packets.SquarePacket;
+import game.model.packets.*;
 import game.model.systems.GeneralSystem;
-import game.model.packets.TrianglePacket;
 import game.service.movement.MovementService;
 import game.service.system.SystemService;
 import game.view.manager.PacketViewManager;
 import game.view.manager.ViewManager;
-import game.model.packets.Packet;
 
 import static game.controller.Constants.PORT_SIZE;
 import static game.controller.Constants.WIRE_WIDTH;
@@ -77,6 +74,8 @@ public class PacketService {
             packet = new SquarePacket();
         } else if (packetType == PacketType.TRIANGLE) {
             packet = new TrianglePacket();
+        } else if (packetType == PacketType.BIT) {
+            packet = new BitPacket();
         }
         gameState.addPacket(packet);
         gameState.getSystems().getFirst().getPendingPackets().add(packet);
@@ -87,11 +86,11 @@ public class PacketService {
     public void createPacketsForLevel(int level) {
         List<Packet> packets = new ArrayList<>();
         if (level == 1) {
-            packets.add(createPacket(PacketType.TRIANGLE));
+            packets.add(createPacket(PacketType.BIT));
             packets.add(createPacket(PacketType.SQUARE));
-            packets.add(createPacket(PacketType.TRIANGLE));
             packets.add(createPacket(PacketType.SQUARE));
-            packets.add(createPacket(PacketType.TRIANGLE));
+            packets.add(createPacket(PacketType.BIT));
+            packets.add(createPacket(PacketType.BIT));
             packets.add(createPacket(PacketType.SQUARE));
         } else if (level == 2) {
             for (int i = 0; i < 5; i++) {

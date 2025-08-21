@@ -9,39 +9,20 @@ import javafx.scene.shape.Polygon;
 import static game.controller.Constants.PORT_SIZE;
 
 public class TrianglePacketView extends PacketView {
-    double x;
-    double y;
-    public TrianglePacket packet;
-    public Color color = Color.YELLOW;
-    public Polygon shape;
-
     public TrianglePacketView(TrianglePacket packet) {
+        super(packet);
+        color = Color.YELLOW;
+        paint();
+    }
+
+    public void paint() {
         shape = new Polygon(packet.getX(), packet.getY(),
                 packet.getX() + PORT_SIZE/2, packet.getY() + PORT_SIZE,
                 packet.getX() - PORT_SIZE/2, packet.getY() + PORT_SIZE);
-        this.x = packet.getX();
-        this.y = packet.getY();
-        this.packet = packet;
         shape.setFill(color);
         shape.setStroke(color);
         shape.setStrokeWidth(2);
         shape.setVisible(false);
         Root.getINSTANCE().getChildren().add(shape);
-    }
-
-    public Polygon getShape() {
-        return shape;
-    }
-
-    public void update() {
-        shape.setLayoutX(packet.getX() - x);
-        shape.setLayoutY(packet.getY() - y);
-        shape.setVisible(packet.isOnWire());
-    }
-
-    public void remove() {
-        Platform.runLater(() -> {
-            Root.getINSTANCE().getChildren().remove(shape);
-        });
     }
 }

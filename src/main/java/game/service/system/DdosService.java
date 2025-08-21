@@ -22,14 +22,17 @@ public class DdosService extends GeneralSystemService {
     @Override
     public void handlePacketReached(Packet packet, PacketService packetService) {
         super.handlePacketReached(packet, packetService);
+        packet.setOnWire(false);
         sabotagePacket(packet, packetService);
+        if (packet.getHealth() == 0) {
+            return;
+        }
         Ddos system = (Ddos) packet.getWire().getEndPort().getSystem();
         Port availablePort = portFinder.findUnsuitablePort(system, packet);
         if (availablePort != null) {
             assignPacketToPort(packet, availablePort);
         } else {
             system.addPendingPacket(packet);
-            packet.setOnWire(false);
         }
     }
 
@@ -39,7 +42,7 @@ public class DdosService extends GeneralSystemService {
             packet.setTrojan(true);
         }
         if (packet.getHealth() == packet.getInitialHealth()) {
-            packetService.reduceHealth(packet);
+            //packetService.reduceHealth(packet);
         }
     }
 }

@@ -144,6 +144,10 @@ public abstract class Packet {
         this.acceleration = acceleration;
     }
 
+    public void decrementAcceleration() {
+        acceleration -= 0.005;
+    }
+
     public boolean isCollidingWith(Packet packet) {
         return collidingWith.contains(packet);
     }
