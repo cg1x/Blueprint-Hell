@@ -86,5 +86,4 @@ public class CollisionService {
         }
         return new Collision(packet1, packet2);
     }
-
 }

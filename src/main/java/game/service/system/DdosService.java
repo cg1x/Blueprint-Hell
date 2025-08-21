@@ -42,7 +42,7 @@ public class DdosService extends GeneralSystemService {
             packet.setTrojan(true);
         }
         if (packet.getHealth() == packet.getInitialHealth()) {
-            //packetService.reduceHealth(packet);
+            packetService.reduceHealth(packet);
         }
     }
 }

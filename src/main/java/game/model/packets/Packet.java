@@ -15,7 +15,7 @@ public abstract class Packet {
     protected Wire wire;
     protected boolean onWire;
     protected boolean trojan;
-    protected int health;
+    protected double health;
     protected double speed;
     protected double acceleration;
     protected boolean movingForward;
@@ -31,10 +31,10 @@ public abstract class Packet {
     }
 
     public void reduceHealth() {
-        health--;
+        health -= 0.5;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
