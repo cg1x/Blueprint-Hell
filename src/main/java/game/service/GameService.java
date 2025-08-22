@@ -3,6 +3,8 @@ package game.service;
 import game.controller.GameController;
 import game.controller.levels.Level1;
 import game.controller.levels.Level2;
+import game.controller.levels.Level3;
+import game.controller.levels.Level4;
 import game.model.GameState;
 import game.model.systems.Server;
 import game.service.movement.MovementService;
@@ -38,7 +40,7 @@ public class GameService {
         gameState.setCurrentLevel(level);
         switch (level) {
             case 1:
-                new Level1(gameState, systemViewManager, portViewManager).createLevel();
+                new Level4(gameState, systemViewManager, portViewManager).createLevel();
                 break;
             case 2:
                 new Level2(gameState, systemViewManager, portViewManager).createLevel();

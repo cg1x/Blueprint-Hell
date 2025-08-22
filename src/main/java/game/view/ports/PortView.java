@@ -41,7 +41,7 @@ public abstract class PortView {
     public void dragLine(MouseEvent e) {
         if (wire != null && port.isAvailable() && (port.getPortType() == PortType.OUTPUT)) {
             wire.setEndX(e.getSceneX());
-            wire.setEndY(e.getSceneY() + 1);
+            wire.setEndY(e.getSceneY() - 2);
         }
     }
 

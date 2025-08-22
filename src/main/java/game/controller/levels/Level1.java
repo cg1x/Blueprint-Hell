@@ -24,33 +24,31 @@ public class Level1 {
     }
 
     public void createLevel() {
-        Server server = new Server(200, 390);
+        Server server = new Server(100, 390);
+        portViewManager.addPort(new SquarePort(server, PortType.OUTPUT));
         portViewManager.addPort(new TrianglePort(server, PortType.OUTPUT));
-        portViewManager.addPort(new BitPort(server, PortType.OUTPUT));
-        portViewManager.addPort(new TrianglePort(server, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(server, PortType.INPUT));
 
-        Ddos ddos = new Ddos(600, 390);
-        portViewManager.addPort(new BitPort(ddos, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(ddos, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(ddos, PortType.OUTPUT));
-        portViewManager.addPort(new BitPort(ddos, PortType.OUTPUT));
+        Transferor transferor1 = new Transferor(500, 200);
+        portViewManager.addPort(new SquarePort(transferor1, PortType.INPUT));
+        portViewManager.addPort(new BitPort(transferor1, PortType.INPUT));
+        portViewManager.addPort(new SquarePort(transferor1, PortType.OUTPUT));
 
-        Transferor transferor2 = new Transferor(1200, 500);
-        portViewManager.addPort(new BitPort(transferor2, PortType.INPUT));
+        Transferor transferor2 = new Transferor(800, 600);
         portViewManager.addPort(new TrianglePort(transferor2, PortType.INPUT));
-        portViewManager.addPort(new TrianglePort(transferor2, PortType.OUTPUT));
+        portViewManager.addPort(new BitPort(transferor2, PortType.OUTPUT));
         portViewManager.addPort(new TrianglePort(transferor2, PortType.OUTPUT));
 
-//        Server server2 = new Server(1200, 390);
-//        portViewManager.addPort(new TrianglePort(server2, PortType.INPUT));
-//        portViewManager.addPort(new TrianglePort(server2, PortType.INPUT));
+        Server server2 = new Server(1400, 390);
+        portViewManager.addPort(new SquarePort(server2, PortType.INPUT));
+        portViewManager.addPort(new TrianglePort(server2, PortType.INPUT));
 
         gameState.addSystem(server);
         systemViewManager.addSystem(server);
-        gameState.addSystem(ddos);
-        systemViewManager.addSystem(ddos);
+        gameState.addSystem(transferor1);
+        systemViewManager.addSystem(transferor1);
         gameState.addSystem(transferor2);
         systemViewManager.addSystem(transferor2);
+        gameState.addSystem(server2);
+        systemViewManager.addSystem(server2);
     }
 }
