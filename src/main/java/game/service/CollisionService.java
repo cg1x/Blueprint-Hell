@@ -16,7 +16,7 @@ import game.view.manager.ViewManager;
 public class CollisionService {
     private ViewManager viewManager;
     private PacketService packetService;
-    private final double MAGNITUDE = PORT_SIZE/2;
+    private final double MAGNITUDE = PORT_SIZE;
     private final double impactRadius = 1600;
 
     public CollisionService(PacketService packetService, ViewManager viewManager) {

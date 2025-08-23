@@ -14,7 +14,7 @@ public final class GameStats {
     private static GameStats INSTANCE;
 
     public GameStats() {
-        coins = 10;
+        coins = 5;
         successfulPackets = 0;
         lostPackets = 0;
         totalPackets = 0;

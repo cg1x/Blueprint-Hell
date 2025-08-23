@@ -35,6 +35,10 @@ public class GameController {
         gameView.updateView();
     }
 
+    public void updateHUD() {
+        gameView.getHud().update();
+    }
+
     public void startGame() {
         gameService.startGame();
         updateController.start();

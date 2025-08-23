@@ -68,7 +68,7 @@ public class PacketService {
         }
     }
 
-    public Packet createPacket(PacketType packetType) {
+    public void createPacket(PacketType packetType) {
         Packet packet = null;
         if (packetType == PacketType.SQUARE) {
             packet = new SquarePacket();
@@ -80,25 +80,15 @@ public class PacketService {
         gameState.addPacket(packet);
         gameState.getSystems().getFirst().getPendingPackets().add(packet);
         manager.addPacket(packet);
-        return packet;
     }
 
     public void createPacketsForLevel(int level) {
-        List<Packet> packets = new ArrayList<>();
-        if (level == 1) {
-            packets.add(createPacket(PacketType.BIT));
-            packets.add(createPacket(PacketType.SQUARE));
-            packets.add(createPacket(PacketType.SQUARE));
-            packets.add(createPacket(PacketType.BIT));
-            packets.add(createPacket(PacketType.BIT));
-            packets.add(createPacket(PacketType.SQUARE));
-        } else if (level == 2) {
-            for (int i = 0; i < 5; i++) {
-                packets.add(createPacket(PacketType.TRIANGLE));
-                packets.add(createPacket(PacketType.SQUARE));
-            }
+        for (int i = 0; i < level + 1; i++) {
+            createPacket(PacketType.TRIANGLE);
+            createPacket(PacketType.SQUARE);
+            createPacket(PacketType.BIT);
         }
-        
+
         int totalPackets = gameState.getPackets().size();
         gameState.getGameStats().setTotalPackets(totalPackets);
     }

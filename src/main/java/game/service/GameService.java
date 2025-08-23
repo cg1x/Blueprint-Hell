@@ -1,10 +1,7 @@
 package game.service;
 
 import game.controller.GameController;
-import game.controller.levels.Level1;
-import game.controller.levels.Level2;
-import game.controller.levels.Level3;
-import game.controller.levels.Level4;
+import game.controller.levels.*;
 import game.model.GameState;
 import game.model.systems.Server;
 import game.service.movement.MovementService;
@@ -27,7 +24,7 @@ public class GameService {
         this.gameState = new GameState();
         this.systemService = new SystemService(gameController.getGameView().getSystemViewManager(), gameState);
         this.wireService = new WireService(systemService, gameController.getGameView().getWireViewManager(), 
-                                            gameController.getGameView().getViewManager(), gameState);
+                                            gameController.getGameView().getViewManager(), gameState, gameController);
         this.movementService = new MovementService(wireService);
         this.packetService = new PacketService(gameState, systemService, movementService, gameController.getGameView().getViewManager());
         this.collisionService = new CollisionService(packetService, gameController.getGameView().getViewManager());
@@ -39,14 +36,14 @@ public class GameService {
         gameState.reset();
         gameState.setCurrentLevel(level);
         switch (level) {
-            case 1:
-                new Level4(gameState, systemViewManager, portViewManager).createLevel();
+            case 1 -> new Level1(gameState, systemViewManager, portViewManager).createLevel();
+            case 2 -> new Level2(gameState, systemViewManager, portViewManager).createLevel();
+            case 3 -> new Level3(gameState, systemViewManager, portViewManager).createLevel();
+            case 4 -> new Level4(gameState, systemViewManager, portViewManager).createLevel();
+            case 5 -> new Level5(gameState, systemViewManager, portViewManager).createLevel();
+            default -> {
                 break;
-            case 2:
-                new Level2(gameState, systemViewManager, portViewManager).createLevel();
-                break;
-            default:
-                break;
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package game.service;
 
+import game.controller.GameController;
 import game.controller.Utils;
 import game.model.*;
 import game.model.ports.Port;
@@ -17,13 +18,15 @@ public class WireService {
     private WireViewManager wireViewManager;
     private ViewManager viewManager;
     private GameState gameState;
+    private GameController gameController;
 
     public WireService(SystemService systemService, WireViewManager wireViewManager,
-                       ViewManager viewManager, GameState gameState) {
+                       ViewManager viewManager, GameState gameState, GameController gameController) {
         this.systemService = systemService;
         this.wireViewManager = wireViewManager;
         this.viewManager = viewManager;
         this.gameState = gameState;
+        this.gameController = gameController;
     }
 
     public void handleConnection(Port startPort, Port endPort) {
@@ -33,22 +36,35 @@ public class WireService {
     }
 
     public boolean AreConnectable(Port startPort, Port endPort) {
-        boolean bool1 = startPort.getPortType() == PortType.OUTPUT;
-        boolean bool2 = endPort.getPortType() == PortType.INPUT;
+        boolean bool1 = startPort.getPortType() == PortType.OUTPUT && endPort.getPortType() == PortType.INPUT;
+        boolean bool2 = startPort.getPortType() == PortType.INPUT && endPort.getPortType() == PortType.OUTPUT;
         boolean bool3 = startPort.getSystem() != endPort.getSystem();
         boolean bool4 = endPort.isAvailable();
+        boolean bool5 = startPort.getClass().getName().equals(endPort.getClass().getName());
 
-        return bool1 && bool2 && bool3 && bool4;
+        return (bool1 || bool2) && bool3 && bool4 && bool5;
     }
 
     public void createWire(Port port1, Port port2) {
         Wire wire = null;
         if (port1 instanceof SquarePort) {
-            wire = new Wire(port1, port2, WireType.SQUARE);
+            if (port1.getPortType() == PortType.OUTPUT) {
+                wire = new Wire(port1, port2, WireType.SQUARE);
+            } else {
+                wire = new Wire(port2, port1, WireType.SQUARE);
+            }
         } else if (port1 instanceof TrianglePort){
-            wire = new Wire(port1, port2, WireType.TRIANGLE);
+            if (port1.getPortType() == PortType.OUTPUT) {
+                wire = new Wire(port1, port2, WireType.TRIANGLE);
+            } else {
+                wire = new Wire(port2, port1, WireType.TRIANGLE);
+            }
         } else {
-            wire = new Wire(port1, port2, WireType.BIT);
+            if (port1.getPortType() == PortType.OUTPUT) {
+                wire = new Wire(port1, port2, WireType.BIT);
+            } else {
+                wire = new Wire(port2, port1, WireType.BIT);
+            }
         }
         wire.setLength(calculateDistance(port1, port2));
         wireViewManager.addWire(wire);
@@ -80,6 +96,7 @@ public class WireService {
         GameStats gameStats = gameState.getGameStats();
         if (gameStats.getCoins() >= 1) {
             gameStats.decrementCoins(1);
+            gameController.updateHUD();
             return true;
         }
         return false;
