@@ -18,6 +18,7 @@ public class GameService {
     private PortService portService;
     private WireService wireService;
     private MovementService movementService;
+    private AbilityService abilityService;
 
     public GameService(GameController gameController) {
         this.gameController = gameController;
@@ -30,6 +31,7 @@ public class GameService {
         this.collisionService = new CollisionService(packetService, gameController.getGameView().getViewManager());
         this.portService = new PortService(gameController.getGameView().getPortViewManager(), wireService);
         systemService.setPortService(portService);
+        abilityService = new AbilityService(gameState);
     }
 
     public void initializeLevel(int level, SystemViewManager systemViewManager, PortViewManager portViewManager) {
@@ -69,4 +71,5 @@ public class GameService {
     public PacketService getPacketService() { return packetService; }
     public SystemService getSystemService() { return systemService; }
     public CollisionService getCollisionService() { return collisionService; }
+    public AbilityService getAbilityService() { return abilityService; }
 }

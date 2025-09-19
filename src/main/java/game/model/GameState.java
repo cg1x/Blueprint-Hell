@@ -1,13 +1,13 @@
 package game.model;
 
 import game.model.packets.Packet;
-import game.model.packets.SquarePacket;
-import game.model.packets.TrianglePacket;
 import game.model.systems.GeneralSystem;
 import game.model.systems.Spy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameState {
     private int currentLevel;
@@ -15,6 +15,7 @@ public class GameState {
     private List<Spy> outputSpySystems;
     private List<Packet> packets;
     private List<Wire> wires;
+    private Map<AbilityType, Boolean> abilities;
     private GameStats gameStats;
     private boolean gameRunning;
 
@@ -24,6 +25,7 @@ public class GameState {
         this.systems = new ArrayList<>();
         this.outputSpySystems = new ArrayList<>();
         this.wires = new ArrayList<>();
+        this.abilities = new HashMap<>();
         this.gameStats = new GameStats();
         this.gameRunning = false;
     }
@@ -64,6 +66,18 @@ public class GameState {
     public void removeWire(Wire wire) { wires.remove(wire); }
 
     public List<Wire> getWires() { return wires; }
+
+    public void activateAbility(AbilityType abilityType) {
+        abilities.put(abilityType, Boolean.TRUE);
+    }
+
+    public void deactivateAbility(AbilityType abilityType) {
+        abilities.put(abilityType, Boolean.FALSE);
+    }
+
+    public boolean isActive(AbilityType abilityType) {
+        return abilities.getOrDefault(abilityType, false);
+    }
 
     public GameStats getGameStats() {
         return gameStats;

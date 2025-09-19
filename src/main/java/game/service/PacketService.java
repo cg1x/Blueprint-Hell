@@ -1,5 +1,6 @@
 package game.service;
 
+import game.model.AbilityType;
 import game.model.GameState;
 import game.model.GameStats;
 import game.model.packets.*;
@@ -33,8 +34,14 @@ public class PacketService {
 
     public void movePackets(GameState gameState) {
         List<Packet> packets = gameState.getPackets();
+
         for (int i = 0; i < packets.size(); i++) {
             Packet packet = packets.get(i);
+
+            if (gameState.isActive(AbilityType.O_ANAHITA)) {
+                packet.resetHealth();
+            }
+
             if (packet.isOnWire()) {
                 movementService.movePacket(packet);
                 if (movementService.hasPacketReachedSystem(packet)) {

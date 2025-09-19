@@ -20,5 +20,7 @@ public class Constants {
     public static final double PACKET_SIZE = 10;
     public static final int WIRE_WIDTH = 4;
     public static final int SPEED_LIMIT = 5;
+    public static final int UPS = 60;
+    public static final int FPS = 60;
     public static final int DEACTIVATION_PERIOD = 5;
 }

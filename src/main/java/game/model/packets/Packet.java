@@ -38,6 +38,10 @@ public abstract class Packet {
         return health;
     }
 
+    public void resetHealth() {
+        health = initialHealth;
+    }
+
     public double getDeflectionX() {
         return deflectionX;
     }

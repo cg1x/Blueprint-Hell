@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.controller.Utils;
+import game.model.AbilityType;
 import game.model.GameState;
 import game.model.packets.BitPacket;
 import game.model.packets.Packet;
@@ -25,8 +26,11 @@ public class CollisionService {
     }
 
     public void detectCollisions(GameState gameState) {
-        List<Packet> packets = gameState.getPackets();
+        if (gameState.isActive(AbilityType.O_AIRYAMAN)) {
+            return;
+        }
 
+        List<Packet> packets = gameState.getPackets();
         for (int i = 0; i < packets.size(); i++) {
             if (!packets.get(i).isOnWire()) {
                 continue;
@@ -41,7 +45,9 @@ public class CollisionService {
                 else if (checkCollision(packets.get(i), packets.get(j))) {
                     Collision collision = handleCollision(packets.get(i), packets.get(j));
                     System.out.println("x:" + collision.getX() + ", y: " + collision.getY());
-                    applyImpact(collision, packets);
+                    if (!gameState.isActive(AbilityType.O_ATAR)) {
+                        applyImpact(collision, packets);
+                    }
                 }
             }
         }

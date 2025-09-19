@@ -5,13 +5,12 @@ import game.model.*;
 import game.view.manager.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -24,12 +23,15 @@ public class GameView {
     private GameController gameController;
     private final Stage stage;
     private final ViewUtil viewUtil;
+    private Scene mainScene;
     private PacketViewManager packetViewManager;
     private SystemViewManager systemViewManager;
     private WireViewManager wireViewManager;
     private PortViewManager portViewManager;
     private ViewManager viewManager;
+    private Button shopButton;
     private HUD hud;
+    private Shop shop;
 
     public GameView(Stage stage) {
         this.stage = stage;
@@ -41,80 +43,107 @@ public class GameView {
         viewManager = new ViewManager(packetViewManager, wireViewManager, portViewManager, systemViewManager);
     }
 
+    public void showShop() {
+        setupStage(shop.showShop(gameController.getGameService().getGameState().getGameStats().getCoins()));
+        gameController.pauseGame();
+    }
+
     public void showMenu() {
-        Pane root = new Pane();
-        Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, Color.BLACK);
+        Button startButton = viewUtil.createButton("START GAME");
+        startButton.setOnAction(e -> gameController.startLevel(1));
+
+        Button exitButton = viewUtil.createButton("EXIT");
+        exitButton.setOnAction(e -> Platform.exit());
+
+        VBox vbox = new VBox(50, startButton, exitButton);
+        vbox.setAlignment(Pos.CENTER);
+
+        StackPane root = new StackPane(vbox);
+        root.setPrefSize(1600, 900);
         root.setBackground(new Background(new BackgroundFill(
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
-        Button startButton = viewUtil.createButton("START GAME", 700, 250, root);
-        startButton.setOnAction(e -> gameController.startLevel(1));
-
-        Button exitButton = viewUtil.createButton("EXIT", 700, 350, root);
-        exitButton.setOnAction(e -> Platform.exit());
-
-        setupStage(scene);
+        setupStage(new Scene(root));
     }
 
     public void showLevelComplete(int level, GameStats gameStats) {
-        Pane root = new Pane();
-        Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, Color.BLACK);
+        Label winText = viewUtil.createLabel("NICE JOB!");
+
+        String packetLossStr = String.format("PACKET LOSS: %.2f",
+                (double) gameStats.getLostPackets()/gameStats.getTotalPackets()*100) + "%";
+        Label packetLossText = viewUtil.createLabel(packetLossStr);
+
+        Button playNextLevelButton = viewUtil.createButton("PLAY LEVEL ");
+        playNextLevelButton.setOnAction(e -> gameController.startLevel(level + 1));
+
+        Button backButton = viewUtil.createButton("BACK TO MENU");
+        backButton.setOnAction(e -> showMenu());
+
+        VBox vbox = new VBox(50, winText, packetLossText, playNextLevelButton, backButton);
+        vbox.setAlignment(Pos.CENTER);
+
+        StackPane root = new StackPane(vbox);
+        root.setPrefSize(1600, 900);
         root.setBackground(new Background(new BackgroundFill(
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
-        Text winText = viewUtil.createText("NICE JOB!", 750, 250, root);
-
-        String packetLossStr = String.format("PACKET LOSS: %.2f",
-                (double) gameStats.getLostPackets()/gameStats.getTotalPackets()*100) + "%";
-        Text packetLossText = viewUtil.createText(packetLossStr, 650, 350, root);
-
-        Button playNextLevelButton = viewUtil.createButton("PLAY LEVEL " + (level+1), 700, 450, root);
-        playNextLevelButton.setOnAction(e -> gameController.startLevel(level + 1));
-
-        Button backButton = viewUtil.createButton("BACK TO MENU", 700, 550, root);
-        backButton.setOnAction(e -> showMenu());
-
-        setupStage(scene);
+        setupStage(new Scene(root));
     }
 
     public void showLevelFailed(int level, GameStats gameStats) {
-        Pane root = new Pane();
-        Scene scene = new Scene(root, 1600, 900, Color.BLACK);
+        Label loseText = viewUtil.createLabel("YOU LOST");
+
+        String packetLossStr = String.format("PACKET LOSS: %.2f",
+                (double) gameStats.getLostPackets()/gameStats.getTotalPackets()*100) + "%";
+        Label packetLossText = viewUtil.createLabel(packetLossStr);
+
+        Button playAgainButton = viewUtil.createButton("PLAY AGAIN");
+        playAgainButton.setOnAction(e -> gameController.startLevel(level));
+
+        Button backButton = viewUtil.createButton("BACK TO MENU");
+        backButton.setOnAction(e -> showMenu());
+
+        VBox vbox = new VBox(50, loseText, packetLossText, playAgainButton, backButton);
+        vbox.setAlignment(Pos.CENTER);
+
+        StackPane root = new StackPane(vbox);
+        root.setPrefSize(1600, 900);
         root.setBackground(new Background(new BackgroundFill(
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
-        Text loseText = viewUtil.createText("YOU LOST", 750, 250, root);
-
-        String packetLossStr = String.format("PACKET LOSS: %.2f",
-                (double) gameStats.getLostPackets()/gameStats.getTotalPackets()*100) + "%";
-        Text packetLossText = viewUtil.createText(packetLossStr, 650, 350, root);
-
-        Button playAgainButton = viewUtil.createButton("PLAY AGAIN", 700, 450, root);
-        playAgainButton.setOnAction(e -> gameController.startLevel(level));
-
-        Button backButton = viewUtil.createButton("BACK TO MENU", 700, 550, root);
-        backButton.setOnAction(e -> showMenu());
-
-        setupStage(scene);
+        setupStage(new Scene(root));
     }
 
     public void initializeLevel(GameState gameState) {
         Root.reset();
-        Scene scene = new Scene(Root.getINSTANCE(), STAGE_WIDTH, STAGE_HEIGHT, Color.BLACK);
+        mainScene = new Scene(Root.getINSTANCE(), STAGE_WIDTH, STAGE_HEIGHT, Color.BLACK);
         Root.getINSTANCE().setBackground(new Background(new BackgroundFill(
                 BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
+        shopButton = viewUtil.createButton("Shop");
+        shopButton.setOnAction(e -> showShop());
+        VBox vbox = new VBox(shopButton);
+        vbox.setAlignment(Pos.BOTTOM_CENTER);
+        vbox.setPadding(new Insets(20));
+        vbox.setPrefSize(STAGE_WIDTH, STAGE_HEIGHT);
+
         gameController.getGameService().getSystemService().paintAllSystems(gameController);
 
         hud = new HUD(gameController.getGameService().getGameState().getGameStats());
+        shop = new Shop(gameController.getGameService().getAbilityService(), this);
 
-        
+        Root.getINSTANCE().getChildren().addFirst(vbox);
 
-        setupStage(scene);
+        setupStage(mainScene);
+    }
+
+    public void resumeGame() {
+        setupStage(mainScene);
+        gameController.resumeGame();
     }
 
     public void updateView() {
@@ -126,7 +155,7 @@ public class GameView {
         stage.setWidth(1600);
         stage.setHeight(900);
         stage.setResizable(false);
-        Platform.runLater(() ->{
+        Platform.runLater(() -> {
             stage.setScene(scene);
             stage.show();
         });

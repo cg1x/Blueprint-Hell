@@ -44,6 +44,14 @@ public class GameController {
         updateController.start();
     }
 
+    public void pauseGame() {
+        updateController.pause();
+    }
+
+    public void resumeGame() {
+        updateController.resume();
+    }
+
     public void generatePackets() {
         int level = gameService.getGameState().getCurrentLevel();
         gameService.getPacketService().createPacketsForLevel(level);
