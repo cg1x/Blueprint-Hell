@@ -16,8 +16,7 @@ import game.view.systems.ServerView;
 import game.view.systems.GeneralSystemView;
 import game.view.manager.SystemViewManager;
 
-import static game.controller.Constants.DEACTIVATION_PERIOD;
-import static game.controller.Constants.SPEED_LIMIT;
+import static game.controller.Constants.*;
 
 public class SystemService {
     private PortService portService;
@@ -140,6 +139,8 @@ public class SystemService {
             packet.setOnWire(false);
             if (packet.getWire().getEndPort().getSystem().isActive()) {
                 sendNewPacketTo(packet.getWire().getStartPort());
+            } else {
+                packet.getWire().setPacket(null);
             }
         } else {
             packetService.handlePacketLost(packet);
@@ -157,13 +158,15 @@ public class SystemService {
         system.setActive(true);
         systemViewManager.getView(system).updateIndicator();
         for (Port port : system.getInputPorts()) {
-            sendNewPacketTo(port.getWire().getStartPort());
+            if (port.getWire().getPacket() == null) {
+                sendNewPacketTo(port.getWire().getStartPort());
+            }
         }
     }
 
     private void deactivateSystem(GeneralSystem system) {
         system.setActive(false);
-        system.setDeactivationPeriod(DEACTIVATION_PERIOD * 60);
+        system.setDeactivationPeriod(DEACTIVATION_PERIOD * UPS);
         systemViewManager.getView(system).updateIndicator();
     }
 

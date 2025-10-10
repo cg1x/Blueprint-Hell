@@ -43,13 +43,23 @@ public class Shop {
         Button airyamanButton = createShopButton("O' Airyaman (-4)");
         Button anahitaButton = createShopButton("O' Anahita (-5)");
         Button backButton = createShopButton("Back to game");
+        Button aergiaButton = createShopButton("Scroll of Aergia (-10)");
+        Button sisyphusButton = createShopButton("Scroll of Sisyphus (-15)");
+        Button eliphasButton = createShopButton("Scroll of Eliphas (-20)");
 
         atarButton.setOnAction(e -> handlePurchase(AbilityType.O_ATAR));
         airyamanButton.setOnAction(e -> handlePurchase(AbilityType.O_AIRYAMAN));
         anahitaButton.setOnAction(e -> handlePurchase(AbilityType.O_ANAHITA));
         backButton.setOnAction(e -> gameView.resumeGame());
 
-        VBox vbox = new VBox(50, title, atarButton, airyamanButton, anahitaButton, messageLabel, coinsLabel);
+        HBox hbox1 = new HBox(50, atarButton, airyamanButton);
+        hbox1.setAlignment(Pos.CENTER);
+        HBox hbox2 = new HBox(50, anahitaButton, aergiaButton);
+        hbox2.setAlignment(Pos.CENTER);
+        HBox hbox3 = new HBox(50, sisyphusButton, eliphasButton);
+        hbox3.setAlignment(Pos.CENTER);
+
+        VBox vbox = new VBox(50, title, hbox1, hbox2, hbox3, messageLabel, coinsLabel);
         vbox.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(vbox, backButton);
@@ -69,6 +79,14 @@ public class Shop {
         if (result.successful()) {
             messageLabel.setText(abilityType.toString().toLowerCase() + " is purchased successfully");
             coinsLabel.setText("coins: " + result.coins());
+            switch (abilityType) {
+                case SCROLL_OF_AERGIA, SCROLL_OF_SISYPHUS, SCROLL_OF_ELIPHAS -> {
+                    //gameView.showGameScene();
+                }
+                default -> {
+                }
+            }
+
         } else {
             if (result.alreadyPurchased()) {
                 messageLabel.setText("You already have " + abilityType.toString().toLowerCase());
@@ -80,7 +98,7 @@ public class Shop {
 
     private Button createShopButton(String text) {
         Button button = new Button(text);
-        button.setPrefWidth(200);
+        button.setPrefWidth(220);
         button.setPrefHeight(50);
         button.setFont(new Font("Verdana", 16));
 

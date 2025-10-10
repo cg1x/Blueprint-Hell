@@ -146,6 +146,10 @@ public class GameView {
         gameController.resumeGame();
     }
 
+    public void showGameScene() {
+        setupStage(mainScene);
+    }
+
     public void updateView() {
         packetViewManager.updateAll();
         hud.update();

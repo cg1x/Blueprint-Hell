@@ -49,6 +49,7 @@ public class WireView {
         shape.setStroke(color);
         shape.setStrokeWidth(WIRE_WIDTH);
         Root.getINSTANCE().getChildren().add(shape);
+        shape.setUserData(this);
     }
 
     public void enableEventHandling(WireService wireService) {
@@ -254,6 +255,7 @@ public class WireView {
                 break;
             }
         }
+        shape.setUserData(this);
     }
 
     private void increaseOpacity() {

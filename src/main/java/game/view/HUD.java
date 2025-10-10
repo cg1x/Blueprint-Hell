@@ -1,58 +1,52 @@
 package game.view;
 
 import game.model.GameStats;
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.control.Label;
 
-public class HUD {
-    public Text coins;
-    public Text successfulPacket;
-    public Text inNetworkPacket;
-    public Text lostPacket;
-    public Text packetLoss;
-    public GameStats gameStats;
+public class HUD extends StackPane {
+    private final GameStats gameStats;
+    private final Label coinsLabel;
+    private final Label successfulPacketLabel;
+    private final Label inNetworkPacketLabel;
+    private final Label lostPacketLabel;
+    private final Label packetLossLabel;
 
     public HUD(GameStats gameStats) {
         this.gameStats = gameStats;
-        coins = new Text("coins: " + gameStats.coins);
-        coins.setFill(Color.WHITE);
-        coins.setFont(new Font("Verdana",18));
-        coins.setX(10);
-        coins.setY(30);
 
-        successfulPacket = new Text("successfulPackets: " + gameStats.getSuccessfulPackets());
-        successfulPacket.setFill(Color.WHITE);
-        successfulPacket.setFont(new Font("Verdana",18));
-        successfulPacket.setX(10);
-        successfulPacket.setY(60);
+        // Create Labels
+        coinsLabel = makeLabel("Coins: " + gameStats.coins);
+        successfulPacketLabel = makeLabel("Successful: " + gameStats.getSuccessfulPackets());
+        inNetworkPacketLabel = makeLabel("In-Network: " + gameStats.getInNetworkPackets());
+        lostPacketLabel = makeLabel("Lost: " + gameStats.getLostPackets());
+        packetLossLabel = makeLabel("Packet Loss: " + gameStats.getPacketLoss() + "%");
 
-        inNetworkPacket = new Text("inNetworkPackets: " + gameStats.getInNetworkPackets());
-        inNetworkPacket.setFill(Color.WHITE);
-        inNetworkPacket.setFont(new Font("Verdana",18));
-        inNetworkPacket.setX(10);
-        inNetworkPacket.setY(90);
+        VBox statsBox = new VBox(5, coinsLabel, successfulPacketLabel, inNetworkPacketLabel, lostPacketLabel, packetLossLabel);
+        statsBox.setPadding(new Insets(10));
 
-        lostPacket = new Text("lostPackets: " + gameStats.getLostPackets());
-        lostPacket.setFill(Color.WHITE);
-        lostPacket.setFont(new Font("Verdana",18));
-        lostPacket.setX(10);
-        lostPacket.setY(120);
+        this.getChildren().add(statsBox);
+        this.setTranslateX(10);
+        this.setTranslateY(10);
 
-        packetLoss = new Text("packetLoss: " + gameStats.getPacketLoss());
-        packetLoss.setFill(Color.WHITE);
-        packetLoss.setFont(new Font("Verdana",18));
-        packetLoss.setX(10);
-        packetLoss.setY(150);
+        Root.getINSTANCE().getChildren().add(this);
+    }
 
-        Root.getINSTANCE().getChildren().addAll(coins, successfulPacket, inNetworkPacket, lostPacket);
+    private Label makeLabel(String text) {
+        Label label = new Label(text);
+        label.setTextFill(Color.WHITE);
+        label.setFont(Font.font("Verdana", 18));
+        return label;
     }
 
     public void update() {
-        coins.setText("coins: " + gameStats.coins);
-        successfulPacket.setText("successfulPackets: " + gameStats.getSuccessfulPackets());
-        inNetworkPacket.setText("inNetworkPackets: " + gameStats.getInNetworkPackets());
-        lostPacket.setText("lostPackets: " + gameStats.getLostPackets());
-        packetLoss.setText("packetLoss: " + gameStats.getPacketLoss());
+        coinsLabel.setText("Coins: " + gameStats.coins);
+        successfulPacketLabel.setText("Successful: " + gameStats.getSuccessfulPackets());
+        inNetworkPacketLabel.setText("In-Network: " + gameStats.getInNetworkPackets());
+        lostPacketLabel.setText("Lost: " + gameStats.getLostPackets());
+        packetLossLabel.setText("Packet Loss: " + gameStats.getPacketLoss() + "%");
     }
 }
